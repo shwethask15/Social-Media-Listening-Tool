@@ -8,10 +8,9 @@ function Home() {
     <div>
       <Navbar />
       <Routes>
-        <Route path="page1" element={<Analytics />} />
-        <Route path="page2" element={<Verbatims />} />
+        <Route path="page1/*" element={<Analytics />} />
+        <Route path="page2/*" element={<Verbatims />} />
       </Routes>
-     
     </div>
   );
 }
