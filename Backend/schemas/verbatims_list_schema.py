@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 class Verbatims_List_create(BaseModel):
     mention_id : str
@@ -26,13 +27,13 @@ class Verbatims_List_create(BaseModel):
     count : int
 
 class verbatims_filters(BaseModel):
-    brand : str | None = None
-    datasource : str | None = None
-    country : str | None = None
-    theme : str | None =None
-    source : str | None = None
-    sentiment : str | None = None
-    virality : str | None = None
-    severity : str | None = None
-    profanity : str | None = None
+    brand : List | None = None
+    datasource : List | None = None
+    country : List | None = None
+    theme : List | None =None
+    source : List | None = None
+    sentiment : List | None = None
+    virality : List | None = None
+    severity : List | None = None
+    profanity : List | None = None
     # relevancy_filter : bool | None = None
