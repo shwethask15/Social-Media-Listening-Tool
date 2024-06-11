@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel # type: ignore
 
 class Verbatims_List_create(BaseModel):
     mention_id : str
