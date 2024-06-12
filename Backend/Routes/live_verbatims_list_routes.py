@@ -29,13 +29,10 @@ async def get_live_data(db: Session):#get the dependency function
         # Get verbatims data
       #  Live_verbatims = await crud.get_verbatims(db=db)
       Live_verbatims=await get_data(db = db)
-      print(Live_verbatims[0].__dict__)
 
         # Get graph data
       graph = await get_graph_data(db=db)
-      print(graph)
-      # print(Live_verbatims,graph)
-
+      # print(dict(Live_verbatims[0]))
       return { "graph": graph,"Live_Verbatims_List": Live_verbatims}#return both graph_data and live_verbatims_list data
     
     
@@ -43,7 +40,7 @@ async def get_live_data(db: Session):#get the dependency function
         raise HTTPException(status_code=500, detail=str(e))
 
 # Define route to fetch both verbatims and graph data
-@router.get("/Live_Verbatims_List/",response_model=GraphItem)
+@router.get("/Live_Verbatims_List/")
 async def get_live_data_endpoint(db: Session = Depends(get_db)):
     return await get_live_data(db=db)
 

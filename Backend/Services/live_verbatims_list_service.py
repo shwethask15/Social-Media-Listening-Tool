@@ -13,7 +13,32 @@ async def get_data(db:Session):
 
 async def get_graph_data(db:Session) -> GraphItem:
     data = Live_Verbatims.get_all(db=db)
-    return data
+    ref = {}
+    two_digit_country_code=[]
+    for i in data:
+        i = i.__dict__
+        if i["country_name"] not in ref:
+            ref[i["country_name"]] = 1
+            two_digit_country_code.append(i["two_digit_country_code"])
+        else:
+            ref[i["country_name"]] += 1
+    res =[]
+    c = 0
+    for i in ref:
+        # graph_data = GraphItem
+        # graph_data.two_digit_country_code = two_digit_country_code[c]
+        # graph_data.country_name = i
+        # graph_data.post_count = ref[i]
+        graph_data = {}
+        graph_data["two_digit_country_code"] = two_digit_country_code[c]
+        graph_data["country_name"] = i
+        graph_data["post_count"] = ref[i]
+        res.append(graph_data)
+        c+=1
+    #print(res)
+    # for i in res:
+    #     print(dict(i))
+    return res
 # async def get_data_with_filters1(q : verbatims_filters):
 #     db = SessionLocal()
 #     data = Verbatims.get_all(db=db)
