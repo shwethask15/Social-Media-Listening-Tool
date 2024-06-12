@@ -1,5 +1,11 @@
 from pydantic import BaseModel # type: ignore
 
+
+class GraphItem(BaseModel):
+    two_digit_country_code:str
+    country_name:str
+    post_count: int
+
 class Live_Verbatims_List_Create(BaseModel):
     mention_id: str 
     virality:str
