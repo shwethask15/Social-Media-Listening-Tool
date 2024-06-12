@@ -3,12 +3,11 @@ from models import live_verbatims_list
 from http.client import HTTPException
 from schemas.verbatims_list_schema import verbatims_filters
 from database.session import SessionLocal,engine
+from sqlalchemy.orm import Session
 
 
-async def get_data():
-    db = SessionLocal()
+async def get_data(db:Session):
     data = Live_Verbatims.get_all(db=db)
-    db.close()
     return data
 
 # async def get_data_with_filters1(q : verbatims_filters):
