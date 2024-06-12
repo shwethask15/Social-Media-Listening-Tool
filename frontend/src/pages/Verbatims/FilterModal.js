@@ -1,40 +1,65 @@
-import React, { useState } from 'react';
-import './style/FilterModal.css';
+import React, { useState } from "react";
+import "./style/FilterModal.css";
 
 const FilterModal = ({ show, onClose }) => {
   const initialFilters = {
-    brand: true,
-    datasource: true,
-    region: true,
-    subCategory: true,
-    source: true,
-    sentiment: true,
+    brand: {
+      selectedAll: true,
+      advance: true,
+    },
+    datasource: {
+      cesarMyDog: true,
+    },
+    region: {
+      crave: true,
+    },
+    subCategory: {
+      dreamies: true,
+    },
+    source: {
+      eukanuba: true,
+    },
+    sentiment: {},
   };
 
   const [filters, setFilters] = useState(initialFilters);
+  const [activeFilter, setActiveFilter] = useState("brand");
 
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
+  const handleCheckboxChange = (category, subCategory) => (e) => {
+    const { checked } = e.target;
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: checked,
+      [category]: {
+        ...prevFilters[category],
+        [subCategory]: checked,
+      },
     }));
   };
 
   const handleApply = () => {
-    console.log('Filters applied:', filters);
+    console.log("Filters applied:", filters);
     onClose();
   };
 
   const handleReset = () => {
-    setFilters({
-      brand: false,
-      datasource: false,
-      region: false,
-      subCategory: false,
-      source: false,
-      sentiment: false,
-    });
+    setFilters(initialFilters);
+  };
+
+  const renderSubFilters = () => {
+    const subFilters = filters[activeFilter];
+    return Object.keys(subFilters).map((subFilter) => (
+      <div key={subFilter} className="filter-section">
+        <label>
+          <input
+            type="checkbox"
+            checked={subFilters[subFilter]}
+            onChange={handleCheckboxChange(activeFilter, subFilter)}
+          />
+          {subFilter.charAt(0).toUpperCase() +
+            subFilter.slice(1).replace(/([A-Z])/g, " $1")}
+        </label>
+      </div>
+    ));
   };
 
   if (!show) {
@@ -48,72 +73,21 @@ const FilterModal = ({ show, onClose }) => {
           <h4 className="modal-title">Filter</h4>
         </div>
         <div className="modal-body">
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="brand"
-                checked={filters.brand}
-                onChange={handleCheckboxChange}
-              />
-              Selected All
-            </label>
+          <div className="filter-category">
+            {Object.keys(initialFilters).map((filter) => (
+              <div
+                key={filter}
+                className={`filter-category-item ${
+                  activeFilter === filter ? "active" : ""
+                }`}
+                onClick={() => setActiveFilter(filter)}
+              >
+                {filter.charAt(0).toUpperCase() +
+                  filter.slice(1).replace(/([A-Z])/g, " $1")}
+              </div>
+            ))}
           </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="datasource"
-                checked={filters.datasource}
-                onChange={handleCheckboxChange}
-              />
-              Advance
-            </label>
-          </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="region"
-                checked={filters.region}
-                onChange={handleCheckboxChange}
-              />
-              Cesar/My Dog
-            </label>
-          </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="subCategory"
-                checked={filters.subCategory}
-                onChange={handleCheckboxChange}
-              />
-              Crave
-            </label>
-          </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="source"
-                checked={filters.source}
-                onChange={handleCheckboxChange}
-              />
-              Dreamies/Temptations/Catisfactions
-            </label>
-          </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="sentiment"
-                checked={filters.sentiment}
-                onChange={handleCheckboxChange}
-              />
-              Eukanuba
-            </label>
-          </div>
+          <div className="filter-options">{renderSubFilters()}</div>
         </div>
         <div className="modal-footer">
           <button onClick={handleApply}>Apply</button>

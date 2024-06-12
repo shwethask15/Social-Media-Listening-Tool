@@ -1,0 +1,57 @@
+.verbatim-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.verbatim-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.verbatim-header span {
+  font-size: 12px;
+  color: #888;
+}
+
+.verbatim-content {
+  display: flex;
+  align-items: center;
+}
+
+.verbatim-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.verbatim-content p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.verbatim-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.verbatim-brand {
+  font-size: 14px;
+  color: #333;
+}
+
+.verbatim-tags {
+  display: flex;
+}
+
+.verbatim-tag {
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 12px;
+  margin-left: 5px;
+}
