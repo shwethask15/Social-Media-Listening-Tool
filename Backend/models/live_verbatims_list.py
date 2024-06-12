@@ -2,6 +2,7 @@ from sqlalchemy import Column,Integer,String,Float,Boolean # type: ignore
 
 from database.base import Base
 
+
 class Live_Verbatims_List(Base):
     __tablename__="live_verbatims_list"
     mention_id= Column(String,primary_key=True,nullable=False)
