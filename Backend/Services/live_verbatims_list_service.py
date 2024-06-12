@@ -10,12 +10,10 @@ from sqlalchemy.orm import Session
 async def get_data(db:Session):
     data = Live_Verbatims.get_all(db=db)
     return data
-async def get_graph_data(db:Session)->GraphItem:
-    data= Live_Verbatims.get_all(db=db)
+
+async def get_graph_data(db:Session) -> GraphItem:
+    data = Live_Verbatims.get_all(db=db)
     return data
-
-
-
 # async def get_data_with_filters1(q : verbatims_filters):
 #     db = SessionLocal()
 #     data = Verbatims.get_all(db=db)

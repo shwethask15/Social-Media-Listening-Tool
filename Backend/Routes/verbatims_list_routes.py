@@ -9,9 +9,9 @@ router = APIRouter()
 
 
 @router.get("/verbatim_list/")
-async def get_data(q :str|None = None):
+async def get_data(db : Session = Depends(get_db)):
     try:
-        return await get_data1()
+        return await get_data1(db=db)
     except Exception as e:
         return str(e)
 
@@ -22,4 +22,3 @@ async def get_data_with_filters(q : verbatims_filters = None, db : Session = Dep
     except Exception as e:
         return str(e)
 
-            
