@@ -1,7 +1,7 @@
 from typing import Any,Dict,Generic,List,Optional,Type,TypeVar,Union
-from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
+from fastapi.encoders import jsonable_encoder # type: ignore
+from pydantic import BaseModel # type: ignore
+from sqlalchemy.orm import Session # type: ignore
 from database.base import Base
 
 ModelType = TypeVar("ModelType",bound=Base)
@@ -17,7 +17,11 @@ class CRUDBase(Generic[ModelType,CreateSchemaType]):
         db.commit()
         db.refresh(obj_in)
         return obj_in
+    
     def get_all(self,db : Session,*,skip:int = 0, limit:int = 100)->List[ModelType]:
         return db.query(self.model).offset(skip).limit(limit).all()
+    
+    def get_By_Id(self,db : Session,*,mention_id)->ModelType:
+        return db.query(self.model).filter(self.model.mention_id == mention_id).first()
     
     

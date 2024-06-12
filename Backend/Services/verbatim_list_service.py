@@ -1,7 +1,7 @@
 from crud.crud_verbatims_list import Verbatims
 from models import verbatims_list
 from http.client import HTTPException
-from schemas.verbatims_list_schema import verbatims_filters
+from schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update
 from database.session import SessionLocal,engine
 from sqlalchemy.orm import Session
 
@@ -60,3 +60,14 @@ async def get_data_with_filters1(q : verbatims_filters,db : Session):
             if i != j["profanity_filter"]:
                 r.remove(j)    
     return r
+async def get_data_by_mention_id1(mention_id : str,update_body : verbatims_list_update,db : Session):
+    data = Verbatims.get_By_Id(mention_id=mention_id,db=db)
+    ref = {"virality" : "virality_altered","sentiment" : "sentiment_altered","severity":"severity_altered","theme":"theme_altered" }
+    update_body = dict(update_body)
+    temp = data
+    temp = temp.__dict__
+    for i in update_body:
+        if update_body[i] != "":
+            print(i,update_body[i])
+            print(temp[ref[i]])
+    return data
