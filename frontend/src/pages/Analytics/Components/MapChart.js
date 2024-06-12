@@ -33,7 +33,7 @@ function LiveMapChart(props) {
 
       let circle = container.children.push(
         am5.Circle.new(root, {
-          radius: 20,
+          radius: 5,
           fillOpacity: 0.7,
           fill: am5.color(0xff0000),
           cursorOverStyle: "pointer",
@@ -65,7 +65,7 @@ function LiveMapChart(props) {
     bubbleSeries.bullets.push(function(root, series, dataItem) {
       return am5.Bullet.new(root, {
         sprite: am5.Label.new(root, {
-          text: "{value.formatNumber('#.')}",
+          // text: "{value.formatNumber('#.')}",
           fill: am5.color(0xffffff),
           populateText: true,
           centerX: am5.p50,
@@ -81,8 +81,8 @@ function LiveMapChart(props) {
       {
         target: circleTemplate,
         dataField: "value",
-        min: 10,
-        max: 50,
+        min: 1,
+        max: 5,
         minValue: 0,
         maxValue: 100,
         key: "radius"
@@ -92,7 +92,7 @@ function LiveMapChart(props) {
     let data = [
       { id: "US", name: "United States", value: 100 },
       { id: "GB", name: "United Kingdom", value: 100 },
-      { id: "CN", name: "China", value: 100 },
+      { id: "CN", name: "China", value: 100},
       { id: "IN", name: "India", value: 100 },
       { id: "AU", name: "Australia", value: 100 },
       { id: "CA", name: "Canada", value: 100 },
@@ -102,10 +102,10 @@ function LiveMapChart(props) {
 
     bubbleSeries.data.setAll(data);
 
-    updateData();
-    setInterval(() => {
-      updateData();
-    }, 2000);
+    // updateData();
+    // setInterval(() => {
+    //   updateData();
+    // }, 2000);
 
     function updateData() {
       for (let i = 0; i < bubbleSeries.dataItems.length; i++) {
