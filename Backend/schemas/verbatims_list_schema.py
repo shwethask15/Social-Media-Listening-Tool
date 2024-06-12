@@ -37,3 +37,8 @@ class verbatims_filters(BaseModel):
     severity : List | None = None
     profanity : List | None = None
     # relevancy_filter : bool | None = None
+class verbatims_list_update(BaseModel):
+    virality : str | None = None
+    sentiment : str | None = None
+    severity : str | None = None
+    theme : str | None = None
