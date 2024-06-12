@@ -2,6 +2,7 @@ from crud.crud_live_verbatims_list import Live_Verbatims
 from models import live_verbatims_list
 from http.client import HTTPException
 from schemas.verbatims_list_schema import verbatims_filters
+from schemas.live_verbatims_list_schema import GraphItem
 from database.session import SessionLocal,engine
 from sqlalchemy.orm import Session
 
@@ -9,6 +10,10 @@ from sqlalchemy.orm import Session
 async def get_data(db:Session):
     data = Live_Verbatims.get_all(db=db)
     return data
+async def get_graph_data(db:Session)->GraphItem:
+    data= Live_Verbatims.get_all(db=db)
+    return data
+
 
 
 # async def get_data_with_filters1(q : verbatims_filters):
