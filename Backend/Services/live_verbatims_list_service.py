@@ -11,6 +11,7 @@ async def get_data():
     db.close()
     return data
 
+
 # async def get_data_with_filters1(q : verbatims_filters):
 #     db = SessionLocal()
 #     data = Verbatims.get_all(db=db)
