@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.analyticsBody{
+  padding-top: 60px;
+}
+
 .navbar-menu {
   list-style-type: none;
   padding: 0;
@@ -29,22 +33,27 @@
 
 .navbar-menu li a:active,
 .navbar-menu li a.active {
-  background-color: #777;
+  color: rgb(51, 122, 199);
+  text-decoration: underline;
   /* border: 1.5px solid #000; */
-  padding: 10px;
   border-radius: 25px; 
 }
 
 
 .navbar {
   display: flex;
-
   align-items: center;
-  justify-content:space-between;
+  justify-content: space-between;
   padding: 0 20px;
-  background-color: #333;
-  color: white;
+  box-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  color: rgb(51, 122, 199);
+  position: fixed;  /* Fixes the navbar at the top */
+  top: 0;           /* Positions the navbar at the very top of the page */
+  width: 100%;      /* Makes the navbar span the full width of the page */
+  z-index: 1000;    /* Ensures the navbar is on top of other elements */
 }
+
 
 .navbar-brand {
   display: flex;
@@ -54,7 +63,7 @@
 .brand-icon {
   width: 30px;
   height: 30px;
-  margin-right: 10px;
+  /* margin-right: 10px; */
 }
 
 
@@ -65,21 +74,18 @@
 
 .navbar-menu li a {
   text-decoration: none;
-  color: white;
+  color: rgb(132, 132, 132);
+
 }
 
 .navbar-menu li a:hover {
   text-decoration: underline;
 }
 
-.navbar-icons {
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-}
+
 
 .icon {
-  margin-left: 20px;
+  margin-right: 30px;
   font-size: 1.2em;
   cursor: pointer;
 }

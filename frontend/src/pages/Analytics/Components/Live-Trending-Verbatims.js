@@ -1,11 +1,18 @@
 import LiveMapChart from './MapChart'
-function LiveTrendingVerbatims(){
+import SmlList from './SmlList';
+import React from 'react';
+import '../style/smlShow.css'; 
+
+function LiveTrendingVerbatims() {
     return (
-        <div className="App">
-            <h1>Livee-Trending-Verbatims</h1>
-        <LiveMapChart />
-      </div>
-        
-    )
+        <div className="LTV">
+            <h1>Live Trending Verbatims</h1>
+            <div className="map-container">
+                <LiveMapChart />
+            </div>
+            <SmlList />
+        </div>
+    );
 }
+
 export default LiveTrendingVerbatims;
