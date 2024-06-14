@@ -15,7 +15,9 @@ export const fetchLiveVerbatims = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(apiURL);
+      console.log(response.data)
       return response.data.Live_Verbatims_List; 
+      
     } catch (error) {
       console.error("Error fetching live verbatims:", error);
       return rejectWithValue(error.response ? error.response.data : "Network error");

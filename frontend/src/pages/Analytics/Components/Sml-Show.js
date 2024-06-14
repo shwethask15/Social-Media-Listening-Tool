@@ -1,21 +1,20 @@
 import React from 'react';
-import '../style//smlShow.css'; 
-import twitterLogo from '../assets/twitter.png'; 
+import '../style//smlShow.css';
+import twitterLogo from '../assets/twitter.png';
 
 const getIconWithTooltip = (type, value) => {
     let icon;
     let description;
 
     switch (type) {
-        case 'impact':
-        case 'severity': 
+        case 'severity':
             switch (value) {
                 case 'Low':
                     icon = '🟡';
                     description = `Low Severity`;
                     break;
                 case 'Medium':
-                    icon = '🟠'; 
+                    icon = '🟠';
                     description = `Medium Severity`;
                     break;
                 case 'High':
