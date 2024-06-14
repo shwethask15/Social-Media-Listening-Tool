@@ -123,7 +123,7 @@ function LiveMapChart(props) {
   }, []);
 
   return (
-    <div id="chartdiv" style={{ width: "50%", height: "300px",marginLeft:"300px" }}></div>
+    <div id="chartdiv" style={{ width: "100%", height: "300px" ,background:"#edeaea"}}></div>
   );
 }
 

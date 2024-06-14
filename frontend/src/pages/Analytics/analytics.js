@@ -4,12 +4,15 @@ import TrendAnalysis from "./Components/Trend-Analysis";
 import SnapshotView from "./Components/Snapshot-View";
 import Navbar from "../Analytics/Components/Navbar";
 import '../Analytics/style/Navbar.css'
+import { Provider } from "react-redux";
+import store from "./redux/store/store";
 
 function Analytics() {
 
 
     return (
-        <div>
+        <div className="analyticsBody">
+            <Provider store={store}>
             <Navbar />
             <Routes>
             
@@ -18,6 +21,7 @@ function Analytics() {
                 <Route path="TrendAnalysis" element={<TrendAnalysis />} />
                 <Route path="SnapshotView" element={<SnapshotView />} />
             </Routes>
+            </Provider>
         </div>
 
     )
