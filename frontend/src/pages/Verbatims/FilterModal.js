@@ -1,70 +1,48 @@
-import React, { useState } from "react";
-import "./style/FilterModal.css";
+import React, { useState } from 'react';
+import './style/FilterModal.css';
 
-const FilterModal = ({ show, onClose }) => {
-  const initialFilters = {
-    brand: {
-      selectedAll: true,
-      advance: true,
-    },
-    datasource: {
-      cesarMyDog: true,
-    },
-    region: {
-      crave: true,
-    },
-    subCategory: {
-      dreamies: true,
-    },
-    source: {
-      eukanuba: true,
-    },
-    sentiment: {},
-  };
+const FilterModal = ({ show, onClose, filterOptions, selectedFilters, setSelectedFilters }) => {
+  const [selectedCategory, setSelectedCategory] = useState('brands');
 
-  const [filters, setFilters] = useState(initialFilters);
-  const [activeFilter, setActiveFilter] = useState("brand");
-
-  const handleCheckboxChange = (category, subCategory) => (e) => {
-    const { checked } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [category]: {
-        ...prevFilters[category],
-        [subCategory]: checked,
-      },
+  const handleCheckboxChange = (category, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [category]: prev[category].includes(value)
+        ? prev[category].filter((v) => v !== value)
+        : [...prev[category], value],
     }));
   };
 
   const handleApply = () => {
-    console.log("Filters applied:", filters);
+    console.log('Filters applied:', selectedFilters);
     onClose();
   };
 
   const handleReset = () => {
-    setFilters(initialFilters);
-  };
-
-  const renderSubFilters = () => {
-    const subFilters = filters[activeFilter];
-    return Object.keys(subFilters).map((subFilter) => (
-      <div key={subFilter} className="filter-section">
-        <label>
-          <input
-            type="checkbox"
-            checked={subFilters[subFilter]}
-            onChange={handleCheckboxChange(activeFilter, subFilter)}
-          />
-          {subFilter.charAt(0).toUpperCase() +
-            subFilter.slice(1).replace(/([A-Z])/g, " $1")}
-        </label>
-      </div>
-    ));
+    setSelectedFilters({
+      brands: filterOptions.brands,
+      regions: filterOptions.regions,
+      sources: filterOptions.sources,
+      sentiments: filterOptions.sentiments,
+      viralities: filterOptions.viralities,
+      severities: filterOptions.severities,
+      languages: filterOptions.languages,
+    });
   };
 
   if (!show) {
     return null;
   }
+
+  const filterCategories = [
+    { key: 'brands', label: 'Brand' },
+    { key: 'regions', label: 'Region/Country' },
+    { key: 'sources', label: 'Source' },
+    { key: 'sentiments', label: 'Sentiment' },
+    { key: 'viralities', label: 'Virality' },
+    { key: 'severities', label: 'Severity' },
+    { key: 'languages', label: 'Language' },
+  ];
 
   return (
     <div className="modal" onClick={onClose}>
@@ -73,26 +51,36 @@ const FilterModal = ({ show, onClose }) => {
           <h4 className="modal-title">Filter</h4>
         </div>
         <div className="modal-body">
-          <div className="filter-category">
-            {Object.keys(initialFilters).map((filter) => (
+          <div className="filter-sidebar">
+            {filterCategories.map(({ key, label }) => (
               <div
-                key={filter}
-                className={`filter-category-item ${
-                  activeFilter === filter ? "active" : ""
-                }`}
-                onClick={() => setActiveFilter(filter)}
+                key={key}
+                className={`filter-category ${selectedCategory === key ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(key)}
               >
-                {filter.charAt(0).toUpperCase() +
-                  filter.slice(1).replace(/([A-Z])/g, " $1")}
+                <h5>{label.toUpperCase()}</h5>
               </div>
             ))}
           </div>
-          <div className="filter-options">{renderSubFilters()}</div>
+          <div className="filter-options">
+            {(filterOptions[selectedCategory] || []).map((option) => (
+              <div key={option} className="filter-option">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedFilters[selectedCategory]?.includes(option)}
+                    onChange={() => handleCheckboxChange(selectedCategory, option)}
+                  />
+                  {option}
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="modal-footer">
-          <button onClick={handleApply}>Apply</button>
-          <button onClick={handleReset}>Reset</button>
-          <button onClick={onClose}>Cancel</button>
+          <button onClick={handleApply}>APPLY</button>
+          <button onClick={handleReset}>RESET</button>
+          <button onClick={onClose}>CANCEL</button>
         </div>
       </div>
     </div>
