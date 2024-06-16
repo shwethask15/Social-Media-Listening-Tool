@@ -1,0 +1,35 @@
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+from typing import Optional
+from database.session import get_db
+from schemas.snapshot_view_schema import AggregatedResponse, FilteredResponse
+from Services.snapshot_view_service import  VerbatimService
+router = APIRouter()
+
+@router.get("/verbatims/snapshot_view_all/{filter_name}", response_model=AggregatedResponse)
+async def get_all_aggregated_verbatims(filter_name: str, db: Session = Depends(get_db)):
+    """Endpoint to retrieve all aggregated counts"""
+
+    verbatim_service = VerbatimService(db)
+    data = verbatim_service.get_filtered_data(filter_name)
+    valid_filter = ["all"]
+    if filter_name.lower() not in valid_filter:
+        raise HTTPException(status_code=400, detail="Invalid filter name")
+    else:
+        aggregated_data = verbatim_service.aggregate_all_counts(data)
+        return aggregated_data    
+    
+@router.get("/verbatims/snapshot_view/{filter_name}", response_model=FilteredResponse)
+async def get_aggregated_verbatims(filter_name: str, db: Session = Depends(get_db)):
+    """
+    Endpoint to retrieve aggregated counts of virality, severity, and sentiment for each country.
+    """
+    valid_filters = ["virality", "severity", "sentiment"]
+    if filter_name.lower() not in valid_filters:
+        raise HTTPException(status_code=400, detail="Invalid filter name")
+    
+    verbatim_service = VerbatimService(db)
+    data = verbatim_service.get_filtered_data(filter_name)
+    if filter_name.lower()!="all":
+         aggregated_data = verbatim_service.aggregate_counts(data, filter_by=filter_name)
+         return aggregated_data
