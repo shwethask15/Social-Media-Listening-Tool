@@ -1,0 +1,139 @@
+.verbatim-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.verbatim-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.verbatim-header span {
+  font-size: 12px;
+  color: #888;
+}
+
+.verbatim-content {
+  display: flex;
+  align-items: center;
+}
+
+.verbatim-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.verbatim-content p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.verbatim-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.verbatim-brand {
+  font-size: 14px;
+  color: #333;
+}
+
+.verbatim-tags {
+  display: flex;
+}
+
+.verbatim-tag {
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.verbatim-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.verbatim-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.verbatim-meta span {
+  background-color: #f1f1f1;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.verbatim-content {
+  margin: 10px 0;
+}
+
+.verbatim-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.verbatim-footer .verbatim-brand {
+  font-weight: bold;
+}
+
+.source-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.verbatim-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.action-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background-color: #0056b3;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #007bff;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination button:hover {
+  background-color: #0056b3;
+  color: white;
+}

@@ -1,45 +1,48 @@
 import React, { useState } from 'react';
 import './style/FilterModal.css';
 
-const FilterModal = ({ show, onClose }) => {
-  const initialFilters = {
-    brand: true,
-    datasource: true,
-    region: true,
-    subCategory: true,
-    source: true,
-    sentiment: true,
-  };
+const FilterModal = ({ show, onClose, filterOptions, selectedFilters, setSelectedFilters }) => {
+  const [selectedCategory, setSelectedCategory] = useState('brands');
 
-  const [filters, setFilters] = useState(initialFilters);
-
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [name]: checked,
+  const handleCheckboxChange = (category, value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [category]: prev[category].includes(value)
+        ? prev[category].filter((v) => v !== value)
+        : [...prev[category], value],
     }));
   };
 
   const handleApply = () => {
-    console.log('Filters applied:', filters);
+    console.log('Filters applied:', selectedFilters);
     onClose();
   };
 
   const handleReset = () => {
-    setFilters({
-      brand: false,
-      datasource: false,
-      region: false,
-      subCategory: false,
-      source: false,
-      sentiment: false,
+    setSelectedFilters({
+      brands: filterOptions.brands,
+      regions: filterOptions.regions,
+      sources: filterOptions.sources,
+      sentiments: filterOptions.sentiments,
+      viralities: filterOptions.viralities,
+      severities: filterOptions.severities,
+      languages: filterOptions.languages,
     });
   };
 
   if (!show) {
     return null;
   }
+
+  const filterCategories = [
+    { key: 'brands', label: 'Brand' },
+    { key: 'regions', label: 'Region/Country' },
+    { key: 'sources', label: 'Source' },
+    { key: 'sentiments', label: 'Sentiment' },
+    { key: 'viralities', label: 'Virality' },
+    { key: 'severities', label: 'Severity' },
+    { key: 'languages', label: 'Language' },
+  ];
 
   return (
     <div className="modal" onClick={onClose}>
@@ -48,77 +51,36 @@ const FilterModal = ({ show, onClose }) => {
           <h4 className="modal-title">Filter</h4>
         </div>
         <div className="modal-body">
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="brand"
-                checked={filters.brand}
-                onChange={handleCheckboxChange}
-              />
-              Selected All
-            </label>
+          <div className="filter-sidebar">
+            {filterCategories.map(({ key, label }) => (
+              <div
+                key={key}
+                className={`filter-category ${selectedCategory === key ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(key)}
+              >
+                <h5>{label.toUpperCase()}</h5>
+              </div>
+            ))}
           </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="datasource"
-                checked={filters.datasource}
-                onChange={handleCheckboxChange}
-              />
-              Advance
-            </label>
-          </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="region"
-                checked={filters.region}
-                onChange={handleCheckboxChange}
-              />
-              Cesar/My Dog
-            </label>
-          </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="subCategory"
-                checked={filters.subCategory}
-                onChange={handleCheckboxChange}
-              />
-              Crave
-            </label>
-          </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="source"
-                checked={filters.source}
-                onChange={handleCheckboxChange}
-              />
-              Dreamies/Temptations/Catisfactions
-            </label>
-          </div>
-          <div className="filter-section">
-            <label>
-              <input
-                type="checkbox"
-                name="sentiment"
-                checked={filters.sentiment}
-                onChange={handleCheckboxChange}
-              />
-              Eukanuba
-            </label>
+          <div className="filter-options">
+            {(filterOptions[selectedCategory] || []).map((option) => (
+              <div key={option} className="filter-option">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={selectedFilters[selectedCategory]?.includes(option)}
+                    onChange={() => handleCheckboxChange(selectedCategory, option)}
+                  />
+                  {option}
+                </label>
+              </div>
+            ))}
           </div>
         </div>
         <div className="modal-footer">
-          <button onClick={handleApply}>Apply</button>
-          <button onClick={handleReset}>Reset</button>
-          <button onClick={onClose}>Cancel</button>
+          <button onClick={handleApply}>APPLY</button>
+          <button onClick={handleReset}>RESET</button>
+          <button onClick={onClose}>CANCEL</button>
         </div>
       </div>
     </div>
