@@ -1,5 +1,5 @@
 from pydantic import BaseModel # type: ignore
-from typing import List
+from typing import List,Optional
 
 class Verbatims_List_create(BaseModel):
     mention_id : str

@@ -1,4 +1,5 @@
 from pydantic import BaseModel # type: ignore
+from typing import List
 
 
 class GraphItem(BaseModel):
@@ -21,5 +22,9 @@ class Live_Verbatims_List_Create(BaseModel):
     two_digit_country_code:str
     theme:str
     source:str
-    originalUR:str
+    originalURL:str
     url:str
+
+class GraphItemResult(BaseModel):
+    graph : List[GraphItem]
+    Live_Verbatims_List : List[Live_Verbatims_List_Create]
