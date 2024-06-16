@@ -26,6 +26,9 @@ class Verbatims_List_create(BaseModel):
     sentiment_altered : bool
     count : int
 
+    class Config:
+        orm_mode = True
+
 class verbatims_filters(BaseModel):
     brand : List | None = None
     datasource : List | None = None
@@ -42,3 +45,7 @@ class verbatims_list_update(BaseModel):
     sentiment : str | None = None
     severity : str | None = None
     theme : str | None = None
+
+class verbatims_snapshot_filter(BaseModel):
+    pass
+
