@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FilterModal from "./FilterModal";
 import VerbatimItem from "./VerbatimItem";
-import VerbatimListHeader from "./VerbatimListHeader";
 import filterVerbatims from "./FilterVerbatims";
 import "./style/Verbatims.css";
 import twitterIcon from "./assets/twitter-icon.png";
@@ -152,7 +151,9 @@ const Verbatims = () => {
 
   return (
     <div className="Verbatims">
-      <button onClick={toggleModal}>Open Filter Modal</button>
+      <div className="filter-button-container">
+        <button onClick={toggleModal} className="filter-button">Open Filter Modal</button>
+      </div>
       <FilterModal
         show={isModalOpen}
         onClose={toggleModal}
@@ -160,11 +161,18 @@ const Verbatims = () => {
         appliedFilters={appliedFilters}
         setAppliedFilters={setAppliedFilters}
       />
-      <VerbatimListHeader
-        verbatimsCount={filteredVerbatimData.length}
-        onSearch={handleSearch}
-        onDownload={handleDownload}
-      />
+      <div className="verbatims-header">
+        <input
+          type="text"
+          placeholder="Search..."
+          onChange={(e) => handleSearch(e.target.value)}
+          className="search-bar"
+        />
+        <div className="verbatims-count">Total Verbatims: {filteredVerbatimData.length}</div>
+        <button onClick={handleDownload} className="download-button">
+          Download CSV
+        </button>
+      </div>
       <div className="verbatims-list">
         {loading ? (
           <p>Loading...</p>
@@ -173,6 +181,12 @@ const Verbatims = () => {
         )}
       </div>
       <div className="pagination">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
@@ -182,6 +196,12 @@ const Verbatims = () => {
             {index + 1}
           </button>
         ))}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
