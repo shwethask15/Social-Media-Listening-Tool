@@ -1,9 +1,10 @@
 from crud.crud_verbatims_list import Verbatims
 from models import verbatims_list
 from http.client import HTTPException
-from schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update
+from schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update,Verbatims_List_create
 from database.session import SessionLocal,engine
 from sqlalchemy.orm import Session
+from models.verbatims_list import Verbatims_List
 
 
 async def get_data1(db : Session):
@@ -67,7 +68,48 @@ async def get_data_by_mention_id1(mention_id : str,update_body : verbatims_list_
     temp = data
     temp = temp.__dict__
     for i in update_body:
-        if update_body[i] != "":
-            print(i,update_body[i])
-            print(temp[ref[i]])
+        if update_body[i] != "" and temp[ref[i]] != True:
+            if i == "virality":
+                res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
+                res.virality = update_body[i]
+                res.virality_altered = True
+            elif i == "sentiment":
+                res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
+                res.sentiment = update_body[i]
+                res.sentiment_altered = True
+            elif i == "severity":
+                res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
+                res.severity = update_body[i]
+                res.severity_altered = True
+            else:
+                res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
+                res.theme = update_body[i]
+                res.theme_altered = True
+    db.commit()
+    # for i in ref:
+    #     if i == "virality":
+    #         data.virality = temp[i]
+    #         data.virality_altered = temp[ref[i]]
+    #     elif i == "sentiment":
+    #         data.sentiment = temp[i]
+    #         data.sentiment_altered = temp[ref[i]]
+    #     elif i == "severity":
+    #         data.severity = temp[i]
+    #         data.severity_altered = temp[ref[i]]
+    #     else:
+    #         data.theme = temp[i]
+    #         data.theme_altered = temp[ref[i]]
+    # new_data = Verbatims_List()
+    # new_data.brand = data.brand
+    # new_data.datasource = data.datasource
+    # new_data.count = data.count
+    # new_data.country = data.country
+    # new_data.date = data.date
+    # new_data.full_text = data.full_text
+    # new_data.id = data.id
+
+    # print(data.virality_altered)
+    # db.add(data)
+    # db.commit()
+    db.refresh(data)
     return data

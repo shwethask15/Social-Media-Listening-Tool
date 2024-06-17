@@ -6,8 +6,6 @@ from database.session import get_db
 from sqlalchemy.orm import Session
 router = APIRouter()
 
-
-
 @router.get("/verbatim_list/")
 async def get_data(db : Session = Depends(get_db)):
     try:
@@ -19,6 +17,13 @@ async def get_data(db : Session = Depends(get_db)):
 async def get_data_with_filters(q : verbatims_filters = None, db : Session = Depends(get_db)):
     try:
         return await get_data_with_filters1(q=q,db=db)
+    except Exception as e:
+        return str(e)
+    
+@router.post("/verbatim_list/{mention_id}")
+async def update_data(mention_id : str, update_body : verbatims_list_update, db: Session = Depends(get_db)):
+    try:
+        return await get_data_by_mention_id1(mention_id=mention_id,update_body=update_body,db=db)
     except Exception as e:
         return str(e)
 
