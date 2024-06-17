@@ -29,6 +29,7 @@
 .verbatim-content {
   display: flex;
   align-items: center;
+  text-align: left;
   margin-bottom: 10px;
   font-size: 16px;
   color: #333;

@@ -1,72 +1,101 @@
-/* Overlay for detailed alerts modal */
+/* Style the overlay */
 .detailed-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 999;
 }
 
-/* Detailed alerts content */
+/* Style the modal content */
 .detailed-content {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    width: 400px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
     position: relative;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Set width relative to viewport */
+    max-width: 600px; /* Maximum width for larger screens */
+    max-height: 80vh; /* Set max height to 80% of the viewport */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
-/* Close button for detailed modal */
+/* Style the close button */
 .close-detailed-btn {
     position: absolute;
     top: 10px;
     right: 10px;
     background: none;
     border: none;
-    font-size: 18px;
+    font-size: 1.2rem;
     cursor: pointer;
 }
 
-/* Detailed modal body styling */
+/* Style the body of the modal */
 .detailed-body {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Tab styles */
+/* Style the tabs */
 .tabs {
     display: flex;
-    justify-content: center;
     margin-bottom: 20px;
 }
 
 .tab {
-    background: none;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
+    flex: 1;
     padding: 10px 20px;
-    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    text-align: center;
+    background-color: #f4f4f4;
+    border: none;
+    outline: none;
 }
 
 .tab.active {
-    border-bottom: 2px solid blue;
+    background-color: #e0e0e0;
+    font-weight: bold;
 }
 
-/* Alert items list */
+/* Style for the alerts list */
 .alerts-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
 }
 
+/* Style each alert item */
 .alert-item {
-    background: #f8f8f8;
-    padding: 10px;
-    border-radius: 4px;
-    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Smooth transition for dropdown */
+.alert-details {
+    overflow: hidden; /* Hide content that's not in view */
+    max-height: 0; /* Initially set the max height to zero */
+    transition: max-height 0.3s ease-in-out; /* Transition for smooth opening and closing */
+}
+
+/* When the dropdown is open, set a max height sufficient to show content */
+.alert-details.open {
+    max-height: 200px; /* You can adjust this value based on content size */
+}
+
+/* Style the individual alert details */
+.alert-detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+}
+
+.badge {
+    background-color: #4caf50;
+    color: white;
+    border-radius: 12px;
+    padding: 2px 8px;
 }

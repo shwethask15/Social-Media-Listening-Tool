@@ -1,4 +1,3 @@
-// filterVerbatims.js
 
 const filterVerbatims = (verbatimData, filters) => {
     return verbatimData.filter((item) => {
