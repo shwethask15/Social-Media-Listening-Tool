@@ -30,8 +30,8 @@ function Navbar() {
                 <h3>SOCIAL MEDIA LISTENING TOOL</h3>
             </div>
             <ul className="navbar-menu">
-                <li><NavLink to="/page1">Analytics</NavLink></li>
-                <li><NavLink to="/page2">Verbatims</NavLink></li>
+                <li><NavLink to="/page1" className="nav-link">Analytics</NavLink></li>
+                <li><NavLink to="/page2" className="nav-link">Verbatims</NavLink></li>
             </ul>
             <div className="navbar-icons">
                 <div className="icon-container" onClick={toggleDropdown}>
