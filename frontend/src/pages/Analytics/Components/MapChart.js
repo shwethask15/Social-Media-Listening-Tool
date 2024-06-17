@@ -1,11 +1,23 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import '../style/smlShow.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchLiveTrendingMapData } from '../redux/slice/slice';
 
-function LiveMapChart(props) {
+function LiveMapChart() {
+  const dispatch = useDispatch();
+  const mapData = useSelector((state) => state.analytics.liveTrendingMapData);
+
+  useEffect(() => {
+    dispatch(fetchLiveTrendingMapData());
+  }, [dispatch]);
+
   useLayoutEffect(() => {
+    if (mapData.length === 0) return; // Wait for mapData to be populated
+
     let root = am5.Root.new("chartdiv");
     root.setThemes([am5themes_Animated.new(root)]);
 
@@ -14,7 +26,8 @@ function LiveMapChart(props) {
     let polygonSeries = chart.series.push(
       am5map.MapPolygonSeries.new(root, {
         geoJSON: am5geodata_worldLow,
-        exclude: ["AQ"]
+        exclude: ["AQ"],
+        fill: am5.color(0xE4C13B),
       })
     );
 
@@ -28,14 +41,14 @@ function LiveMapChart(props) {
 
     let circleTemplate = am5.Template.new({});
 
-    bubbleSeries.bullets.push(function(root, series, dataItem) {
+    bubbleSeries.bullets.push(function (root, series, dataItem) {
       let container = am5.Container.new(root, {});
 
       let circle = container.children.push(
         am5.Circle.new(root, {
-          radius: 5,
-          fillOpacity: 0.7,
-          fill: am5.color(0xff0000),
+          radius: 4, //  radius
+          fillOpacity: 1,
+          fill: am5.color(0xFFFFFF),
           cursorOverStyle: "pointer",
           tooltipText: `{name}: [bold]{value}[/]`
         }, circleTemplate)
@@ -43,7 +56,6 @@ function LiveMapChart(props) {
 
       let countryLabel = container.children.push(
         am5.Label.new(root, {
-          text: "{name}",
           paddingLeft: 5,
           populateText: true,
           fontWeight: "bold",
@@ -52,9 +64,9 @@ function LiveMapChart(props) {
         })
       );
 
-      circle.on("radius", function(radius) {
+      circle.on("radius", function (radius) {
         countryLabel.set("x", radius);
-      })
+      });
 
       return am5.Bullet.new(root, {
         sprite: container,
@@ -62,11 +74,10 @@ function LiveMapChart(props) {
       });
     });
 
-    bubbleSeries.bullets.push(function(root, series, dataItem) {
+    bubbleSeries.bullets.push(function (root, series, dataItem) {
       return am5.Bullet.new(root, {
         sprite: am5.Label.new(root, {
-          // text: "{value.formatNumber('#.')}",
-          fill: am5.color(0xffffff),
+          fill: am5.color(0xFFFFFF),
           populateText: true,
           centerX: am5.p50,
           centerY: am5.p50,
@@ -76,54 +87,58 @@ function LiveMapChart(props) {
       });
     });
 
-    // minValue and maxValue must be set for the animations to work
-    bubbleSeries.set("heatRules", [
-      {
-        target: circleTemplate,
-        dataField: "value",
-        min: 1,
-        max: 5,
-        minValue: 0,
-        maxValue: 100,
-        key: "radius"
-      }
-    ]);
+    let data1 = mapData.map(item => ({
+      id: item.two_digit_country_code,
+      name: item.country_name,
+      value: item.post_count
+    }));
 
-    let data = [
-      { id: "US", name: "United States", value: 100 },
-      { id: "GB", name: "United Kingdom", value: 100 },
-      { id: "CN", name: "China", value: 100},
-      { id: "IN", name: "India", value: 100 },
-      { id: "AU", name: "Australia", value: 100 },
-      { id: "CA", name: "Canada", value: 100 },
-      { id: "BR", name: "Brasil", value: 100 },
-      { id: "ZA", name: "South Africa", value: 100 }
-    ];
+    bubbleSeries.data.setAll(data1);
 
-    bubbleSeries.data.setAll(data);
+    // Add zoom control
+    let zoomControl = am5map.ZoomControl.new(root, {
+      layout: root.verticalLayout
+    });
+    chart.set("zoomControl", zoomControl);
 
-    // updateData();
-    // setInterval(() => {
-    //   updateData();
-    // }, 2000);
+    // Customize the zoom in button
+    zoomControl.plusButton.setAll({
+      scale: .6, // Adjust the size
+      background: am5.Rectangle.new(root, {
+        fill: am5.color(0x00FF00) // Change the color
+      })
+    });
 
-    function updateData() {
-      for (let i = 0; i < bubbleSeries.dataItems.length; i++) {
-        bubbleSeries.data.setIndex(i, {
-          value: Math.round(Math.random() * 100),
-          id: data[i].id,
-          name: data[i].name
-        });
-      }
-    }
+    // Customize the zoom out button
+    zoomControl.minusButton.setAll({
+      scale: .6, // Adjust the size
+      background: am5.Rectangle.new(root, {
+        fill: am5.color(0xFF0000) // Change the color
+      })
+    });
+
+    // Customize the home button
+    let homeButton = am5.Button.new(root, {
+      scale: .6, // Adjust the size
+      icon: am5.Graphics.new(root, {
+        svgPath: "M12 2C13.1 2 14 2.9 14 4V8H16V4C16 2.34 14.66 1 13 1H11C9.34 1 8 2.34 8 4V8H10V4C10 2.9 10.9 2 12 2M4 10V22H10V16H14V22H20V10L12 3L4 10Z",
+        fill: am5.color(0x0000FF) // Change the color
+      }),
+    });
+
+    zoomControl.children.push(homeButton);
+
+    homeButton.events.on("click", function () {
+      chart.goHome();
+    });
 
     return () => {
       root.dispose();
     };
-  }, []);
+  }, [mapData]);
 
   return (
-    <div id="chartdiv" style={{ width: "100%", height: "300px" ,background:"#edeaea"}}></div>
+    <div id="chartdiv" className='MapChart' style={{ width: "100%", height: "300px", background: "black", borderRadius: "25px" }}></div>
   );
 }
 
