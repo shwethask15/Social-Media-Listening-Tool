@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FilterModal from "./FilterModal";
 import VerbatimItem from "./VerbatimItem";
+import VerbatimListHeader from "./VerbatimListHeader";
 import filterVerbatims from "./FilterVerbatims";
 import "./style/Verbatims.css";
 import twitterIcon from "./assets/twitter-icon.png";
@@ -66,13 +67,13 @@ const Verbatims = () => {
 
         // Extract unique filter options
         const uniqueOptions = {
-          brands: [...new Set(data.map(item => item.brand))].sort(),
-          regions: [...new Set(data.map(item => item.location))].sort(),
-          sources: [...new Set(data.map(item => item.icon))].sort(), // Assuming icon represents the source
-          sentiments: [...new Set(data.map(item => item.sentiment))].sort(),
-          viralities: [...new Set(data.map(item => item.virality))].sort(),
-          severities: [...new Set(data.map(item => item.severity))].sort(),
-          languages: [...new Set(data.map(item => item.language))].sort(),
+          brands: [...new Set(data.map((item) => item.brand))].sort(),
+          regions: [...new Set(data.map((item) => item.location))].sort(),
+          sources: [...new Set(data.map((item) => item.icon))].sort(), // Assuming icon represents the source
+          sentiments: [...new Set(data.map((item) => item.sentiment))].sort(),
+          viralities: [...new Set(data.map((item) => item.virality))].sort(),
+          severities: [...new Set(data.map((item) => item.severity))].sort(),
+          languages: [...new Set(data.map((item) => item.language))].sort(),
         };
 
         const initialFilters = {
@@ -112,6 +113,43 @@ const Verbatims = () => {
     setCurrentPage(pageNumber);
   };
 
+  const handleSearch = (query) => {
+    const result = verbatimData.filter((verbatim) =>
+      verbatim.content.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredVerbatimData(result);
+    setCurrentPage(1);
+  };
+
+  const handleDownload = () => {
+    const csvData = filteredVerbatimData.map((verbatim) => ({
+      date: verbatim.date,
+      location: verbatim.location,
+      language: verbatim.language,
+      virality: verbatim.virality,
+      sentiment: verbatim.sentiment,
+      severity: verbatim.severity,
+      subCategory: verbatim.subCategory,
+      content: verbatim.content,
+      brand: verbatim.brand,
+    }));
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      Object.keys(csvData[0])
+        .join(",") +
+      "\n" +
+      csvData.map((e) => Object.values(e).join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "verbatims.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="Verbatims">
       <button onClick={toggleModal}>Open Filter Modal</button>
@@ -121,6 +159,11 @@ const Verbatims = () => {
         filterOptions={filterOptions}
         appliedFilters={appliedFilters}
         setAppliedFilters={setAppliedFilters}
+      />
+      <VerbatimListHeader
+        verbatimsCount={filteredVerbatimData.length}
+        onSearch={handleSearch}
+        onDownload={handleDownload}
       />
       <div className="verbatims-list">
         {loading ? (
