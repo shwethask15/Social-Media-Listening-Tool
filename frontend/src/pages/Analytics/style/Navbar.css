@@ -1,14 +1,16 @@
 .navbar-analytics {
     display: flex;
     justify-content: center; 
-    background-color: #ffffff;
-    color: #3342a7;
+    background-color: rgb(254, 252, 240);
+    color: #000000;
     padding: 10px 10px;
     margin: 10px;
+    font-weight: lighter;
     width:fit-content;
-    margin-left: 30%;
+    margin-left: 35%;
     border-radius: 25px;
-    border: 1px solid #67a9f4;
+    border: 1px solid rgb(255, 232, 101);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
   .navbar-menu-analytics {
@@ -30,7 +32,7 @@
   }
   
   .navbar-menu-analytics li a {
-    color: #2959c1;
+    color: #000000;
     text-decoration: none;
 
    
@@ -38,18 +40,20 @@
   
   .navbar-menu-analytics li a:hover {
     /* background-color: #555; */
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     padding:5px;
     border-radius: 25px; 
-    border: 1px solid #67a9f4;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border: 1px solid rgb(255, 232, 101);
   }
   
   .navbar-menu-analytics li a.active {
-    background-color:#67a9f4 ;
+    background-color:rgb(247, 225, 80) ;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     padding: 5px;
     border-radius: 25px; 
-    border: 1px solid #67a9f4;
-    color: white;
+    /* border: 1px solid #67a9f4; */
+    color: rgb(0, 0, 0);
   }
 
 

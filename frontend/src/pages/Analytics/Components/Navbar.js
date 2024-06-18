@@ -8,9 +8,9 @@ function Navbar() {
     return (
         <div className="navbar-analytics">
             <ul className="navbar-menu-analytics">
-                <li><NavLink to="LiveTrendingVerbatims">LiveTrendingVerbatims</NavLink></li>
-                <li><NavLink to="TrendAnalysis">TrendAnalysis</NavLink></li>
-                <li><NavLink to="SnapshotView">SnapshotView</NavLink></li>
+                <li><NavLink to="LiveTrendingVerbatims">Live Trending Verbatims</NavLink></li>
+                <li><NavLink to="TrendAnalysis">Trend Analysis</NavLink></li>
+                <li><NavLink to="SnapshotView">Snapshot View</NavLink></li>
             </ul>
 
         </div>

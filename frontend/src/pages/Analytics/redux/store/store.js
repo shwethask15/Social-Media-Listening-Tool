@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import liveVerbatimsReducer from '../slice/slice'; 
+import analyticsReducer from '../slice/slice'; 
 
 const store = configureStore({
   reducer: {
-    liveVerbatims: liveVerbatimsReducer,
+    analytics: analyticsReducer,
   },
 });
 

@@ -84,24 +84,24 @@ const smlShow = ({ item }) => {
 
     return (
         <div className="sml-show">
-            <div className="sml-show-header">
-                <span>
-                    <img src={twitterLogo} alt="Twitter Logo" style={{ width: '10px', height: '10px', marginRight: '5px' }} />
-                    {formatDateTime(mention_updated_date)} |
-                    {getIconWithTooltip('severity', severity)} |
-                    {getIconWithTooltip('virality', virality)} |
-                    {getIconWithTooltip('sentiment', sentiment)}
-                </span>
-            </div>
-            <div className="sml-show-content">
-                <p>{snippet}</p>
-            </div>
-            <div className="sml-show-footer">
-                {/* <span>{country_name || 'Unknown'}</span> */}
-                <span>{two_digit_country_code || 'Unknown'}</span>
-                <a href={url} target="_blank" rel="noopener noreferrer">🔗</a>
-            </div>
-        </div>
+      <div className="sml-show-header">
+        <span>
+          <img src={twitterLogo} alt="Twitter Logo" style={{ width: '10px', height: '10px', marginRight: '5px' }} />
+          {formatDateTime(mention_updated_date)} |
+          {getIconWithTooltip('severity', severity)} |
+          {getIconWithTooltip('virality', virality)} |
+          {getIconWithTooltip('sentiment', sentiment)}
+        </span>
+      </div>
+      <div className="sml-show-content">
+        <p>{snippet}</p>
+      </div>
+      <div className="sml-show-footer">
+        {/* <span>{country_name || 'Unknown'}</span> */}
+        <span>{two_digit_country_code || 'Unknown'}</span>
+        <a href={url} target="_blank" rel="noopener noreferrer">🔗</a>
+      </div>
+    </div>
     );
 }
 

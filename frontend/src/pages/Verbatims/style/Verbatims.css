@@ -1,15 +1,74 @@
 .Verbatims {
+  margin-top: 70px;
   padding: 20px;
-  margin-top: 60px;
 }
 
-.Verbatims button {
-  padding: 10px 20px;
-  font-size: 16px;
+.filter-button-container {
+  text-align: left;
+}
+
+.filter-button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  margin-bottom: 20px;
+}
+
+.verbatims-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.search-bar {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.verbatims-count {
+  font-weight: bold;
+}
+
+.download-button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .verbatims-list {
   margin-top: 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.pagination button.active {
+  background-color: blue;
+  color: white;
+}
+
+.pagination button:disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
 }
