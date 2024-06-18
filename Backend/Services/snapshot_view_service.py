@@ -6,7 +6,7 @@ from typing import List,Dict
 from sqlalchemy.orm import Session
 from models.verbatims_list import Verbatims_List as VerbatimModel
 from schemas.verbatims_list_schema import Verbatims_List_create
-from schemas.snapshot_view_schema import AggregatedResponse,SentimentCounts,Counts,CountryData,FilteredResponse
+from schemas.snapshot_view_schema import AggregatedResponse,SentimentCounts,Counts,CountryData,FilteredResponse,CountryAggregatedData
 
 class VerbatimService:
     def __init__(self, db: Session):
@@ -71,31 +71,63 @@ class VerbatimService:
         return query.all()
     
 #function to fetch the data of all the filters together.
-    def aggregate_all_counts(self,data: List[VerbatimModel]) -> AggregatedResponse:
-        country_data = defaultdict(lambda: {
-            "virality": {"High": 0, "Medium": 0, "Low": 0},
-            "severity": {"High": 0, "Medium": 0, "Low": 0},
-            "sentiment": {"Positive": 0, "Negative": 0, "Neutral": 0}
-        })
+    # def aggregate_all_counts(self,data: List[VerbatimModel]) -> AggregatedResponse:
+    #     country_data = defaultdict(lambda: {
+    #         "virality": {"High": 0, "Medium": 0, "Low": 0},
+    #         "severity": {"High": 0, "Medium": 0, "Low": 0},
+    #         "sentiment": {"Positive": 0, "Negative": 0, "Neutral": 0}
+    #     })
+
+    #     for verbatim in data:
+    #         country = verbatim.country
+    #         if country:
+    #             if verbatim.virality in country_data[country]["virality"]:
+    #                 country_data[country]["virality"][verbatim.virality] += 1
+    #             if verbatim.severity in country_data[country]["severity"]:
+    #                 country_data[country]["severity"][verbatim.severity] += 1
+    #             if verbatim.sentiment in country_data[country]["sentiment"]:
+    #                 country_data[country]["sentiment"][verbatim.sentiment] += 1
+
+    #     result = [
+    #         CountryData(
+    #             country=country,
+    #             virality_counts=Counts(**data["virality"]),
+    #             severity_counts=Counts(**data["severity"]),
+    #             sentiment_counts=SentimentCounts(**data["sentiment"])
+    #         )
+    #         for country, data in country_data.items()
+    #     ]
+
+    #     return AggregatedResponse(all=result)
+    def aggregate_all_counts(self, data: List[VerbatimModel]) -> AggregatedResponse:
+        country_data = defaultdict(lambda: {"High": 0, "Medium": 0, "Low": 0})
 
         for verbatim in data:
             country = verbatim.country
             if country:
-                if verbatim.virality in country_data[country]["virality"]:
-                    country_data[country]["virality"][verbatim.virality] += 1
-                if verbatim.severity in country_data[country]["severity"]:
-                    country_data[country]["severity"][verbatim.severity] += 1
-                if verbatim.sentiment in country_data[country]["sentiment"]:
-                    country_data[country]["sentiment"][verbatim.sentiment] += 1
+                # Aggregate virality counts
+                if verbatim.virality in country_data[country]:
+                    country_data[country][verbatim.virality] += 1
+                # Aggregate severity counts
+                if verbatim.severity in country_data[country]:
+                    country_data[country][verbatim.severity] += 1
+                # Map sentiment to counts and aggregate
+                if verbatim.sentiment == "Positive":
+                    country_data[country]["High"] += 1
+                elif verbatim.sentiment == "Neutral":
+                    country_data[country]["Medium"] += 1
+                elif verbatim.sentiment == "Negative":
+                    country_data[country]["Low"] += 1
 
         result = [
-            CountryData(
+            CountryAggregatedData(
                 country=country,
-                virality_counts=Counts(**data["virality"]),
-                severity_counts=Counts(**data["severity"]),
-                sentiment_counts=SentimentCounts(**data["sentiment"])
+                High=data["High"],
+                Medium=data["Medium"],
+                Low=data["Low"]
             )
             for country, data in country_data.items()
         ]
 
         return AggregatedResponse(all=result)
+

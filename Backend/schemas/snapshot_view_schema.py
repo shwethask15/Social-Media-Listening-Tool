@@ -1,17 +1,6 @@
 from pydantic import BaseModel
 from typing import Dict, List,Optional
 
-class all(BaseModel):
-    country:str
-    High: int
-    Medium: int
-    Low: int
-
-class Sentiment(BaseModel):
-    country:str
-    negative: int
-
-
 class Counts(BaseModel):
     High: int
     Medium: int
@@ -28,9 +17,15 @@ class CountryData(BaseModel):
     severity_counts: Optional[Counts] = None
     sentiment_counts: Optional[SentimentCounts] = None
 
+
+class CountryAggregatedData(BaseModel):
+    country: str
+    High: int
+    Medium: int
+    Low: int
+
 class AggregatedResponse(BaseModel):
-    all: List[CountryData]
-    #all:List[Counts]
+    all:List[CountryAggregatedData]
 
 class FilteredResponse(BaseModel):
     virality: Optional[List[CountryData]] = None
