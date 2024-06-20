@@ -16,20 +16,25 @@ async def get_data_with_filters1(q : verbatims_filters,db : Session):
     d = {}
     q= dict(q)
     for i in q:
-        if q[i] != "string":
+        if q[i][0] != "string":
+            # print(q[i])
             d[i] = q[i]
+            #print([ord[i] for i in q[i]])
+            # print(d[i])
+        else:
+            d[i] = []
     r = []
-    print(d)
+    # print(d)
     for i in d["brand"]:
         for j in data:
             j = j.__dict__
             if i == j["brand"][1:]:
                 r.append(j)
-    print(len(d["datasource"]))
     for i in d["datasource"]:
         for j in r:
             if i != j["datasource"]:
                 r.remove(j)
+    print(r)
     for i in d["country"]:
         for j in r:
             if i != j["country"]:
@@ -55,7 +60,7 @@ async def get_data_with_filters1(q : verbatims_filters,db : Session):
             if i != j["severity"]:
                 r.remove(j)
     for i in d["profanity"]:
-        print(i)
+        # print(i)
         for j in r:
             # print(type(i),type(j["profanity_filter"]))
             if i != j["profanity_filter"]:
