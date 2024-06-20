@@ -11,6 +11,7 @@ class SentimentCounts(BaseModel):
     Negative: int
     Neutral:int
 
+
 class CountryData(BaseModel):
     country: str
     virality_counts: Optional[Counts] = None
