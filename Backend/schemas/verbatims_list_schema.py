@@ -4,11 +4,11 @@ from typing import List,Optional
 class Verbatims_List_create(BaseModel):
     mention_id : str
     datasource : str
-    language : str
+    language : str | None
     date : str
     translated_snippet : str
     snippet : str
-    country : str
+    country : str | None
     originalURL : str
     virality : str
     severity : str
@@ -17,7 +17,7 @@ class Verbatims_List_create(BaseModel):
     brand : str
     theme : str
     profanity_filter : bool
-    impact_index : str
+    impact_index : str | None
     relevancy_filter : bool
     full_text : str
     theme_altered : bool

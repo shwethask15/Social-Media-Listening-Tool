@@ -3,7 +3,7 @@ const filterVerbatims = (verbatimData, filters) => {
     return verbatimData.filter((item) => {
       const brandMatch = filters.brands.includes(item.brand);
       const regionMatch = filters.regions.includes(item.location);
-      const sourceMatch = filters.sources.includes(item.icon);
+      const sourceMatch = filters.sources.includes(item.source);
       const sentimentMatch = filters.sentiments.includes(item.sentiment);
       const viralityMatch = filters.viralities.includes(item.virality);
       const severityMatch = filters.severities.includes(item.severity);

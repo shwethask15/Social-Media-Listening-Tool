@@ -11,6 +11,7 @@ const VerbatimItem = ({
   subCategory,
   content,
   brand,
+  link,
   icon,
 }) => {
   return (
@@ -21,7 +22,11 @@ const VerbatimItem = ({
         <span className="verbatim-language">{language}</span>
       </div>
       <div className="verbatim-content">
-        {icon && <img src={icon} alt="icon" className="verbatim-icon" />}
+        {icon && (
+          <a href={link} target="_blank" rel="noopener noreferrer">
+            <img src={icon} alt="icon" className="verbatim-icon" />
+          </a>
+        )}
         <p>{content}</p>
       </div>
       <div className="verbatim-footer">

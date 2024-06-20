@@ -10,12 +10,20 @@ const FilterModal = ({ show, onClose, filterOptions, appliedFilters, setAppliedF
   }, [appliedFilters]);
 
   const handleCheckboxChange = (category, option) => {
-    setLocalFilters((prevFilters) => ({
-      ...prevFilters,
-      [category]: prevFilters[category].includes(option)
-        ? prevFilters[category].filter((item) => item !== option)
-        : [...prevFilters[category], option],
-    }));
+    if (option === "selectAll") {
+      const allSelected = localFilters[category].length === filterOptions[category].length;
+      setLocalFilters((prevFilters) => ({
+        ...prevFilters,
+        [category]: allSelected ? [] : filterOptions[category],
+      }));
+    } else {
+      setLocalFilters((prevFilters) => ({
+        ...prevFilters,
+        [category]: prevFilters[category].includes(option)
+          ? prevFilters[category].filter((item) => item !== option)
+          : [...prevFilters[category], option],
+      }));
+    }
   };
 
   const handleApply = () => {
@@ -28,18 +36,34 @@ const FilterModal = ({ show, onClose, filterOptions, appliedFilters, setAppliedF
   };
 
   const renderOptions = (category) => {
-    return filterOptions[category].map((option) => (
-      <div key={option} className="filter-option">
-        <label>
-          <input
-            type="checkbox"
-            checked={localFilters[category].includes(option)}
-            onChange={() => handleCheckboxChange(category, option)}
-          />
-          {option}
-        </label>
-      </div>
-    ));
+    const allSelected = localFilters[category].length === filterOptions[category].length;
+
+    return (
+      <>
+        <div className="filter-option">
+          <label>
+            <input
+              type="checkbox"
+              checked={allSelected}
+              onChange={() => handleCheckboxChange(category, "selectAll")}
+            />
+            Select All
+          </label>
+        </div>
+        {filterOptions[category].map((option) => (
+          <div key={option} className="filter-option">
+            <label>
+              <input
+                type="checkbox"
+                checked={localFilters[category].includes(option)}
+                onChange={() => handleCheckboxChange(category, option)}
+              />
+              {category === "sources" ? option.charAt(0).toUpperCase() + option.slice(1) : option}
+            </label>
+          </div>
+        ))}
+      </>
+    );
   };
 
   if (!show) {
@@ -51,7 +75,7 @@ const FilterModal = ({ show, onClose, filterOptions, appliedFilters, setAppliedF
       <div className="filter-modal-content">
         <div className="filter-modal-header">
           <h2>Filter Options</h2>
-          <button onClick={onClose}>X</button>
+          <button className="close-button" onClick={onClose}>X</button>
         </div>
         <div className="filter-modal-body">
           <div className="filter-modal-sidebar">
