@@ -1,3 +1,10 @@
+:root {
+  --primary: black;
+  --purple: #e3cffd;
+  --gray: #ededec;
+  --beige: #fbf9f5;
+}
+
 .App {
   text-align: center;
   font-family:'DM Serif display';
