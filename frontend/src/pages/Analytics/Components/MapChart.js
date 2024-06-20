@@ -27,7 +27,7 @@ function LiveMapChart() {
       am5map.MapPolygonSeries.new(root, {
         geoJSON: am5geodata_worldLow,
         exclude: ["AQ"],
-        fill: am5.color(0xE4C13B),
+        fill: am5.color(0xdddbe4),
       })
     );
 
@@ -46,9 +46,9 @@ function LiveMapChart() {
 
       let circle = container.children.push(
         am5.Circle.new(root, {
-          radius: 4, //  radius
+          radius: 3, //  radius
           fillOpacity: 1,
-          fill: am5.color(0xFFFFFF),
+          fill: am5.color(0x000000),
           cursorOverStyle: "pointer",
           tooltipText: `{name}: [bold]{value}[/]`
         }, circleTemplate)
@@ -138,7 +138,7 @@ function LiveMapChart() {
   }, [mapData]);
 
   return (
-    <div id="chartdiv" className='MapChart' style={{ width: "100%", height: "300px", background: "black", borderRadius: "25px" }}></div>
+    <div id="chartdiv" className='MapChart' style={{ width: "100%", height: "300px", background: "#c5afea", borderRadius: "25px"}}></div>
   );
 }
 

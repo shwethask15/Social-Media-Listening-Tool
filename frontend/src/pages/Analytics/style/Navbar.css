@@ -1,7 +1,7 @@
 .navbar-analytics {
     display: flex;
     justify-content: center; 
-    background-color: rgb(254, 252, 240);
+    background-color: rgb(255, 255, 255);
     color: #000000;
     padding: 10px 10px;
     margin: 10px;
@@ -9,7 +9,7 @@
     width:fit-content;
     margin-left: 35%;
     border-radius: 25px;
-    border: 1px solid rgb(255, 232, 101);
+    border: 1px solid rgb(0, 0, 0);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
   
@@ -42,15 +42,15 @@
     /* background-color: #555; */
     /* border: 1px solid #ccc; */
     padding:5px;
-    border-radius: 25px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border: 1px solid rgb(255, 232, 101);
+    border-bottom: 2px solid  rgb(227, 207, 253);
+    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
+    /* border: 1px solid rgb(227, 207, 253); */
   }
   
   .navbar-menu-analytics li a.active {
-    background-color:rgb(247, 225, 80) ;
+    background-color:rgb(227, 207, 253) ;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 5px;
+    padding: 10px;
     border-radius: 25px; 
     /* border: 1px solid #67a9f4; */
     color: rgb(0, 0, 0);

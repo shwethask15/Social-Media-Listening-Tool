@@ -40,7 +40,8 @@ export const fetchMapData = createAsyncThunk(
   "mapData/fetchMapData",
   async (type, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/verbatims/snapshot_view/${type}`);
+      const response = await axios.get(`http://127.0.0.1:8000/analytics/snapshot_view/${type}`);
+      console.log('data: ',response.data[type])
       return response.data[type];
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : "Network error");
@@ -52,7 +53,7 @@ export const fetchAll = createAsyncThunk(
   "mapData/fetchAll",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/verbatims/snapshot_view_all/all");
+      const response = await axios.get("http://127.0.0.1:8000/analytics/snapshot_view/all");
       return response.data.all;
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : "Network error");

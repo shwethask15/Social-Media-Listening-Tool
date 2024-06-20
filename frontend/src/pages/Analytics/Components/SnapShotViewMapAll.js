@@ -3,11 +3,10 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4maps from '@amcharts/amcharts4/maps';
 import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
-import '../style/smlShow.css';
 
 am4core.useTheme(am4themes_animated);
 
-const SnapshotViewMap = ({ data, selectedOption, loading }) => {
+const SnapshotViewMapAll = ({ data, selectedOption, loading }) => {
   const [countryData, setCountryData] = useState([]);
   const [legendData, setLegendData] = useState([]);
   const [isProcessing, setIsProcessing] = useState(true);
@@ -51,49 +50,25 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     setCountryData(processedCountryData);
 
     let processedLegendData;
-    if (selectedOption === 'Sentiment') {
-      processedLegendData = [
-        { name: 'Positive', fill: am4core.color('#004d00') },
-        { name: 'Negative', fill: am4core.color('#8B0000') },
-        { name: 'Neutral', fill: am4core.color('#FFD700') },
-        { name: 'No Activity', fill: am4core.color('#c0c0c0') }
-      ];
-    } else {
-      processedLegendData = [
-        { name: 'High', fill: am4core.color('#004d00') },
-        { name: 'Medium', fill: am4core.color('#1a8c1a') },
-        { name: 'Low', fill: am4core.color('#66ff66') },
-        { name: 'No Activity', fill: am4core.color('#c0c0c0') }
-      ];
-    }
+    processedLegendData = [
+      { name: 'High', fill: am4core.color('#004d00') },
+      { name: 'Medium', fill: am4core.color('#1a8c1a') },
+      { name: 'Low', fill: am4core.color('#66ff66') },
+      { name: 'No Activity', fill: am4core.color('#c0c0c0') }
+    ];
+
     setLegendData(processedLegendData);
     setIsProcessing(false);
   };
 
   const getCounts = (item) => {
-    switch (selectedOption) {
-      case 'Virality':
-        return item.virality_counts || { High: 0, Medium: 0, Low: 0 };
-      case 'Sentiment':
-        return item.sentiment_counts || { Positive: 0, Negative: 0, Neutral: 0 };
-      case 'Severity':
-        return item.severity_counts || { High: 0, Medium: 0, Low: 0 };
-      default:
-        return {};
-    }
+    return { High: item.High, Medium: item.Medium, Low: item.Low };
   };
 
   const getFillColor = (counts) => {
-    if (selectedOption === 'Sentiment') {
-      if (counts.Positive > 0) return am4core.color('#004d00');
-      if (counts.Negative > 0) return am4core.color('#8B0000');
-      if (counts.Neutral > 0) return am4core.color('#FFD700');
-    } else {
-      if (counts.High > 0) return am4core.color('#004d00');
-      if (counts.Medium > 0) return am4core.color('#1a8c1a');
-      if (counts.Low > 0) return am4core.color('#66ff66');
-    }
-    return am4core.color('#c0c0c0');
+    if (counts.High > 0) return am4core.color('#004d00');
+    if (counts.Medium > 0) return am4core.color('#1a8c1a');
+    if (counts.Low > 0) return am4core.color('#66ff66');
   };
 
   const constructMap = (countryData, legendData) => {
@@ -163,7 +138,7 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
   };
 
   return (
-    <div className='SnapShotViewMap' style={{ margin: '50px', border: '1px solid #000000', padding: '20px', borderRadius: '8px' }}>
+    <div className='SnapShotViewMapAll' style={{ margin: '50px', border: '1px solid #000000', padding: '20px', borderRadius: '8px' }}>
       {loading || isProcessing ? (
         <div>Loading...</div>
       ) : (
@@ -183,4 +158,4 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
   );
 };
 
-export default SnapshotViewMap;
+export default SnapshotViewMapAll;

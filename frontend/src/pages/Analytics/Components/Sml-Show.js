@@ -1,6 +1,7 @@
 import React from 'react';
-import '../style//smlShow.css';
+import '../style/smlShow.css';
 import twitterLogo from '../assets/twitter.png';
+import newsLogo from '../assets/news.png';
 
 const getIconWithTooltip = (type, value) => {
     let icon;
@@ -66,7 +67,7 @@ const getIconWithTooltip = (type, value) => {
             description = 'Unknown type';
     }
     return (
-        <span title={description} >
+        <span title={description}>
             {icon}
         </span>
     );
@@ -79,30 +80,41 @@ const formatDateTime = (dateString) => {
     return `${formattedDate} ${formattedTime}`;
 };
 
-const smlShow = ({ item }) => {
-    const { sentiment, mention_updated_date, impact_index, virality, severity, snippet, country_name, two_digit_country_code, url } = item;
+const getSourceIcon = (source) => {
+    switch (source.toLowerCase()) {
+        case 'twitter':
+            return <img src={twitterLogo} alt="Twitter Logo" className='Sourceicon' />;
+        case 'news':
+            return <img src={newsLogo} alt="News Logo" className='Sourceicon' />;
+        default:
+            return null; // Optional: handle other sources or return a default icon
+    }
+};
+
+const SmlShow = ({ item }) => {
+    const { sentiment, mention_updated_date, impact_index, virality, severity, snippet, country_name, two_digit_country_code, url, source } = item;
 
     return (
         <div className="sml-show">
-      <div className="sml-show-header">
-        <span>
-          <img src={twitterLogo} alt="Twitter Logo" style={{ width: '10px', height: '10px', marginRight: '5px' }} />
-          {formatDateTime(mention_updated_date)} |
-          {getIconWithTooltip('severity', severity)} |
-          {getIconWithTooltip('virality', virality)} |
-          {getIconWithTooltip('sentiment', sentiment)}
-        </span>
-      </div>
-      <div className="sml-show-content">
-        <p>{snippet}</p>
-      </div>
-      <div className="sml-show-footer">
-        {/* <span>{country_name || 'Unknown'}</span> */}
-        <span>{two_digit_country_code || 'Unknown'}</span>
-        <a href={url} target="_blank" rel="noopener noreferrer">🔗</a>
-      </div>
-    </div>
+            <div className="sml-show-header">
+                <span>
+                    {getSourceIcon(source)} |
+                    {formatDateTime(mention_updated_date)} |
+                    {getIconWithTooltip('severity', severity)} |
+                    {getIconWithTooltip('virality', virality)} |
+                    {getIconWithTooltip('sentiment', sentiment)}
+                </span>
+            </div>
+            <div className="sml-show-content">
+                <p>{snippet}</p>
+            </div>
+            <div className="sml-show-footer">
+                {/* <span>{country_name || 'Unknown'}</span> */}
+                <span>{two_digit_country_code || 'Unknown'}</span>
+                <a href={url} target="_blank" rel="noopener noreferrer">🔗</a>
+            </div>
+        </div>
     );
-}
+};
 
-export default smlShow;
+export default SmlShow;

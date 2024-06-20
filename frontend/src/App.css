@@ -6,7 +6,7 @@
 .analyticsBody {
   font-family:'DM Serif display';
   padding-top: 70px;
-  background-color:rgb(254, 252, 240);
+  background-color:rgb(255, 255, 255);
 }
 
 .navbar-menu {
@@ -37,7 +37,7 @@
 
 .navbar-menu li a:active,
 .navbar-menu li a.active {
-  color: rgb(254, 252, 240);
+  color: rgb(255, 255, 255);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   border-radius: 10px;
   font-size: 15px;
