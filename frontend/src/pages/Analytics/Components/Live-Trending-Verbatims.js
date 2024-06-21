@@ -17,7 +17,7 @@ function LiveTrendingVerbatims() {
         <LiveMapChart setLoading={setLoading} />
       </div>
       <div>
-        <SmlList setLoading={setLoading} />
+        <SmlList />
       </div>
     </div>
   );

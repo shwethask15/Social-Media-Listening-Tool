@@ -18,7 +18,7 @@ function LiveMapChart({ setLoading }) {
   useLayoutEffect(() => {
     if (mapData.length === 0) return;
 
-    setLoading(true); // Set loading state to true before constructing the map
+    setLoading(true); 
 
     let root = am5.Root.new("chartdiv");
     root.setThemes([am5themes_Animated.new(root)]);
@@ -136,7 +136,7 @@ function LiveMapChart({ setLoading }) {
       chart.goHome();
     });
 
-    setLoading(false); // Set loading state to false after the map is constructed
+    setLoading(false);
 
     return () => {
       root.dispose();
@@ -144,7 +144,8 @@ function LiveMapChart({ setLoading }) {
   }, [mapData, setLoading]);
 
   return (
-    <div id="chartdiv" className='MapChart' style={{ width: "100%", height: "300px", background: "#c5afea", borderRadius: "25px"}}></div>
+    <div id="chartdiv" className='MapChart'></div>
+   
   );
 }
 
