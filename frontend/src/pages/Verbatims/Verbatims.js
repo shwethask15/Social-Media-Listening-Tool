@@ -70,10 +70,9 @@ const Verbatims = () => {
               forumIcon
         }));
         setVerbatimData(data);
-        setFilteredVerbatimData(data); // Initialize filtered data with all verbatims
+        setFilteredVerbatimData(data); 
         setLoading(false);
 
-        // Extract unique filter options
         const uniqueOptions = {
           brands: [...new Set(data.map((item) => item.brand))].sort(),
           regions: [...new Set(data.map((item) => item.location))].sort(),
@@ -95,7 +94,7 @@ const Verbatims = () => {
         };
 
         setFilterOptions(uniqueOptions);
-        setAppliedFilters(initialFilters); // Set all filters to checked by default
+        setAppliedFilters(initialFilters); //default: select all
       } catch (error) {
         console.error("Error fetching verbatims:", error);
         setLoading(false);
@@ -108,10 +107,10 @@ const Verbatims = () => {
   useEffect(() => {
     const filteredData = filterVerbatims(verbatimData, appliedFilters);
     setFilteredVerbatimData(filteredData);
-    setCurrentPage(1); // Reset to first page whenever filters are applied
+    setCurrentPage(1);
   }, [verbatimData, appliedFilters]);
 
-  // Pagination logic
+  // Pagination 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredVerbatimData.slice(indexOfFirstItem, indexOfLastItem);
@@ -161,7 +160,7 @@ const Verbatims = () => {
   return (
     <div className="Verbatims">
       <div className="filter-button-container">
-        <button onClick={toggleModal} className="filter-button">Open Filter Modal</button>
+        <button onClick={toggleModal} className="filter-button">Open Filter</button>
       </div>
       <FilterModal
         show={isModalOpen}
