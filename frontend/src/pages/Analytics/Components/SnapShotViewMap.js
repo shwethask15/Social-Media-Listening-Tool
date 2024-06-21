@@ -130,15 +130,6 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
 
   const constructMap = (countryData, legendData) => {
     console.log('Rendering map with countryData:', countryData, 'legendData:', legendData);
-
-    // Filter out items with all counts as 0
-    const filteredCountryData = countryData.filter(item => item.high > 0 || item.medium > 0 || item.low > 0);
-
-    if (filteredCountryData.length === 0) {
-      console.log('No data to display on the map.');
-      return; // Exit early if there's no data to display
-    }
-
     let chart = am4core.create('chartdiv', am4maps.MapChart);
 
     chart.geodata = am4geodata_worldLow;
@@ -155,7 +146,7 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     let hs = polygonTemplate.states.create('hover');
     hs.properties.fill = am4core.color('#367B25');
 
-    polygonSeries.data = filteredCountryData; // Use filtered data
+    polygonSeries.data = countryData;
 
     polygonTemplate.propertyFields.fill = 'fill';
 
