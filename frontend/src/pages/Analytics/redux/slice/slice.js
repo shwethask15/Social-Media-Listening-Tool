@@ -40,26 +40,14 @@ export const fetchMapData = createAsyncThunk(
   "mapData/fetchMapData",
   async (type, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/verbatims/snapshot_view/${type}`);
+      const response = await axios.get(`http://127.0.0.1:8000/analytics/snapshot_view/${type}`);
+      console.log('data: ',response.data[type])
       return response.data[type];
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : "Network error");
     }
   }
 );
-
-export const fetchAll = createAsyncThunk(
-  "mapData/fetchAll",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/verbatims/snapshot_view_all/all");
-      return response.data.all;
-    } catch (error) {
-      return rejectWithValue(error.response ? error.response.data : "Network error");
-    }
-  }
-);
-
 
 const analyticsSlice = createSlice({
   name: "analyticsPage",
@@ -102,20 +90,7 @@ const analyticsSlice = createSlice({
       .addCase(fetchMapData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-      .addCase(fetchAll.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchAll.fulfilled, (state, action) => {
-        state.loading = false;
-        state.radioButtonData = action.payload;
-        state.error = "";
-      })
-      .addCase(fetchAll.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-      
+      })      
   },
 });
 

@@ -7,6 +7,9 @@ import "./style/Verbatims.css";
 import twitterIcon from "./assets/twitter-icon.png";
 import blogIcon from "./assets/blog-icon.png";
 import redditIcon from "./assets/reddit-icon.png";
+import forumIcon from "./assets/forum-icon.png";
+import newsIcon from "./assets/news-icon.png";
+
 
 const Verbatims = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,25 +56,30 @@ const Verbatims = () => {
           subCategory: item.theme || "Unknown",
           content: item.translated_snippet,
           brand: item.brand.trim(),
+          source: item.source,
+          link: item.originalURL,
           icon:
             item.source === "twitter"
               ? twitterIcon
               : item.source === "blog"
               ? blogIcon
-              : redditIcon,
+              : item.source === "reddit"
+              ? redditIcon
+              : item.source === "news"
+              ? newsIcon :
+              forumIcon
         }));
         setVerbatimData(data);
-        setFilteredVerbatimData(data); // Initialize filtered data with all verbatims
+        setFilteredVerbatimData(data); 
         setLoading(false);
 
-        // Extract unique filter options
         const uniqueOptions = {
           brands: [...new Set(data.map((item) => item.brand))].sort(),
           regions: [...new Set(data.map((item) => item.location))].sort(),
-          sources: [...new Set(data.map((item) => item.icon))].sort(), // Assuming icon represents the source
-          sentiments: [...new Set(data.map((item) => item.sentiment))].sort(),
-          viralities: [...new Set(data.map((item) => item.virality))].sort(),
-          severities: [...new Set(data.map((item) => item.severity))].sort(),
+          sources: [...new Set(data.map((item) => item.source))].sort(), 
+          sentiments: [...new Set(data.map((item) => item.sentiment))].reverse(),
+          viralities: [...new Set(data.map((item) => item.virality))],
+          severities: [...new Set(data.map((item) => item.severity))],
           languages: [...new Set(data.map((item) => item.language))].sort(),
         };
 
@@ -86,7 +94,7 @@ const Verbatims = () => {
         };
 
         setFilterOptions(uniqueOptions);
-        setAppliedFilters(initialFilters); // Set all filters to checked by default
+        setAppliedFilters(initialFilters); //default: select all
       } catch (error) {
         console.error("Error fetching verbatims:", error);
         setLoading(false);
@@ -99,10 +107,10 @@ const Verbatims = () => {
   useEffect(() => {
     const filteredData = filterVerbatims(verbatimData, appliedFilters);
     setFilteredVerbatimData(filteredData);
-    setCurrentPage(1); // Reset to first page whenever filters are applied
+    setCurrentPage(1);
   }, [verbatimData, appliedFilters]);
 
-  // Pagination logic
+  // Pagination 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredVerbatimData.slice(indexOfFirstItem, indexOfLastItem);
@@ -152,7 +160,7 @@ const Verbatims = () => {
   return (
     <div className="Verbatims">
       <div className="filter-button-container">
-        <button onClick={toggleModal} className="filter-button">Open Filter Modal</button>
+        <button onClick={toggleModal} className="filter-button">Open Filter</button>
       </div>
       <FilterModal
         show={isModalOpen}

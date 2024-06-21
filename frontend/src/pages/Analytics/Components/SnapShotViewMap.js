@@ -1,59 +1,196 @@
-import React, { useLayoutEffect } from 'react';
-import * as am5 from "@amcharts/amcharts5";
-import * as am5map from "@amcharts/amcharts5/map";
-import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import React, { useEffect, useState } from 'react';
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4maps from '@amcharts/amcharts4/maps';
+import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import '../style/smlShow.css';
 
-const MyMapChart = () => {
-  useLayoutEffect(() => {
-    // Create root element
-    let root = am5.Root.new("chartdiv");
+am4core.useTheme(am4themes_animated);
 
-    // Set themes
-    root.setThemes([am5themes_Animated.new(root)]);
+const LoadingIndicator = () => <div>Loading...</div>;
 
-    // Create the map chart
-    let chart = root.container.children.push(am5map.MapChart.new(root, {
-      panX: "rotateX",
-      panY: "none",
-      projection: am5map.geoMercator()
-    }));
+const MapContainer = () => (
+  <div id="chartdiv"></div>
+);
 
-    // Create polygon series
-    let polygonSeries = chart.series.push(am5map.MapPolygonSeries.new(root, {
-      geoJSON: am5geodata_worldLow,
-      exclude: ["AQ"]
-    }));
+const Legend = ({ legendData }) => (
+  <div className="legend-container">
+    {legendData.map((item, index) => (
+      <div key={index} className="legend-item">
+        <div className="legend-color-box" style={{ backgroundColor: item.fill }}></div>
+        <span>{item.name}</span>
+      </div>
+    ))}
+  </div>
+);
 
-    // Configure series
-    polygonSeries.mapPolygons.template.setAll({
-      tooltipText: "{name}: {value}",
-      interactive: true,
-      fill: am5.color(0x74B266)
+const SnapshotViewMap = ({ data, selectedOption, loading }) => {
+  const [countryData, setCountryData] = useState([]);
+  const [legendData, setLegendData] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(true);
+
+  useEffect(() => {
+    if (!loading) {
+      setIsProcessing(true);
+      processData(data);
+    }
+  }, [data, selectedOption, loading]);
+
+  useEffect(() => {
+    if (!loading && !isProcessing && countryData.length > 0) {
+      constructMap(countryData, legendData);
+    }
+  }, [countryData, legendData, loading, isProcessing]);
+
+  const processData = (data) => {
+    if (!data || data.length === 0) {
+      setIsProcessing(false);
+      return;
+    }
+
+    let processedCountryData = data.map(item => {
+      const counts = getCounts(item);
+      const countryFeature = am4geodata_worldLow.features.find(f => f.properties.name === item.country);
+      if (!countryFeature) {
+        console.warn(`Country "${item.country}" not found in geodata`);
+        return null;
+      }
+      return {
+        id: countryFeature.id,
+        name: item.country,
+        fill: getFillColor(counts),
+        high: counts.High || counts.Positive || 0,
+        medium: counts.Medium || counts.Neutral || 0,
+        low: counts.Low || counts.Negative || 0
+      };
+    }).filter(item => item !== null);
+
+    setCountryData(processedCountryData);
+
+    let processedLegendData;
+    if (selectedOption === 'Sentiment') {
+      processedLegendData = [
+        { name: 'Positive', fill: am4core.color('#004d00') },
+        { name: 'Negative', fill: am4core.color('#8B0000') },
+        { name: 'Neutral', fill: am4core.color('#FFD700') },
+        { name: 'No Activity', fill: am4core.color('#c0c0c0') }
+      ];
+    } else {
+      processedLegendData = [
+        { name: 'High', fill: am4core.color('#004d00') },
+        { name: 'Medium', fill: am4core.color('#1a8c1a') },
+        { name: 'Low', fill: am4core.color('#66ff66') },
+        { name: 'No Activity', fill: am4core.color('#c0c0c0') }
+      ];
+    }
+    setLegendData(processedLegendData);
+    setIsProcessing(false);
+  };
+
+  const getCounts = (item) => {
+    switch (selectedOption) {
+      case 'Virality':
+        return item.virality_counts || { High: 0, Medium: 0, Low: 0 };
+      case 'Sentiment':
+        return item.sentiment_counts || { Positive: 0, Negative: 0, Neutral: 0 };
+      case 'Severity':
+        return item.severity_counts || { High: 0, Medium: 0, Low: 0 };
+      case 'All':
+        return { High: item.High, Medium: item.Medium, Low: item.Low };
+      default:
+        return {};
+    }
+  };
+
+  const getFillColor = (counts) => {
+    if (selectedOption === 'Sentiment') {
+      if (counts.Positive > 0) return am4core.color('#004d00');
+      if (counts.Negative > 0) return am4core.color('#8B0000');
+      if (counts.Neutral > 0) return am4core.color('#FFD700');
+    } else {
+      if (counts.High > 0) return am4core.color('#004d00');
+      if (counts.Medium > 0) return am4core.color('#1a8c1a');
+      if (counts.Low > 0) return am4core.color('#66ff66');
+    }
+    return am4core.color('#c0c0c0');
+  };
+
+  const getTooltipText = () => {
+    switch (selectedOption) {
+      case 'Sentiment':
+        return '[bold]{name}[/]\nPositive: {high}\nNeutral: {medium}\nNegative: {low}';
+      case 'Virality':
+      case 'Severity':
+      case 'All':
+        return '[bold]{name}[/]\nHigh: {high}\nMedium: {medium}\nLow: {low}';
+      default:
+        return '[bold]{name}[/]\nHigh: {high}\nMedium: {medium}\nLow: {low}';
+    }
+  };
+
+  const constructMap = (countryData, legendData) => {
+    console.log('Rendering map with countryData:', countryData, 'legendData:', legendData);
+
+    // Filter out items with all counts as 0
+    const filteredCountryData = countryData.filter(item => item.high > 0 || item.medium > 0 || item.low > 0);
+
+    if (filteredCountryData.length === 0) {
+      console.log('No data to display on the map.');
+      return; // Exit early if there's no data to display
+    }
+
+    let chart = am4core.create('chartdiv', am4maps.MapChart);
+
+    chart.geodata = am4geodata_worldLow;
+    chart.projection = new am4maps.projections.Miller();
+
+    let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+    polygonSeries.useGeodata = true;
+    polygonSeries.exclude = ['AQ'];
+
+    let polygonTemplate = polygonSeries.mapPolygons.template;
+    polygonTemplate.tooltipText = getTooltipText();
+    polygonTemplate.polygon.fillOpacity = 0.6;
+
+    let hs = polygonTemplate.states.create('hover');
+    hs.properties.fill = am4core.color('#367B25');
+
+    polygonSeries.data = filteredCountryData; // Use filtered data
+
+    polygonTemplate.propertyFields.fill = 'fill';
+
+    chart.zoomControl = new am4maps.ZoomControl();
+
+    let homeButton = new am4core.Button();
+    homeButton.events.on('hit', function() {
+      chart.goHome();
     });
 
-    // Add hover state
-    polygonSeries.mapPolygons.template.states.create("hover", {
-      fill: am5.color(0x367B25)
-    });
+    homeButton.icon = new am4core.Sprite();
+    homeButton.padding(7, 5, 7, 5);
+    homeButton.width = 30;
+    homeButton.icon.path = 'M12 2L2 7h3v5h4V8h2v4h4V7h3L12 2z';
+    homeButton.marginBottom = 10;
+    homeButton.parent = chart.zoomControl;
+    homeButton.insertBefore(chart.zoomControl.plusButton);
 
-    // Add some data
-    polygonSeries.data.setAll([
-      { id: "US", name: "United States", value: 100, fill: am5.color(0x006400) },
-      { id: "FR", name: "France", value: 50, fill: am5.color(0x228B22) },
-      { id: "RU", name: "Russia", value: 20, fill: am5.color(0x32CD32) },
-      { id: "CN", name: "China", value: 10, fill: am5.color(0xADFF2F) },
-      { id: "IN", name: "India", value: 5, fill: am5.color(0x98FB98) },
-      { id: "BR", name: "Brazil", value: 15, fill: am5.color(0x7FFF00) }
-    ]);
-
-    // Clean up on unmount
     return () => {
-      root.dispose();
+      chart.dispose();
     };
-  }, []);
+  };
 
-  return <div id="chartdiv" style={{ width: "100%", height: "500px" }}></div>;
+  return (
+    <div className='SnapShotViewMap'>
+      {loading || isProcessing ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <MapContainer />
+          <Legend legendData={legendData} />
+        </>
+      )}
+    </div>
+  );
 };
 
-export default MyMapChart;
+export default SnapshotViewMap;
