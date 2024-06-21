@@ -1,9 +1,9 @@
 from fastapi import APIRouter,Depends, HTTPException # type: ignore
-from sqlalchemy.orm import Session # type: ignore
+from sqlalchemy.orm import Session 
 from Services.live_verbatims_list_service import get_data,get_graph_data
 from schemas.verbatims_list_schema import verbatims_filters
-from schemas.live_verbatims_list_schema import GraphItem,GraphItemResult
-from typing import Dict,List
+from schemas.live_verbatims_list_schema import GraphItem,GraphItemResult,Live_Verbatims_List_Create
+from typing import Dict,List,Union
 from database.session import get_db
 
 router = APIRouter()
@@ -33,17 +33,16 @@ async def get_live_data(db: Session):#get the dependency function
 
         # Get graph data
       graph = await get_graph_data(db=db)
-      # print(dict(Live_verbatims[0]))
-      return { "graph": graph,"Live_Verbatims_List": Live_verbatims}#return both graph_data and live_verbatims_list data
-    
+      result= GraphItemResult(
+            graph=graph,
+            Live_Verbatims_List=Live_verbatims)
+      return result
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
 
 # Define route to fetch both verbatims and graph data
 @router.get("/Live_Verbatims_List/",response_model=GraphItemResult)
 async def get_live_data_endpoint(db: Session = Depends(get_db)):
     return await get_live_data(db=db)
-
-
-            

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel # type: ignore
 from typing import Dict, List,Optional
 
 class Counts(BaseModel):

@@ -2,16 +2,17 @@ from crud.crud_live_verbatims_list import Live_Verbatims
 from models import live_verbatims_list
 from http.client import HTTPException
 from schemas.verbatims_list_schema import verbatims_filters
-from schemas.live_verbatims_list_schema import GraphItem
+from schemas.live_verbatims_list_schema import GraphItem,Live_Verbatims_List_Create
 from database.session import SessionLocal,engine
 from sqlalchemy.orm import Session
+from typing import List
 
 
-async def get_data(db:Session):
+async def get_data(db:Session)-> Live_Verbatims_List_Create:
     data = Live_Verbatims.get_all(db=db)
-    return data
+    return  [Live_Verbatims_List_Create(**item.__dict__) for item in data]
 
-async def get_graph_data(db:Session) -> GraphItem:
+async def get_graph_data(db:Session) -> List[GraphItem]:
     data = Live_Verbatims.get_all(db=db)
     ref = {}
     two_digit_country_code=[]
