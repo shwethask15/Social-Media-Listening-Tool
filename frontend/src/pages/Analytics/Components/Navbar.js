@@ -2,8 +2,6 @@ import { NavLink } from 'react-router-dom';
 import { FaBell, FaQuestionCircle } from 'react-icons/fa'; 
 import '../style/Navbar.css'
 
-
-
 function Navbar() {
     return (
         <div className="navbar-analytics">

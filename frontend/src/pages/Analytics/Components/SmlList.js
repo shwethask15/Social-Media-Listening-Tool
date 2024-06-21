@@ -3,13 +3,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchLiveVerbatims } from '../redux/slice/slice';
 import SmlShow from './Sml-Show';
 
-const SmlList = () => {
+const SmlList = ({ setLoading }) => {
   const dispatch = useDispatch();
-  const  liveVerbatims  = useSelector((state) => state.analytics.liveVerbatims);
+  const liveVerbatims = useSelector((state) => state.analytics.liveVerbatims);
 
   useEffect(() => {
-    dispatch(fetchLiveVerbatims());
-  }, [dispatch]);
+    setLoading(true);
+
+    dispatch(fetchLiveVerbatims()).finally(() => {
+      setLoading(false); 
+    });
+  }, [dispatch, setLoading]);
 
   let data = liveVerbatims;
   let count = data.length;

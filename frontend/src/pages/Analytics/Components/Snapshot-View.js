@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMapData, fetchAll } from '../redux/slice/slice';
-import SnapshotViewMap from './SnapShotViewMap'; // Assuming this is your generic map component
-import SnapshotViewMapAll from './SnapShotViewMapAll';
+import { fetchMapData } from '../redux/slice/slice';
+import SnapshotViewMap from './SnapShotViewMap'; 
+
 
 function SnapshotView() {
   const dispatch = useDispatch();
@@ -15,12 +15,8 @@ function SnapshotView() {
   }, [selectedOption]);
 
   const handleFetchData = () => {
-    setLoading(true); // Set loading to true when fetching data
-    if (selectedOption === 'All') {
-      dispatch(fetchAll()).finally(() => setLoading(false)); // Set loading to false when fetch is complete
-    } else {
-      dispatch(fetchMapData(selectedOption.toLowerCase())).finally(() => setLoading(false)); // Set loading to false when fetch is complete
-    }
+      setLoading(true); 
+      dispatch(fetchMapData(selectedOption.toLowerCase())).finally(() => setLoading(false)); 
   };
 
   const handleOptionChange = (event) => {
@@ -43,19 +39,14 @@ function SnapshotView() {
     </div>
   );
 
-  const renderContent = () => {
-    if (selectedOption === 'All') {
-      return <SnapshotViewMapAll data={radioButtonData} selectedOption={selectedOption} loading={loading} />   
-    } 
-    else {
+  const renderMap = () => {
       return <SnapshotViewMap data={radioButtonData} selectedOption={selectedOption} loading={loading} />;
-    }
   };
 
   return (
     <div>
       {renderRadioButtons()}
-      {renderContent()}
+      {renderMap()}
     </div>
   );
 }

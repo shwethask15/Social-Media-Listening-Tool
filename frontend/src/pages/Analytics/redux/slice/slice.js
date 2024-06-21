@@ -49,19 +49,6 @@ export const fetchMapData = createAsyncThunk(
   }
 );
 
-export const fetchAll = createAsyncThunk(
-  "mapData/fetchAll",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get("http://127.0.0.1:8000/analytics/snapshot_view/all");
-      return response.data.all;
-    } catch (error) {
-      return rejectWithValue(error.response ? error.response.data : "Network error");
-    }
-  }
-);
-
-
 const analyticsSlice = createSlice({
   name: "analyticsPage",
   initialState,
@@ -103,20 +90,7 @@ const analyticsSlice = createSlice({
       .addCase(fetchMapData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-      .addCase(fetchAll.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchAll.fulfilled, (state, action) => {
-        state.loading = false;
-        state.radioButtonData = action.payload;
-        state.error = "";
-      })
-      .addCase(fetchAll.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-      
+      })      
   },
 });
 

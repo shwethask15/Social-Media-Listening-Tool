@@ -7,7 +7,7 @@ import '../style/smlShow.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLiveTrendingMapData } from '../redux/slice/slice';
 
-function LiveMapChart() {
+function LiveMapChart({ setLoading }) {
   const dispatch = useDispatch();
   const mapData = useSelector((state) => state.analytics.liveTrendingMapData);
 
@@ -16,7 +16,9 @@ function LiveMapChart() {
   }, [dispatch]);
 
   useLayoutEffect(() => {
-    if (mapData.length === 0) return; // Wait for mapData to be populated
+    if (mapData.length === 0) return;
+
+    setLoading(true); // Set loading state to true before constructing the map
 
     let root = am5.Root.new("chartdiv");
     root.setThemes([am5themes_Animated.new(root)]);
@@ -27,7 +29,9 @@ function LiveMapChart() {
       am5map.MapPolygonSeries.new(root, {
         geoJSON: am5geodata_worldLow,
         exclude: ["AQ"],
-        fill: am5.color(0xdddbe4),
+        fill: am5.color(0xffffff),
+        stroke: am5.color(0x000000), // Change the border color here
+        strokeWidth: 2
       })
     );
 
@@ -105,7 +109,7 @@ function LiveMapChart() {
     zoomControl.plusButton.setAll({
       scale: .6, // Adjust the size
       background: am5.Rectangle.new(root, {
-        fill: am5.color(0x00FF00) // Change the color
+        fill: am5.color(0xdddbe4) // Change the color
       })
     });
 
@@ -113,7 +117,7 @@ function LiveMapChart() {
     zoomControl.minusButton.setAll({
       scale: .6, // Adjust the size
       background: am5.Rectangle.new(root, {
-        fill: am5.color(0xFF0000) // Change the color
+        fill: am5.color(0xdddbe4) // Change the color
       })
     });
 
@@ -122,7 +126,7 @@ function LiveMapChart() {
       scale: .6, // Adjust the size
       icon: am5.Graphics.new(root, {
         svgPath: "M12 2C13.1 2 14 2.9 14 4V8H16V4C16 2.34 14.66 1 13 1H11C9.34 1 8 2.34 8 4V8H10V4C10 2.9 10.9 2 12 2M4 10V22H10V16H14V22H20V10L12 3L4 10Z",
-        fill: am5.color(0x0000FF) // Change the color
+        fill: am5.color(0xdddbe4) // Change the color
       }),
     });
 
@@ -132,10 +136,12 @@ function LiveMapChart() {
       chart.goHome();
     });
 
+    setLoading(false); // Set loading state to false after the map is constructed
+
     return () => {
       root.dispose();
     };
-  }, [mapData]);
+  }, [mapData, setLoading]);
 
   return (
     <div id="chartdiv" className='MapChart' style={{ width: "100%", height: "300px", background: "#c5afea", borderRadius: "25px"}}></div>
