@@ -1,21 +1,16 @@
 import React from "react";
 import "./style/VerbatimListHeader.css";
 
-const VerbatimListHeader = ({ verbatimsCount, onSearch, onDownload }) => {
+const VerbatimListHeader = ({ verbatimsCount, onDownload, toggleModal }) => {
   return (
     <div className="verbatim-list-header">
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search"
-          onChange={(e) => onSearch(e.target.value)}
-        />
-        <i className="fas fa-search"></i>
-      </div>
       <div className="verbatims-info">
         <span className="verbatims-count">Total Verbatims: {verbatimsCount}</span>
+        <button onClick={toggleModal} className="filter-button">
+          Open Filter
+        </button>
         <button className="download-button" onClick={onDownload}>
-          <i className="fas fa-download"></i>
+          <i className="fas fa-download"></i> Download CSV
         </button>
       </div>
     </div>

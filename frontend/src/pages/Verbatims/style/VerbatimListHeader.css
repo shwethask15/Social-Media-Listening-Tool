@@ -6,26 +6,7 @@
   background-color: #f9f9f9;
   border-bottom: 1px solid #e0e0e0;
   margin-bottom: 20px;
-}
-
-.search-bar {
-  display: flex;
-  align-items: center;
-  position: relative;
-  background-color: var(--beige);
-}
-
-.search-bar input {
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  outline: none;
-}
-
-.search-bar i {
-  position: absolute;
-  right: 10px;
-  color: #888;
+  max-height: 70px;
 }
 
 .verbatims-info {
