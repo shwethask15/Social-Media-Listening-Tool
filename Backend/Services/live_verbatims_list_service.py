@@ -4,7 +4,9 @@ from http.client import HTTPException
 from schemas.verbatims_list_schema import verbatims_filters
 from schemas.live_verbatims_list_schema import GraphItem,Live_Verbatims_List_Create
 from database.session import SessionLocal,engine
+from sqlalchemy.sql import select
 from sqlalchemy.orm import Session
+import asyncio
 from typing import List
 
 
@@ -62,4 +64,3 @@ async def get_graph_data(db:Session) -> List[GraphItem]:
 #                 f.append(False)
 #         if False not in f:
 #             r.append(i)
-#     return r

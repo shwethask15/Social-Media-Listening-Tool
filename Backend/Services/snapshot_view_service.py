@@ -3,7 +3,7 @@ from crud.crud_snapshot_view import all_views
 from crud import base
 import logging
 from typing import List,Dict
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session # type: ignore
 from models.verbatims_list import Verbatims_List as VerbatimModel
 from schemas.verbatims_list_schema import Verbatims_List_create
 from schemas.snapshot_view_schema import AggregatedResponse,SentimentCounts,Counts,CountryData,FilteredResponse,CountryAggregatedData
@@ -70,35 +70,6 @@ class VerbatimService:
             query = query.filter(getattr(VerbatimModel, filter_name).isnot(None))
         return query.all()
     
-#function to fetch the data of all the filters together.
-    # def aggregate_all_counts(self,data: List[VerbatimModel]) -> AggregatedResponse:
-    #     country_data = defaultdict(lambda: {
-    #         "virality": {"High": 0, "Medium": 0, "Low": 0},
-    #         "severity": {"High": 0, "Medium": 0, "Low": 0},
-    #         "sentiment": {"Positive": 0, "Negative": 0, "Neutral": 0}
-    #     })
-
-    #     for verbatim in data:
-    #         country = verbatim.country
-    #         if country:
-    #             if verbatim.virality in country_data[country]["virality"]:
-    #                 country_data[country]["virality"][verbatim.virality] += 1
-    #             if verbatim.severity in country_data[country]["severity"]:
-    #                 country_data[country]["severity"][verbatim.severity] += 1
-    #             if verbatim.sentiment in country_data[country]["sentiment"]:
-    #                 country_data[country]["sentiment"][verbatim.sentiment] += 1
-
-    #     result = [
-    #         CountryData(
-    #             country=country,
-    #             virality_counts=Counts(**data["virality"]),
-    #             severity_counts=Counts(**data["severity"]),
-    #             sentiment_counts=SentimentCounts(**data["sentiment"])
-    #         )
-    #         for country, data in country_data.items()
-    #     ]
-
-    #     return AggregatedResponse(all=result)
     def aggregate_all_counts(self, data: List[VerbatimModel]) -> AggregatedResponse:
         country_data = defaultdict(lambda: {"High": 0, "Medium": 0, "Low": 0})
 
