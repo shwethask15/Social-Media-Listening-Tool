@@ -30,7 +30,7 @@ function SignIn({ onAuthSuccess }) {
   };
 
   return (
-    <div className='SignUp'>
+    <div>
       <h2>Sign In</h2>
       <form onSubmit={handleSignIn}>
         <input

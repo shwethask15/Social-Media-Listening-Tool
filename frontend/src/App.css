@@ -16,36 +16,15 @@
   background-color:rgb(255, 255, 255);
 }
 
-/* App.css */
-.SignUp {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-   min-height: 100vh;
-}
-
-.SignUp h2 {
-  margin-bottom: 20px;
-}
-
-.SignUp form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 300px;
-}
-
-.SignUp input {
+/* input {
   display: block;
-  width: 100%;
   margin: 10px 0;
   padding: 10px;
+  width: 100%;
   box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
 }
 
-.SignUp button {
+button {
   padding: 10px 20px;
   background-color: #6200ea;
   color: white;
@@ -54,11 +33,10 @@
   cursor: pointer;
 }
 
-.SignUp button:hover {
+button:hover {
   background-color: #3700b3;
 }
 
-.SignUp p {
+p {
   color: red;
-}
-
+} */
