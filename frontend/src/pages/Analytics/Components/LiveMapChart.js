@@ -3,37 +3,39 @@ import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-import '../style/smlShow.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLiveTrendingMapData } from '../redux/slice/slice';
+import { fetchLiveVerbatimsData } from '../redux/slice/slice';
+import '../style/smlShow.css'; // Ensure this path is correct
 
 function LiveMapChart({ setLoading }) {
   const dispatch = useDispatch();
-  const mapData = useSelector((state) => state.analytics.liveTrendingMapData);
-
+  const mapData = useSelector((state) => state.analytics.liveVerbatimsData.graph);
   useEffect(() => {
-    dispatch(fetchLiveTrendingMapData());
+    dispatch(fetchLiveVerbatimsData());
+    console.log('Fetching live verbatims data');
   }, [dispatch]);
 
   useLayoutEffect(() => {
-    if (mapData.length === 0) return;
+    console.log('mapData:', mapData);
+    if (!mapData || mapData.length === 0) return; // Check if mapData is undefined or empty
 
-    setLoading(true); // Set loading state to true before constructing the map
+    setLoading(true);
 
     let root = am5.Root.new("chartdiv");
     root.setThemes([am5themes_Animated.new(root)]);
 
     let chart = root.container.children.push(am5map.MapChart.new(root, {}));
-
+    
     let polygonSeries = chart.series.push(
       am5map.MapPolygonSeries.new(root, {
         geoJSON: am5geodata_worldLow,
         exclude: ["AQ"],
         fill: am5.color(0xffffff),
-        stroke: am5.color(0x000000), // Change the border color here
-        strokeWidth: 2
+        stroke: am5.color(0x000000), // Stroke color
+        strokeWidth: 2, // Increase the stroke width (adjust as needed)
       })
     );
+    
 
     let bubbleSeries = chart.series.push(
       am5map.MapPointSeries.new(root, {
@@ -54,7 +56,7 @@ function LiveMapChart({ setLoading }) {
           fillOpacity: 1,
           fill: am5.color(0x000000),
           cursorOverStyle: "pointer",
-          tooltipText: `{name}: [bold]{value}[/]`
+          tooltipText: `{id}: [bold]{value}[/]`
         }, circleTemplate)
       );
 
@@ -136,15 +138,16 @@ function LiveMapChart({ setLoading }) {
       chart.goHome();
     });
 
-    setLoading(false); // Set loading state to false after the map is constructed
+    setLoading(false);
 
     return () => {
       root.dispose();
     };
   }, [mapData, setLoading]);
 
+
   return (
-    <div id="chartdiv" className='MapChart' style={{ width: "100%", height: "300px", background: "#c5afea", borderRadius: "25px"}}></div>
+    <div id="chartdiv" className='MapChart '></div>
   );
 }
 

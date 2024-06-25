@@ -5,8 +5,6 @@ import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import '../style/smlShow.css';
 
-am4core.useTheme(am4themes_animated);
-
 const LoadingIndicator = () => <div>Loading...</div>;
 
 const MapContainer = () => (
@@ -129,16 +127,9 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
   };
 
   const constructMap = (countryData, legendData) => {
+    am4core.useTheme(am4themes_animated);
+
     console.log('Rendering map with countryData:', countryData, 'legendData:', legendData);
-
-    // Filter out items with all counts as 0
-    const filteredCountryData = countryData.filter(item => item.high > 0 || item.medium > 0 || item.low > 0);
-
-    if (filteredCountryData.length === 0) {
-      console.log('No data to display on the map.');
-      return; // Exit early if there's no data to display
-    }
-
     let chart = am4core.create('chartdiv', am4maps.MapChart);
 
     chart.geodata = am4geodata_worldLow;
@@ -155,7 +146,7 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     let hs = polygonTemplate.states.create('hover');
     hs.properties.fill = am4core.color('#367B25');
 
-    polygonSeries.data = filteredCountryData; // Use filtered data
+    polygonSeries.data = countryData;
 
     polygonTemplate.propertyFields.fill = 'fill';
 
@@ -173,6 +164,9 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     homeButton.marginBottom = 10;
     homeButton.parent = chart.zoomControl;
     homeButton.insertBefore(chart.zoomControl.plusButton);
+
+    // Enable export plugin and menu
+    chart.exporting.menu = new am4core.ExportMenu();
 
     return () => {
       chart.dispose();

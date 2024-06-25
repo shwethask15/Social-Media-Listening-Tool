@@ -3,16 +3,30 @@ from Routes.verbatims_list_routes import router as verbatims_list_router
 from Routes.live_verbatims_list_routes import router as live_verbatims_list_router
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from Routes.snapshot_view_routes import router as snapshot_router
+<<<<<<< HEAD
 import asyncio
 from database.session import SessionLocal
 import websockets
 from models.live_verbatims_list import Live_Verbatims_List
 from sqlalchemy import func
+=======
+from Routes.user_auth_routes import router as user_auth_router
+from models import users_data_model
+from database.session import engine
+>>>>>>> 363fb183ff525774d2025e0619499c477ec95a55
 
+# users_data_model.Base.metadata.create_all(bind = engine)
 app = FastAPI()
 
-app.add_middleware(CORSMiddleware,allow_origins=['*'])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Adjust this list as necessary
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+<<<<<<< HEAD
 app.include_router(verbatims_list_router,prefix="")
 app.include_router(live_verbatims_list_router,prefix="")
 app.include_router(snapshot_router,prefix="")
@@ -78,3 +92,9 @@ async def startup_event():
 # # Adjust the directory path as per your setup
 # from fastapi.staticfiles import StaticFiles
 # app.mount("/static/index", StaticFiles(directory="static"), name="static")
+=======
+app.include_router(verbatims_list_router,tags=["verbatims_list"],prefix="")
+app.include_router(live_verbatims_list_router,tags=["live_verbatims_list_apis"],prefix="")
+app.include_router(snapshot_router,tags=["snapshot_apis"],prefix="")
+app.include_router(user_auth_router,tags=["user_auth"],prefix="")
+>>>>>>> 363fb183ff525774d2025e0619499c477ec95a55

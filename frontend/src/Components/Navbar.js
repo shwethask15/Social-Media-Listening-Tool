@@ -23,6 +23,10 @@ function Navbar() {
     const closeViewAlertsModal = () => {
         setShowViewAlertsModal(false);
     };
+    const handleLogout = () => {
+        localStorage.removeItem('authToken');
+        window.location.reload();
+      };
 
     return (
         <div className="navbar">
@@ -42,8 +46,10 @@ function Navbar() {
                     {showDropdown && <Alerts toggleModal={toggleDropdown} showViewAlerts={showViewAlerts} />}
                 </div>
                 <FaQuestionCircle className="icon" />
+                <button onClick={handleLogout}>Logout</button>
             </div>
             {showViewAlertsModal && <ViewAlerts closeModal={closeViewAlertsModal} />}
+            
         </div>
     );
 }

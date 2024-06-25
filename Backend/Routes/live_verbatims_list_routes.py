@@ -2,6 +2,7 @@ from fastapi import APIRouter,Depends, HTTPException, WebSocket # type: ignore
 from sqlalchemy.orm import Session  # type: ignore
 from Services.live_verbatims_list_service import get_data,get_graph_data
 from schemas.verbatims_list_schema import verbatims_filters
+<<<<<<< HEAD
 from schemas.live_verbatims_list_schema import GraphItem,GraphItemResult,Live_Verbatims_List_Create
 from typing import Dict,List,Union
 from database.session import get_db, SessionLocal
@@ -12,6 +13,12 @@ from models.live_verbatims_list import Live_Verbatims_List
 from sqlalchemy import func
 
 
+=======
+from schemas.live_verbatims_list_schema import GraphItem,GraphItemResult
+from typing import Dict,List
+from user_auth.auth_bearer import JWTBearer
+from database.session import get_db
+>>>>>>> 363fb183ff525774d2025e0619499c477ec95a55
 
 router = APIRouter()
 
@@ -36,7 +43,7 @@ async def get_live_data(db: Session):#get the dependency function
         # Get verbatims data
       #  Live_verbatims = await crud.get_verbatims(db=db)
       Live_verbatims=await get_data(db = db)
-      print(Live_verbatims[0].__dict__)
+      # print(Live_verbatims[0].__dict__)
 
         # Get graph data
       graph = await get_graph_data(db=db)
@@ -51,7 +58,7 @@ async def get_live_data(db: Session):#get the dependency function
 
 # Define route to fetch both verbatims and graph data
 @router.get("/Live_Verbatims_List/",response_model=GraphItemResult)
-async def get_live_data_endpoint(db: Session = Depends(get_db)):
+async def get_live_data_endpoint(token : str = Depends(JWTBearer()),db: Session = Depends(get_db)):
     return await get_live_data(db=db)
 
 

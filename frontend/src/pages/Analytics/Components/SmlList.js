@@ -1,31 +1,40 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchLiveVerbatims } from '../redux/slice/slice';
+import { fetchLiveVerbatimsData } from '../redux/slice/slice';
 import SmlShow from './Sml-Show';
+import Loader from './Loader';
+import '../style/smlShow.css';
 
-const SmlList = ({ setLoading }) => {
+const SmlList = () => {
   const dispatch = useDispatch();
-  const liveVerbatims = useSelector((state) => state.analytics.liveVerbatims);
+  const liveVerbatims = useSelector((state) => state.analytics.liveVerbatimsData.Live_Verbatims_List);
+  const loading = useSelector((state) => state.analytics.loading);
+  const error = useSelector((state) => state.analytics.error);
 
   useEffect(() => {
-    setLoading(true);
+    dispatch(fetchLiveVerbatimsData());
+  }, [dispatch]);
 
-    dispatch(fetchLiveVerbatims()).finally(() => {
-      setLoading(false); 
-    });
-  }, [dispatch, setLoading]);
+  if (loading) {
+    return <Loader />;
+  }
 
-  let data = liveVerbatims;
-  let count = data.length;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!liveVerbatims || liveVerbatims.length === 0) {
+    return <div>No data available</div>;
+  }
 
   return (
     <div>
       <div className='smlHeading'>
         <p>Live Trending Verbatims</p>
-        <p>Count: {count}</p>
+        <p>Count: {liveVerbatims.length}</p>
       </div>
       <div>
-        {data.map((item, index) => (
+        {liveVerbatims.map((item, index) => (
           <SmlShow key={index} item={item} />
         ))}
       </div>

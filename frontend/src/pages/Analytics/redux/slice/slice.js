@@ -1,47 +1,51 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import apiURL from "../utils/Live-Verbatims-List-URL";
+import urls from "../utils/urls";
+
+const liveVerbatimsUrl = urls.LiveVerbatimsListUrl;
+const snapshotViewUrl = urls.SnapShotViewUrl;
 
 const initialState = {
-  liveVerbatims: [],
-  liveTrendingMapData: [],
-  radioButtonData: [],
+  liveVerbatimsData: [],
+  SSVMapData: [],
   loading: false,
   error: "",
 };
 
+// Add a request interceptor to include the authToken in the headers
+axios.interceptors.request.use(
+  (config) => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      config.headers.Authorization = `Bearer ${authToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // Async thunk for fetching live verbatims
-export const fetchLiveVerbatims = createAsyncThunk(
+export const fetchLiveVerbatimsData = createAsyncThunk(
   "liveVerbatims/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(apiURL);
-      return response.data.Live_Verbatims_List;
+      const response = await axios.get(liveVerbatimsUrl);
+      console.log('datalll', response.data.Live_Verbatims_List);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : "Network error");
     }
   }
 );
 
-// Async thunk for fetching map data
-export const fetchLiveTrendingMapData = createAsyncThunk(
-  "mapData/fetch",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${apiURL}`);
-      return response.data.graph; 
-    } catch (error) {
-      return rejectWithValue(error.response ? error.response.data : "Network error");
-    }
-  }
-);
-
-export const fetchMapData = createAsyncThunk(
+export const fetchSnapShotViewData = createAsyncThunk(
   "mapData/fetchMapData",
   async (type, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/analytics/snapshot_view/${type}`);
-      console.log('data: ',response.data[type])
+      const response = await axios.get(`${snapshotViewUrl}${type}`);
+      console.log('data: ', response.data[type]);
       return response.data[type];
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : "Network error");
@@ -55,42 +59,30 @@ const analyticsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchLiveVerbatims.pending, (state) => {
+      .addCase(fetchLiveVerbatimsData.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchLiveVerbatims.fulfilled, (state, action) => {
+      .addCase(fetchLiveVerbatimsData.fulfilled, (state, action) => {
         state.loading = false;
-        state.liveVerbatims = action.payload;
+        state.liveVerbatimsData = action.payload;
         state.error = "";
       })
-      .addCase(fetchLiveVerbatims.rejected, (state, action) => {
+      .addCase(fetchLiveVerbatimsData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(fetchLiveTrendingMapData.pending, (state) => {
+      .addCase(fetchSnapShotViewData.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchLiveTrendingMapData.fulfilled, (state, action) => {
+      .addCase(fetchSnapShotViewData.fulfilled, (state, action) => {
         state.loading = false;
-        state.liveTrendingMapData = action.payload;
+        state.SSVMapData = action.payload;
         state.error = "";
       })
-      .addCase(fetchLiveTrendingMapData.rejected, (state, action) => {
+      .addCase(fetchSnapShotViewData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })
-      .addCase(fetchMapData.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(fetchMapData.fulfilled, (state, action) => {
-        state.loading = false;
-        state.radioButtonData = action.payload;
-        state.error = "";
-      })
-      .addCase(fetchMapData.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })      
+      });
   },
 });
 

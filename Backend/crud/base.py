@@ -18,7 +18,7 @@ class CRUDBase(Generic[ModelType,CreateSchemaType]):
         db.refresh(obj_in)
         return obj_in
     
-    def get_all(self,db : Session,*,skip:int = 0, limit:int = 100)->List[ModelType]:
+    def get_all(self,db : Session,*,skip:int = 0, limit:int = 60)->List[ModelType]:
         return db.query(self.model).offset(skip).limit(limit).all()
     
     

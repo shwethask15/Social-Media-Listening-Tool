@@ -4,11 +4,12 @@ from typing import Optional,Union
 from database.session import get_db
 from schemas.snapshot_view_schema import AggregatedResponse, FilteredResponse
 from Services.snapshot_view_service import  VerbatimService
+from user_auth.auth_bearer import JWTBearer
 router = APIRouter()
-  
+
     
 @router.get("/analytics/snapshot_view/{filter_name}", response_model=Union[AggregatedResponse, FilteredResponse])
-async def get_aggregated_verbatims(filter_name: str, db: Session = Depends(get_db)):
+async def get_aggregated_verbatims(filter_name: str,token : str = Depends(JWTBearer()), db: Session = Depends(get_db)):
     """
     Endpoint to retrieve aggregated counts of all, virality, severity, and sentiment for each country.
     """
