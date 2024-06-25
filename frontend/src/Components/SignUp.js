@@ -33,7 +33,7 @@ function SignUp({ onSignUpSuccess }) {
   };
 
   return (
-    <div>
+    <div className='SignUp'>
       <h2>Sign Up</h2>
       <form onSubmit={handleSignUp}>
         <input
