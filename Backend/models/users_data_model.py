@@ -7,7 +7,6 @@ class User_Data(Base):
     password = Column(String,nullable=False)
     mobile_no = Column(BigInteger,nullable=False)
     address = Column(String,nullable=False)
-    # role = Column(String,nullable=False)
 
 class Token_Data(Base):
     user_name = Column(String)
@@ -15,7 +14,3 @@ class Token_Data(Base):
     # refresh_token = Column(String,nullable=False)
     status = Column(Boolean)
     created_date = Column(DateTime, default=datetime.datetime.now)
-
-# class Roles(Base):
-#     role = Column(String,nullable=False)
-#     operation = Column(String,nullable=False)
