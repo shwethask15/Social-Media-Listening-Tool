@@ -10,14 +10,20 @@ function LiveTrendingVerbatims() {
   return (
     <div className="LTV">
       {loading && <Loader />}
-      <div className="title-ltv">
+      {/* <div className="title-ltv">
         <h1>Live Trending Map</h1>
-      </div>
-      <div className="map-container">
-        <LiveMapChart setLoading={setLoading} />
-      </div>
-      <div>
-        <SmlList />
+      </div> */}
+      <div className="content-container">
+        <div className="map-container">
+          <LiveMapChart setLoading={setLoading} />
+          <div>
+          <p className='MapLabel'> * Live Trending Verbatims shows the recent records</p>
+          </div>
+        </div>
+       
+        <div className="comments-container">
+          <SmlList />
+        </div>
       </div>
     </div>
   );

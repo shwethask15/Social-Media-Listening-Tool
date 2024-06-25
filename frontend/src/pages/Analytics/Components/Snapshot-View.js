@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMapData } from '../redux/slice/slice';
+import { fetchSnapShotViewData } from '../redux/slice/slice';
 import SnapshotViewMap from './SnapShotViewMap'; 
 
 
 function SnapshotView() {
   const dispatch = useDispatch();
-  const radioButtonData = useSelector((state) => state.analytics.radioButtonData);
+  const MapData = useSelector((state) => state.analytics.SSVMapData);
   const [selectedOption, setSelectedOption] = useState('All');
   const [loading, setLoading] = useState(false); // State to track loading
 
@@ -16,7 +16,7 @@ function SnapshotView() {
 
   const handleFetchData = () => {
       setLoading(true); 
-      dispatch(fetchMapData(selectedOption.toLowerCase())).finally(() => setLoading(false)); 
+      dispatch(fetchSnapShotViewData(selectedOption.toLowerCase())).finally(() => setLoading(false)); 
   };
 
   const handleOptionChange = (event) => {
@@ -40,7 +40,7 @@ function SnapshotView() {
   );
 
   const renderMap = () => {
-      return <SnapshotViewMap data={radioButtonData} selectedOption={selectedOption} loading={loading} />;
+      return <SnapshotViewMap data={MapData} selectedOption={selectedOption} loading={loading} />;
   };
 
   return (

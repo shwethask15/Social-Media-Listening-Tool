@@ -5,8 +5,6 @@ import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import '../style/smlShow.css';
 
-am4core.useTheme(am4themes_animated);
-
 const LoadingIndicator = () => <div>Loading...</div>;
 
 const MapContainer = () => (
@@ -129,6 +127,8 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
   };
 
   const constructMap = (countryData, legendData) => {
+    am4core.useTheme(am4themes_animated);
+
     console.log('Rendering map with countryData:', countryData, 'legendData:', legendData);
     let chart = am4core.create('chartdiv', am4maps.MapChart);
 
@@ -164,6 +164,9 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     homeButton.marginBottom = 10;
     homeButton.parent = chart.zoomControl;
     homeButton.insertBefore(chart.zoomControl.plusButton);
+
+    // Enable export plugin and menu
+    chart.exporting.menu = new am4core.ExportMenu();
 
     return () => {
       chart.dispose();
