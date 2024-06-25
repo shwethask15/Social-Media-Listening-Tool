@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
 import urls from "../utils/urls";
-
 
 const liveVerbatimsUrl = urls.LiveVerbatimsListUrl;
 const snapshotViewUrl = urls.SnapShotViewUrl;
@@ -14,6 +12,19 @@ const initialState = {
   error: "",
 };
 
+// Add a request interceptor to include the authToken in the headers
+axios.interceptors.request.use(
+  (config) => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      config.headers.Authorization = `Bearer ${authToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Async thunk for fetching live verbatims
 export const fetchLiveVerbatimsData = createAsyncThunk(
@@ -21,7 +32,7 @@ export const fetchLiveVerbatimsData = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(liveVerbatimsUrl);
-      console.log('datalll',response.data.Live_Verbatims_List)
+      console.log('datalll', response.data.Live_Verbatims_List);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : "Network error");
@@ -34,7 +45,7 @@ export const fetchSnapShotViewData = createAsyncThunk(
   async (type, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${snapshotViewUrl}${type}`);
-      console.log('data: ',response.data[type])
+      console.log('data: ', response.data[type]);
       return response.data[type];
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : "Network error");
@@ -71,7 +82,7 @@ const analyticsSlice = createSlice({
       .addCase(fetchSnapShotViewData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      })      
+      });
   },
 });
 
