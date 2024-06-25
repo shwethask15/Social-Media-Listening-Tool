@@ -72,3 +72,27 @@ async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db))
     if user is None:
         raise credentials_exception
     return user
+
+@router.post('/logout')
+def logout(dependencies=Depends(JWTBearer()), db: Session = Depends(get_db)):
+    token=dependencies
+    payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
+    user_id = payload['user_data']
+    token_record = db.query(Token_Data).all()
+    info=[]
+    # print(token_record[0].__dict__)
+    for record in token_record :
+        print("record",record)
+        if (datetime.now() - record.created_date).days >1:
+            info.append(record.use)
+    if info:
+        existing_token = db.query(Token_Data).where(Token_Data.user_name.in_(info)).delete()
+        db.commit()
+        
+    existing_token = db.query(Token_Data).filter(Token_Data.user_name == user_id, Token_Data.access_token==token).first()
+    if existing_token:
+        existing_token.status=False
+        db.add(existing_token)
+        db.commit()
+        db.refresh(existing_token)
+    return {"message":"Logout Successfully"}
