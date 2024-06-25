@@ -5,7 +5,22 @@ import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import '../style/smlShow.css';
 
-am4core.useTheme(am4themes_animated);
+const LoadingIndicator = () => <div>Loading...</div>;
+
+const MapContainer = () => (
+  <div id="chartdiv"></div>
+);
+
+const Legend = ({ legendData }) => (
+  <div className="legend-container">
+    {legendData.map((item, index) => (
+      <div key={index} className="legend-item">
+        <div className="legend-color-box" style={{ backgroundColor: item.fill }}></div>
+        <span>{item.name}</span>
+      </div>
+    ))}
+  </div>
+);
 
 const SnapshotViewMap = ({ data, selectedOption, loading }) => {
   const [countryData, setCountryData] = useState([]);
@@ -78,6 +93,8 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
         return item.sentiment_counts || { Positive: 0, Negative: 0, Neutral: 0 };
       case 'Severity':
         return item.severity_counts || { High: 0, Medium: 0, Low: 0 };
+      case 'All':
+        return { High: item.High, Medium: item.Medium, Low: item.Low };
       default:
         return {};
     }
@@ -96,17 +113,23 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     return am4core.color('#c0c0c0');
   };
 
-  const constructMap = (countryData, legendData) => {
-    console.log('Rendering map with countryData:', countryData, 'legendData:', legendData);
-
-    // Filter out items with all counts as 0
-    const filteredCountryData = countryData.filter(item => item.high > 0 || item.medium > 0 || item.low > 0);
-
-    if (filteredCountryData.length === 0) {
-      console.log('No data to display on the map.');
-      return; // Exit early if there's no data to display
+  const getTooltipText = () => {
+    switch (selectedOption) {
+      case 'Sentiment':
+        return '[bold]{name}[/]\nPositive: {high}\nNeutral: {medium}\nNegative: {low}';
+      case 'Virality':
+      case 'Severity':
+      case 'All':
+        return '[bold]{name}[/]\nHigh: {high}\nMedium: {medium}\nLow: {low}';
+      default:
+        return '[bold]{name}[/]\nHigh: {high}\nMedium: {medium}\nLow: {low}';
     }
+  };
 
+  const constructMap = (countryData, legendData) => {
+    am4core.useTheme(am4themes_animated);
+
+    console.log('Rendering map with countryData:', countryData, 'legendData:', legendData);
     let chart = am4core.create('chartdiv', am4maps.MapChart);
 
     chart.geodata = am4geodata_worldLow;
@@ -117,21 +140,15 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     polygonSeries.exclude = ['AQ'];
 
     let polygonTemplate = polygonSeries.mapPolygons.template;
-    polygonTemplate.tooltipText = '[bold]{name}[/]\nHigh: {high}\nMedium: {medium}\nLow: {low}';
+    polygonTemplate.tooltipText = getTooltipText();
     polygonTemplate.polygon.fillOpacity = 0.6;
 
     let hs = polygonTemplate.states.create('hover');
     hs.properties.fill = am4core.color('#367B25');
 
-    polygonSeries.data = filteredCountryData; // Use filtered data
+    polygonSeries.data = countryData;
 
     polygonTemplate.propertyFields.fill = 'fill';
-
-    let legend = new am4maps.Legend();
-    legend.position = 'bottom';
-    legend.align = 'center';
-    legend.fontSize = '20px';
-    legend.data = legendData;
 
     chart.zoomControl = new am4maps.ZoomControl();
 
@@ -148,14 +165,8 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     homeButton.parent = chart.zoomControl;
     homeButton.insertBefore(chart.zoomControl.plusButton);
 
-    // Adjusting legend position inside the map
-    // chart.events.on('ready', function() {
-    //   legend.parent = chart.chartContainer;
-    //   legend.zIndex = 100;
-    //   legend.width = am4core.percent(100);
-    //   legend.align = 'center';
-    //   legend.marginTop = 10;
-    // });
+    // Enable export plugin and menu
+    chart.exporting.menu = new am4core.ExportMenu();
 
     return () => {
       chart.dispose();
@@ -163,20 +174,13 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
   };
 
   return (
-    <div className='SnapShotViewMap' style={{ margin: '50px', border: '1px solid #000000', padding: '20px', borderRadius: '8px' }}>
+    <div className='SnapShotViewMap'>
       {loading || isProcessing ? (
-        <div>Loading...</div>
+        <LoadingIndicator />
       ) : (
         <>
-          <div id="chartdiv" style={{ width: '100%', height: '300px' }}></div>
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '10px' }}>
-            {legendData.map((item, index) => (
-              <div key={index} style={{ display: 'flex', alignItems: 'center', marginRight: '10px' }}>
-                <div style={{ width: '20px', height: '20px', backgroundColor: item.fill.hex, marginRight: '5px' }}></div>
-                <span>{item.name}</span>
-              </div>
-            ))}
-          </div>
+          <MapContainer />
+          <Legend legendData={legendData} />
         </>
       )}
     </div>

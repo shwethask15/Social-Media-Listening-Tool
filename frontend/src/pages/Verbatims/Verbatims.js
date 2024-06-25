@@ -9,7 +9,7 @@ import blogIcon from "./assets/blog-icon.png";
 import redditIcon from "./assets/reddit-icon.png";
 import forumIcon from "./assets/forum-icon.png";
 import newsIcon from "./assets/news-icon.png";
-
+import VerbatimsPrompter from "./VerbatimsPrompter";
 
 const Verbatims = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,7 +45,9 @@ const Verbatims = () => {
   useEffect(() => {
     const fetchVerbatims = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/verbatim_list/");
+        const response = await axios.get(
+          "http://127.0.0.1:8000/verbatim_list/"
+        );
         const data = response.data.map((item) => ({
           date: item.date,
           location: item.country || "Unknown",
@@ -66,18 +68,20 @@ const Verbatims = () => {
               : item.source === "reddit"
               ? redditIcon
               : item.source === "news"
-              ? newsIcon :
-              forumIcon
+              ? newsIcon
+              : forumIcon,
         }));
         setVerbatimData(data);
-        setFilteredVerbatimData(data); 
+        setFilteredVerbatimData(data);
         setLoading(false);
 
         const uniqueOptions = {
           brands: [...new Set(data.map((item) => item.brand))].sort(),
           regions: [...new Set(data.map((item) => item.location))].sort(),
-          sources: [...new Set(data.map((item) => item.source))].sort(), 
-          sentiments: [...new Set(data.map((item) => item.sentiment))].reverse(),
+          sources: [...new Set(data.map((item) => item.source))].sort(),
+          sentiments: [
+            ...new Set(data.map((item) => item.sentiment)),
+          ].reverse(),
           viralities: [...new Set(data.map((item) => item.virality))],
           severities: [...new Set(data.map((item) => item.severity))],
           languages: [...new Set(data.map((item) => item.language))].sort(),
@@ -110,22 +114,17 @@ const Verbatims = () => {
     setCurrentPage(1);
   }, [verbatimData, appliedFilters]);
 
-  // Pagination 
+  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredVerbatimData.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredVerbatimData.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
   const totalPages = Math.ceil(filteredVerbatimData.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-  };
-
-  const handleSearch = (query) => {
-    const result = verbatimData.filter((verbatim) =>
-      verbatim.content.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredVerbatimData(result);
-    setCurrentPage(1);
   };
 
   const handleDownload = () => {
@@ -143,8 +142,7 @@ const Verbatims = () => {
 
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      Object.keys(csvData[0])
-        .join(",") +
+      Object.keys(csvData[0]).join(",") +
       "\n" +
       csvData.map((e) => Object.values(e).join(",")).join("\n");
 
@@ -157,11 +155,42 @@ const Verbatims = () => {
     document.body.removeChild(link);
   };
 
+  const handleSearch = (query) => {
+    const severityMatch = query.match(/(high|medium|low) severity/i);
+    const viralityMatch = query.match(/(high|medium|low) virality/i);
+    const sentimentMatch = query.match(
+      /(positive|negative|neutral) sentiment/i
+    );
+    const locationMatch = query.match(/in (\w+)/i);
+
+    const severity = severityMatch ? severityMatch[1] : null;
+    const virality = viralityMatch ? viralityMatch[1] : null;
+    const sentiment = sentimentMatch ? sentimentMatch[1] : null;
+    const location = locationMatch ? locationMatch[1] : null;
+
+    const result = verbatimData.filter((verbatim) => {
+      return (
+        (severity
+          ? verbatim.severity.toLowerCase() === severity.toLowerCase()
+          : true) &&
+        (virality
+          ? verbatim.virality.toLowerCase() === virality.toLowerCase()
+          : true) &&
+        (sentiment
+          ? verbatim.sentiment.toLowerCase() === sentiment.toLowerCase()
+          : true) &&
+        (location
+          ? verbatim.location.toLowerCase() === location.toLowerCase()
+          : true)
+      );
+    });
+
+    setFilteredVerbatimData(result);
+    setCurrentPage(1);
+  };
+
   return (
     <div className="Verbatims">
-      <div className="filter-button-container">
-        <button onClick={toggleModal} className="filter-button">Open Filter</button>
-      </div>
       <FilterModal
         show={isModalOpen}
         onClose={toggleModal}
@@ -170,22 +199,33 @@ const Verbatims = () => {
         setAppliedFilters={setAppliedFilters}
       />
       <div className="verbatims-header">
-        <input
-          type="text"
-          placeholder="Search..."
-          onChange={(e) => handleSearch(e.target.value)}
-          className="search-bar"
+        <VerbatimsPrompter
+          verbatimData={verbatimData}
+          setFilteredVerbatimData={setFilteredVerbatimData}
+          handleSearch={handleSearch}
+          setCurrentPage={setCurrentPage}
         />
-        <div className="verbatims-count">Total Verbatims: {filteredVerbatimData.length}</div>
-        <button onClick={handleDownload} className="download-button">
-          Download CSV
-        </button>
+        <div className="verbatims-count">
+          Total Verbatims: {filteredVerbatimData.length}
+        </div>
+        <div className="right-buttons">
+          <button onClick={toggleModal} className="filter-button">
+            Open Filter
+          </button>
+          <button onClick={handleDownload} className="download-button">
+            Download CSV
+          </button>
+        </div>
       </div>
       <div className="verbatims-list">
         {loading ? (
           <p>Loading...</p>
+        ) : filteredVerbatimData.length > 0 ? (
+          currentItems.map((item, index) => (
+            <VerbatimItem key={index} {...item} />
+          ))
         ) : (
-          currentItems.map((item, index) => <VerbatimItem key={index} {...item} />)
+          <p>No matches found</p>
         )}
       </div>
       <div className="pagination">

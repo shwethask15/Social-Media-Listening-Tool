@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMapData, fetchAll } from '../redux/slice/slice';
-import SnapshotViewMap from './SnapShotViewMap'; // Assuming this is your generic map component
-import SnapshotViewMapAll from './SnapShotViewMapAll';
+import { fetchSnapShotViewData } from '../redux/slice/slice';
+import SnapshotViewMap from './SnapShotViewMap'; 
+
 
 function SnapshotView() {
   const dispatch = useDispatch();
-  const radioButtonData = useSelector((state) => state.analytics.radioButtonData);
+  const MapData = useSelector((state) => state.analytics.SSVMapData);
   const [selectedOption, setSelectedOption] = useState('All');
   const [loading, setLoading] = useState(false); // State to track loading
 
@@ -15,12 +15,8 @@ function SnapshotView() {
   }, [selectedOption]);
 
   const handleFetchData = () => {
-    setLoading(true); // Set loading to true when fetching data
-    if (selectedOption === 'All') {
-      dispatch(fetchAll()).finally(() => setLoading(false)); // Set loading to false when fetch is complete
-    } else {
-      dispatch(fetchMapData(selectedOption.toLowerCase())).finally(() => setLoading(false)); // Set loading to false when fetch is complete
-    }
+      setLoading(true); 
+      dispatch(fetchSnapShotViewData(selectedOption.toLowerCase())).finally(() => setLoading(false)); 
   };
 
   const handleOptionChange = (event) => {
@@ -43,19 +39,14 @@ function SnapshotView() {
     </div>
   );
 
-  const renderContent = () => {
-    if (selectedOption === 'All') {
-      return <SnapshotViewMapAll data={radioButtonData} selectedOption={selectedOption} loading={loading} />   
-    } 
-    else {
-      return <SnapshotViewMap data={radioButtonData} selectedOption={selectedOption} loading={loading} />;
-    }
+  const renderMap = () => {
+      return <SnapshotViewMap data={MapData} selectedOption={selectedOption} loading={loading} />;
   };
 
   return (
     <div>
       {renderRadioButtons()}
-      {renderContent()}
+      {renderMap()}
     </div>
   );
 }
