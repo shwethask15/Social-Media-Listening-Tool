@@ -10,7 +10,13 @@ from database.session import engine
 # users_data_model.Base.metadata.create_all(bind = engine)
 app = FastAPI()
 
-app.add_middleware(CORSMiddleware,allow_origins=['http://localhost:3000'])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Adjust this list as necessary
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(verbatims_list_router,tags=["verbatims_list"],prefix="")
 app.include_router(live_verbatims_list_router,tags=["live_verbatims_list_apis"],prefix="")
