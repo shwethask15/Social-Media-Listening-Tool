@@ -10,10 +10,6 @@
   padding: 20px;
 }
 
-.filter-button-container {
-  text-align: left;
-}
-
 .filter-button {
   padding: 8px 12px;
   background-color: var(--purple);
@@ -21,6 +17,17 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  gap: 0;
+}
+
+.download-button {
+  padding: 8px 12px;
+  background-color: var(--purple);
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
 }
 
 .verbatims-header {
@@ -33,6 +40,7 @@
   background-color: var(--gray);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 15px;
+  height: 45px;
 }
 
 .search-bar {
@@ -45,13 +53,9 @@
   font-weight: bold;
 }
 
-.download-button {
-  padding: 8px 12px;
-  background-color: var(--purple);
-  color: black;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.verbatims-info {
+  display: flex;
+  align-items: center;
 }
 
 .verbatims-list {
