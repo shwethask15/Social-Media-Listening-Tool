@@ -12,11 +12,35 @@ from sqlalchemy import func
 
 from Routes.user_auth_routes import router as user_auth_router
 from models import users_data_model
-from database.session import engine
+from models.users_data_model import Roles
+from database.session import engine,SessionLocal
+from user_auth.security import get_password_hash
 
 
 # users_data_model.Base.metadata.create_all(bind = engine)
 # app = FastAPI()
+# db = SessionLocal()
+# roles = [
+#     {"role" : "admin","get" : True,"post" : True,"put" : True,"patch" : True},
+#     {"role" : "user","get" : True,"post" : True,"put" : False,"patch" : False}
+# ]
+# for i in roles:
+#     data = Roles(**i)
+#     db.add(data)
+#     db.commit()
+#     db.refresh(data)
+# db.close()
+
+# admin_data = [
+#     {"user_name":"venkatesh@gmail.com","password":get_password_hash("abcdef@123"),"mobile_no":9988776655,"address":"bengaluru","role":"admin"},
+#     {"user_name":"admin@gmail.com","password":get_password_hash("wuvxyz@123"),"mobile_no":9876543277,"address":"bengaluru","role":"admin"}
+# ]
+# for i in admin_data:
+#     data = users_data_model.User_Data(**i)
+#     db.add(data)
+#     db.commit()
+#     db.refresh(data)
+# db.close()
 app = FastAPI()
 
 app.add_middleware(
@@ -91,3 +115,11 @@ async def startup_event():
     asyncio.create_task(send_realtime_updates(websocket_connections))
 
 
+
+
+"""
+user_data ={
+  "user_name": "abcdef@gmail.com",
+  "password": "abcdefg@123"
+}
+"""

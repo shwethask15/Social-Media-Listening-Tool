@@ -21,7 +21,7 @@ async def get_data_with_filters(token : str = Depends(JWTBearer()),q : verbatims
     except Exception as e:
         return str(e)
     
-@router.post("/verbatim_list/{mention_id}")
+@router.put("/verbatim_list/{mention_id}")
 async def update_data(mention_id : str, update_body : verbatims_list_update,token : str = Depends(JWTBearer()), db: Session = Depends(get_db)):
     try:
         return await get_data_by_mention_id1(mention_id=mention_id,update_body=update_body,db=db)

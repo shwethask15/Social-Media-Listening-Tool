@@ -7,14 +7,17 @@ import jwt
 
 from models.users_data_model import User_Data
 from user_auth.security import verify_password
+from config.settings import get_settings
 
-SECRET_KEY = "0f887850b2898e971380ac9334d00c8b0314e7c19630c54ecc1181c89213a4e1"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_TIME = 45
+settings = get_settings()
+
+# SECRET_KEY = "0f887850b2898e971380ac9334d00c8b0314e7c19630c54ecc1181c89213a4e1"
+# ALGORITHM = "HS256"
+# ACCESS_TOKEN_EXPIRE_TIME = 45
 def authenticate(*,user_name: str,password : str,db : Session)->Optional[User_Data]:
     user = db.query(User_Data).filter(User_Data.user_name == user_name).first()
     user = user.__dict__
-    # print(user.password)
+    # print(user)
     if not user:
         return None
     if not verify_password(password,user["password"]):
@@ -26,7 +29,7 @@ def create_token(data : dict,expires_delta : timedelta = None):
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_TIME)
+        expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_TIME)
     data_encode.update({"exp":expire})
-    encoded_token = jwt.encode(data_encode,SECRET_KEY,algorithm = ALGORITHM)
+    encoded_token = jwt.encode(data_encode,settings.SECRET_KEY,algorithm = settings.ALGORITHM)
     return encoded_token
