@@ -41,17 +41,11 @@ async def login(data : Login_data,db : Session = Depends(get_db)):
             headers={"WWW-Authenticate":"Bearer"}
         )
     access_token = create_token(data={"user_data":user["user_name"]})
-    get_token_data = db.query(Token_Data).filter_by(access_token=access_token).first()
-    if not get_token_data:
-        token_db = Token_Data(user_name=user["user_name"],access_token=access_token,status=True)
-        db.add(token_db)
-        db.commit()
-        db.refresh(token_db)
-    else:
-        get_token_data.status = True
-        db.add(get_token_data)
-        db.commit()
-        db.refresh(token_db)
+
+    token_db = Token_Data(user_name=user["user_name"],access_token=access_token,status=True)
+    db.add(token_db)
+    db.commit()
+    db.refresh(token_db)
     return {"access_token":access_token,"token_type":"Bearer"}
 
 @router.get("/users/me")

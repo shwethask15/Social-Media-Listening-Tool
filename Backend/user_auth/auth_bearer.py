@@ -44,7 +44,7 @@ class JWTBearer(HTTPBearer):
         get_token_data = db.query(Token_Data).filter_by(access_token=jwtoken).first()
         db.close()
         # print(get_token_data.__dict__)
-        if get_token_data.status == False:
+        if get_token_data and get_token_data.status == False:
             return None
         try:
             payload = decodeJWT(jwtoken=jwtoken)
