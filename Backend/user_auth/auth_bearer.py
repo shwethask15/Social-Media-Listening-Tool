@@ -1,5 +1,6 @@
 import jwt
-from jwt.exceptions import InvalidTokenError
+# import jwt.exceptions
+# from jwt.exceptions import InvalidTokenError
 from fastapi import FastAPI, Depends, HTTPException,status
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -21,7 +22,7 @@ def decodeJWT(jwtoken: str):
         # Decode and verify the token
         payload = jwt.decode(jwtoken, settings.SECRET_KEY, settings.ALGORITHM)
         return payload
-    except InvalidTokenError:
+    except Exception as e:
         return None
 
 
@@ -48,8 +49,8 @@ class JWTBearer(HTTPBearer):
         db = SessionLocal()
         get_token_data = db.query(Token_Data).filter_by(access_token=jwtoken).first()
         db.close()
-        print(get_token_data.__dict__)
-        if get_token_data.status == False:
+        # print(get_token_data.__dict__)
+        if get_token_data and get_token_data.status == False:
             return None
         try:
             payload = decodeJWT(jwtoken=jwtoken)
