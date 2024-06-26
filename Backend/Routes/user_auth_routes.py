@@ -6,7 +6,7 @@ from crud.crud_users_data import Users
 from database.session import get_db,engine
 import jwt
 from sqlalchemy.orm import Session
-from jwt.exceptions import InvalidTokenError
+# from jwt.exceptions import InvalidTokenError
 from user_auth.auth_bearer import JWTBearer
 from user_auth.auth import create_token,authenticate,SECRET_KEY,ALGORITHM
 from datetime import datetime
@@ -66,7 +66,7 @@ async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db))
         user_name : str = data.get("user_data")
         if user_name is None:
             raise credentials_exception
-    except InvalidTokenError:
+    except Exception as e:
         raise credentials_exception
     user = get_user(user_name,db=db)
     if user is None:

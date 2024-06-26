@@ -1,21 +1,22 @@
-from fastapi import FastAPI,WebSocket # type: ignore
+from fastapi import FastAPI,WebSocket, Depends # type: ignore
 from Routes.verbatims_list_routes import router as verbatims_list_router
 from Routes.live_verbatims_list_routes import router as live_verbatims_list_router
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from Routes.snapshot_view_routes import router as snapshot_router
-<<<<<<< HEAD
+from typing import List
 import asyncio
-from database.session import SessionLocal
+from database.session import SessionLocal, get_db
 import websockets
 from models.live_verbatims_list import Live_Verbatims_List
 from sqlalchemy import func
-=======
+
 from Routes.user_auth_routes import router as user_auth_router
 from models import users_data_model
 from database.session import engine
->>>>>>> 363fb183ff525774d2025e0619499c477ec95a55
+
 
 # users_data_model.Base.metadata.create_all(bind = engine)
+# app = FastAPI()
 app = FastAPI()
 
 app.add_middleware(
@@ -26,13 +27,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-<<<<<<< HEAD
-app.include_router(verbatims_list_router,prefix="")
-app.include_router(live_verbatims_list_router,prefix="")
-app.include_router(snapshot_router,prefix="")
+app.include_router(verbatims_list_router,tags=["verbatims_list"],prefix="")
+app.include_router(live_verbatims_list_router,tags=["live_verbatims_list_apis"],prefix="")
+app.include_router(snapshot_router,tags=["snapshot_apis"],prefix="")
+app.include_router(user_auth_router,tags=["user_auth"],prefix="")
 
 
-websocket_connections = []
+websocket_connections = []  # List to store WebSocket connections
 
 # WebSocket endpoint (defined in your router or separate module)
 @app.websocket("/ws")
@@ -45,31 +46,35 @@ async def websocket_endpoint(websocket: WebSocket):
     except Exception:
         websocket_connections.remove(websocket)
 
-# Function to send real-time updates (defined in your router or separate module)
-@app.on_event("startup")
-async def startup_event():
-    while True:
-        await asyncio.sleep(10)
-        print("Performing startup tasks...")
 
-
-async def send_realtime_updates():
+# Function to send real-time updates
+async def send_realtime_updates(websocket_connections) -> None:
     last_total_rows = 0  # Track the last known total rows in the table
+    recent_updates = []  # List to store recent updates
+
     while True:
         try:
             db = SessionLocal()
 
             # Query current total rows in Live_Verbatims_List
             current_total_rows = db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
+            print(f"Current total rows: {current_total_rows}, Last total rows: {last_total_rows}")
 
             # Compare current total rows with last known total rows
             if current_total_rows != last_total_rows:
+                print("Detected change in total rows")
+
                 # Fetch all data if total rows have changed
                 new_data = db.query(Live_Verbatims_List).all()
 
                 if new_data:
-                    for connection in websocket_connections:
-                        await connection.send_json({"type": "notification", "data": [item.serialize() for item in new_data]})
+                    print(f"Sending notifications for {len(new_data)} new items")
+                    recent_updates = [item.serialize() for item in new_data]
+                    #print(recent_updates)
+                    # for connection in websocket_connections:
+                    #     await connection.send_json({"type": "notification", "data": recent_updates})
+                    send_tasks = [connection.send_json({"type": "notification", "data": recent_updates}) for connection in websocket_connections]
+                    await asyncio.gather(*send_tasks)
 
                     # Update last_total_rows to current_total_rows
                     last_total_rows = current_total_rows
@@ -80,21 +85,9 @@ async def send_realtime_updates():
         except Exception as e:
             print(f"Error sending updates: {e}")
 
-# Function to send real-time updates (defined in your router or separate module)
+       
 @app.on_event("startup")
 async def startup_event():
-    while True:
-        await asyncio.sleep(10)
-        print("Performing startup tasks...")
+    asyncio.create_task(send_realtime_updates(websocket_connections))
 
 
-# # Optional: Serve static files for Swagger UI
-# # Adjust the directory path as per your setup
-# from fastapi.staticfiles import StaticFiles
-# app.mount("/static/index", StaticFiles(directory="static"), name="static")
-=======
-app.include_router(verbatims_list_router,tags=["verbatims_list"],prefix="")
-app.include_router(live_verbatims_list_router,tags=["live_verbatims_list_apis"],prefix="")
-app.include_router(snapshot_router,tags=["snapshot_apis"],prefix="")
-app.include_router(user_auth_router,tags=["user_auth"],prefix="")
->>>>>>> 363fb183ff525774d2025e0619499c477ec95a55
