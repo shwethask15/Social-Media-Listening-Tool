@@ -48,7 +48,7 @@ class JWTBearer(HTTPBearer):
         db = SessionLocal()
         get_token_data = db.query(Token_Data).filter_by(access_token=jwtoken).first()
         db.close()
-        # print(get_token_data.__dict__)
+        print(get_token_data.__dict__)
         if get_token_data.status == False:
             return None
         try:

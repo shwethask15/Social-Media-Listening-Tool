@@ -4,6 +4,7 @@ from Routes.live_verbatims_list_routes import router as live_verbatims_list_rout
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from Routes.snapshot_view_routes import router as snapshot_router
 from Routes.user_auth_routes import router as user_auth_router
+from Routes.trend_analysis_routes import router as trend_analysis_router
 from models import users_data_model
 from models.users_data_model import Roles
 from database.session import engine,SessionLocal
@@ -32,6 +33,7 @@ from user_auth.security import get_password_hash
 #     db.commit()
 #     db.refresh(data)
 # db.close()
+# print(type(99887766554433322211))
 app = FastAPI()
 
 app.add_middleware(
@@ -46,6 +48,7 @@ app.include_router(verbatims_list_router,tags=["verbatims_list"],prefix="")
 app.include_router(live_verbatims_list_router,tags=["live_verbatims_list_apis"],prefix="")
 app.include_router(snapshot_router,tags=["snapshot_apis"],prefix="")
 app.include_router(user_auth_router,tags=["user_auth"],prefix="")
+app.include_router(trend_analysis_router,tags=["trend_analysis"],prefix="")
 
 """
 user_data ={
