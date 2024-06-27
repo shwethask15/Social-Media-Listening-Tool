@@ -77,19 +77,19 @@ async def get_data_by_mention_id1(mention_id : str,update_body : verbatims_list_
             if i == "virality":
                 res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
                 res.virality = update_body[i]
-                res.virality_altered = True
+                # res.virality_altered = True
             elif i == "sentiment":
                 res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
                 res.sentiment = update_body[i]
-                res.sentiment_altered = True
+                # res.sentiment_altered = True
             elif i == "severity":
                 res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
                 res.severity = update_body[i]
-                res.severity_altered = True
+                # res.severity_altered = True
             else:
                 res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
                 res.theme = update_body[i]
-                res.theme_altered = True
+                # res.theme_altered = True
     db.commit()
     # for i in ref:
     #     if i == "virality":

@@ -1,20 +1,24 @@
 from models.users_data_model import User_Data,Token_Data
 from fastapi import APIRouter,Depends,HTTPException,status
 from user_auth.security import get_password_hash
-from schemas.user_data_schema import User_data_create,Token_Create,Login_data
+from schemas.user_data_schema import User_data_create,Token_Create,Login_data,Get_user_data
 from crud.crud_users_data import Users
 from database.session import get_db,engine
 import jwt
 from sqlalchemy.orm import Session
-from jwt.exceptions import InvalidTokenError
+# from jwt.exceptions import InvalidTokenError
 from user_auth.auth_bearer import JWTBearer
-from user_auth.auth import create_token,authenticate,SECRET_KEY,ALGORITHM
+from user_auth.auth import create_token,authenticate
 from datetime import datetime
+from config.settings import get_settings
+
+settings = get_settings()
 
 router = APIRouter()
 
 def get_user(username : str,db : Session):
     data = Users.get_all(db=db)
+    # print(data)
     for i in data:
         temp = i.__dict__
         if username == temp["user_name"]:
@@ -34,13 +38,14 @@ async def signup(user : User_data_create,db : Session = Depends(get_db)):
 @router.post("/login/")
 async def login(data : Login_data,db : Session = Depends(get_db)):
     user = authenticate(user_name=data.user_name,password=data.password,db=db)
+    # print(user)
     if not user:
         raise HTTPException(
             status_code= status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password",
             headers={"WWW-Authenticate":"Bearer"}
         )
-    access_token = create_token(data={"user_data":user["user_name"]})
+    access_token = create_token(data={"user_data":user["user_name"],"role":user["role"]})
     get_token_data = db.query(Token_Data).filter_by(access_token=access_token).first()
     if not get_token_data:
         token_db = Token_Data(user_name=user["user_name"],access_token=access_token,status=True)
@@ -54,7 +59,7 @@ async def login(data : Login_data,db : Session = Depends(get_db)):
         db.refresh(token_db)
     return {"access_token":access_token,"token_type":"Bearer"}
 
-@router.get("/users/me")
+@router.get("/users/me",response_model=Get_user_data)
 async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -62,27 +67,28 @@ async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db))
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        data = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
+        data = jwt.decode(token,settings.SECRET_KEY,algorithms=[settings.ALGORITHM])
         user_name : str = data.get("user_data")
         if user_name is None:
             raise credentials_exception
-    except InvalidTokenError:
+    except Exception as e:
         raise credentials_exception
     user = get_user(user_name,db=db)
     if user is None:
         raise credentials_exception
+    user["mobile_no"] = str(user["mobile_no"])
     return user
 
 @router.post('/logout')
 def logout(dependencies=Depends(JWTBearer()), db: Session = Depends(get_db)):
     token=dependencies
-    payload = jwt.decode(token, SECRET_KEY, ALGORITHM)
+    payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
     user_id = payload['user_data']
     token_record = db.query(Token_Data).all()
     info=[]
     # print(token_record[0].__dict__)
     for record in token_record :
-        print("record",record)
+        # print("record",record)
         if (datetime.now() - record.created_date).days >1:
             info.append(record.use)
     if info:

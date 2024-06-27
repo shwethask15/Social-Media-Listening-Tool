@@ -22,3 +22,24 @@ class Live_Verbatims_List(Base):
     source= Column(String, nullable=False)
     originalURL= Column(String, nullable=False)
     url= Column(String, nullable=False)
+
+    def serialize(self):
+        return {
+            "mention_id": self.mention_id,
+            "virality": self.virality,
+            "severity": self.severity,
+            "snippet": self.snippet,
+            "impact_index":self.impact_index,
+            "all_combined_wt":self.all_combined_wt,
+            "updated_at":self.updated_at,
+            "mention_updated_date":self.mention_updated_date,
+            "sentiment":self.sentiment,
+            "brand":self.brand,
+            "three_digit_country_code":self.three_digit_country_code,
+            "country_name":self.country_name,
+            "two_digit_country_code":self.two_digit_country_code,
+            "theme":self.theme,
+            "source":self.source,
+            "originalURL":self.originalURL,
+            "url":self.url      
+        }
