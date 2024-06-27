@@ -31,7 +31,7 @@ class VerbatimService:
     #     return [Verbatims_List_create.from_orm(verbatim) for verbatim in verbatims]
 
 #function to fetch particular filter data
-    def aggregate_counts(self, data, filter_by) -> FilteredResponse:
+    async def aggregate_counts(self, data, filter_by) -> FilteredResponse:
         """
         Aggregate counts based on the filter type for each country.
         """
@@ -61,7 +61,7 @@ class VerbatimService:
     
    
 #function to fetch the data from database
-    def get_filtered_data(self, filter_name: str) -> List[VerbatimModel]:
+    async def get_filtered_data(self, filter_name: str) -> List[VerbatimModel]:
         """
         Retrieve data filtered by the given filter name.
         """
@@ -70,7 +70,7 @@ class VerbatimService:
             query = query.filter(getattr(VerbatimModel, filter_name).isnot(None))
         return query.all()
     
-    def aggregate_all_counts(self, data: List[VerbatimModel]) -> AggregatedResponse:
+    async def aggregate_all_counts(self, data: List[VerbatimModel]) -> AggregatedResponse:
         country_data = defaultdict(lambda: {"High": 0, "Medium": 0, "Low": 0})
 
         for verbatim in data:

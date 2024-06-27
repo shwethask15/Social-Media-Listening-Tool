@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Notifications</title>
+</head>
+<body>
+    <div id="notification-list">
+        <!-- Notifications will be appended here -->
+    </div>
+
+    <script>
+        const socket = new WebSocket('ws://127.0.0.1:8000/ws');  // Replace with your WebSocket server URL
+
+        socket.onmessage = function(event) {
+            const message = JSON.parse(event.data);
+            if (message.type === 'notification') {
+                const notifications = message.data;
+                notifications.forEach(notification => {
+                    const notificationElement = document.createElement('div');
+                    notificationElement.textContent = JSON.stringify(notification);
+                    document.getElementById('notification-list').appendChild(notificationElement);
+                });
+            }
+        };
+
+        socket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+        };
+
+        socket.onclose = function(event) {
+            console.log('WebSocket closed:', event);
+        };
+    </script>
+</body>
+</html>

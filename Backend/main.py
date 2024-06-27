@@ -71,10 +71,21 @@ async def websocket_endpoint(websocket: WebSocket):
         websocket_connections.remove(websocket)
 
 
+import json
+import os
+
+# File to store last_total_rows value
+LAST_TOTAL_ROWS_FILE = "Backend/config/last_total_rows.json"
+
 # Function to send real-time updates
 async def send_realtime_updates(websocket_connections) -> None:
-    last_total_rows = 0  # Track the last known total rows in the table
+    #last_total_rows = 0  # Track the last known total rows in the table
     recent_updates = []  # List to store recent updates
+    if os.path.exists(LAST_TOTAL_ROWS_FILE):
+        with open(LAST_TOTAL_ROWS_FILE, "r") as f:
+            last_total_rows = json.load(f)
+    else:
+        last_total_rows = 0
 
     while True:
         try:
@@ -82,17 +93,17 @@ async def send_realtime_updates(websocket_connections) -> None:
 
             # Query current total rows in Live_Verbatims_List
             current_total_rows = db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
-            print(f"Current total rows: {current_total_rows}, Last total rows: {last_total_rows}")
+            #print(f"Current total rows: {current_total_rows}, Last total rows: {last_total_rows}")
 
             # Compare current total rows with last known total rows
             if current_total_rows != last_total_rows:
-                print("Detected change in total rows")
+                print("Detected change in Live trending verbatims")
 
                 # Fetch all data if total rows have changed
                 new_data = db.query(Live_Verbatims_List).all()
 
                 if new_data:
-                    print(f"Sending notifications for {len(new_data)} new items")
+                    print(f"Sending notifications for {len(new_data)} items")
                     recent_updates = [item.serialize() for item in new_data]
                     #print(recent_updates)
                     # for connection in websocket_connections:
@@ -102,6 +113,9 @@ async def send_realtime_updates(websocket_connections) -> None:
 
                     # Update last_total_rows to current_total_rows
                     last_total_rows = current_total_rows
+                    # Save last_total_rows to file
+                    with open(LAST_TOTAL_ROWS_FILE, "w") as f:
+                        json.dump(last_total_rows, f)
 
             db.close()
             await asyncio.sleep(5)  # Send updates every 5 seconds (adjust as needed)
