@@ -82,3 +82,35 @@
     align-items: flex-start;
   }
 }
+
+.edit-icon {
+  background: none;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.edit-dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-option {
+  margin-bottom: 8px;
+}
+
+.save-button {
+  margin-top: 8px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 3px;
+}

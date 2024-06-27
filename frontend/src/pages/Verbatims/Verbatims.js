@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import FilterModal from "./FilterModal";
@@ -10,6 +11,7 @@ import redditIcon from "./assets/reddit-icon.png";
 import forumIcon from "./assets/forum-icon.png";
 import newsIcon from "./assets/news-icon.png";
 import VerbatimsPrompter from "./VerbatimsPrompter";
+import axiosInstance from "../../Components/redux/axiosInstance";
 
 const Verbatims = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -45,8 +47,8 @@ const Verbatims = () => {
   useEffect(() => {
     const fetchVerbatims = async () => {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/verbatim_list/"
+        const response = await axiosInstance.get(
+          "http://127.0.0.1:8000/verbatims_list/"
         );
         const data = response.data.map((item) => ({
           date: item.date,
@@ -256,3 +258,4 @@ const Verbatims = () => {
 };
 
 export default Verbatims;
+
