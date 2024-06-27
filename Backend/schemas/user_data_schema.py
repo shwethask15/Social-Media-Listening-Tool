@@ -1,16 +1,19 @@
 from pydantic import BaseModel
+# from typing import
+from sqlalchemy import BigInteger
 import datetime
 
 class User_data_create(BaseModel):
     user_name : str
     password : str
-    mobile_no : int
+    mobile_no : str
     address : str
 
 class Get_user_data(BaseModel):
     user_name : str
     mobile_no : str
     address : str
+    role : str
     class Config:
         orm_mode = True
 

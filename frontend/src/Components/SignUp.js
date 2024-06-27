@@ -1,81 +1,84 @@
 import React, { useState } from 'react';
-import '../App.css';
+import { useRegisterMutation } from './redux/authApi';
+import { useNavigate, NavLink } from 'react-router-dom';
+import './../App.css'; // Ensure you have some basic CSS for styling
 
-function SignUp({ onSignUpSuccess }) {
+const SignUp = () => {
   const [user_name, setUserName] = useState('');
-  // const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [mobile_no, setMobileNo] = useState('');
   const [address, setAddress] = useState('');
-  const [error, setError] = useState(null);
+  const [register, { isLoading, error }] = useRegisterMutation();
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://127.0.0.1:8000/signup/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ "user_name":user_name, "password":password, "mobile_no":mobile_no, "address":address })
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        onSignUpSuccess();
-      } else {
-        const errorData = await response.json();
-        setError(errorData.detail || 'Sign-up failed');
-      }
+      await register({ user_name, password, mobile_no, address }).unwrap();
+      navigate('/login');  // Redirect to login page after successful signup
     } catch (err) {
-      setError('An error occurred. Please try again later.');
+      console.error(err);
     }
   };
 
   return (
-    <div className='SignUp'>
+    <div className="sign-up-container">
       <h2>Sign Up</h2>
-      <form onSubmit={handleSignUp}>
-        <input
-          type="text"
-          placeholder="Username"
-          value={user_name}
-          onChange={(e) => setUserName(e.target.value)}
-          required
-        />
-        {/* <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        /> */}
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Mobile Number"
-          value={mobile_no}
-          onChange={(e) => setMobileNo(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          required
-        />
-        {error && <p>{error}</p>}
-        <button type="submit">Sign Up</button>
+      <form onSubmit={handleSignUp} className="sign-up-form">
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Username"
+            value={user_name}
+            onChange={(e) => setUserName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="mobile">Mobile Number</label>
+          <input
+            type="text"
+            id="mobile"
+            placeholder="Mobile Number"
+            value={mobile_no}
+            onChange={(e) => setMobileNo(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="address">Address</label>
+          <input
+            type="text"
+            id="address"
+            placeholder="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+          />
+        </div>
+        {error && error.data?.detail && (
+          <p className="error-message">{error.data.detail}</p>
+        )}
+        <button type="submit" className="sign-up-button" disabled={isLoading}>Sign Up</button>
+        <p className="signin-link">
+          Already have an account? <NavLink to="/login">Sign In</NavLink>
+        </p>
       </form>
     </div>
   );
-}
+};
 
 export default SignUp;

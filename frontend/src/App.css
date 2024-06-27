@@ -12,53 +12,127 @@
  
 .analyticsBody {
   font-family:'DM Serif display';
-  padding-top: 70px;
   background-color:rgb(255, 255, 255);
+  margin-top:100px;
 }
 
-/* App.css */
-.SignUp {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-   min-height: 100vh;
+.sign-in-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
 
-.SignUp h2 {
+.sign-in-container h2 {
+  text-align: center;
   margin-bottom: 20px;
 }
 
-.SignUp form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 300px;
+.sign-in-form .form-group {
+  margin-bottom: 15px;
 }
 
-.SignUp input {
+.sign-in-form .form-group label {
   display: block;
+  margin-bottom: 5px;
+}
+
+.sign-in-form .form-group input {
   width: 100%;
-  margin: 10px 0;
-  padding: 10px;
+  padding: 8px;
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-.SignUp button {
-  padding: 10px 20px;
-  background-color: #6200ea;
-  color: white;
+.sign-in-form .error-message {
+  color: red;
+  margin-bottom: 15px;
+}
+
+.sign-in-form .sign-in-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.SignUp button:hover {
-  background-color: #3700b3;
+.sign-in-form .sign-in-button:disabled {
+  background-color: #ccc;
 }
 
-.SignUp p {
+.signup-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.signup-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+.sign-up-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.sign-up-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sign-up-form .form-group {
+  margin-bottom: 15px;
+}
+
+.sign-up-form .form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.sign-up-form .form-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.sign-up-form .error-message {
   color: red;
+  margin-bottom: 15px;
 }
 
+.sign-up-form .sign-up-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.sign-up-form .sign-up-button:disabled {
+  background-color: #ccc;
+}
+
+.signin-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.signin-link a {
+  color: #007bff;
+  text-decoration: none;
+}

@@ -1,7 +1,7 @@
 from models.users_data_model import User_Data,Token_Data
 from fastapi import APIRouter,Depends,HTTPException,status
 from user_auth.security import get_password_hash
-from schemas.user_data_schema import User_data_create,Token_Create,Login_data
+from schemas.user_data_schema import User_data_create,Token_Create,Login_data,Get_user_data
 from crud.crud_users_data import Users
 from database.session import get_db,engine
 import jwt
@@ -18,7 +18,7 @@ router = APIRouter()
 
 def get_user(username : str,db : Session):
     data = Users.get_all(db=db)
-    print(data)
+    # print(data)
     for i in data:
         temp = i.__dict__
         if username == temp["user_name"]:
@@ -59,7 +59,7 @@ async def login(data : Login_data,db : Session = Depends(get_db)):
         db.refresh(token_db)
     return {"access_token":access_token,"token_type":"Bearer"}
 
-@router.get("/users/me")
+@router.get("/users/me",response_model=Get_user_data)
 async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -76,6 +76,7 @@ async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db))
     user = get_user(user_name,db=db)
     if user is None:
         raise credentials_exception
+    user["mobile_no"] = str(user["mobile_no"])
     return user
 
 @router.post('/logout')
@@ -87,7 +88,7 @@ def logout(dependencies=Depends(JWTBearer()), db: Session = Depends(get_db)):
     info=[]
     # print(token_record[0].__dict__)
     for record in token_record :
-        print("record",record)
+        # print("record",record)
         if (datetime.now() - record.created_date).days >1:
             info.append(record.use)
     if info:
