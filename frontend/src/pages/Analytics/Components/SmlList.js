@@ -20,7 +20,9 @@ const SmlList = () => {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    // Convert the error object to a string
+    const errorMessage = typeof error === 'object' ? JSON.stringify(error) : error;
+    return <div>Error: {errorMessage}</div>;
   }
 
   if (!liveVerbatims || liveVerbatims.length === 0) {

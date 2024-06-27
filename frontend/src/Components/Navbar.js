@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { FaBell, FaQuestionCircle } from 'react-icons/fa';
 import './Navbar.css';
 import Alerts from './Alerts';
 import ViewAlerts from './ViewAlerts';
+import { useDispatch } from 'react-redux';
+import { logoutSuccess } from './redux/authSlice';
 
 function Navbar() {
     const [showDropdown, setShowDropdown] = useState(false);
     const [showViewAlertsModal, setShowViewAlertsModal] = useState(false);
     const [notificationCount, setNotificationCount] = useState(2);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const toggleDropdown = (e) => {
         e.stopPropagation(); // Prevent click event from propagating
@@ -23,10 +27,12 @@ function Navbar() {
     const closeViewAlertsModal = () => {
         setShowViewAlertsModal(false);
     };
+
     const handleLogout = () => {
-        localStorage.removeItem('authToken');
-        window.location.reload();
-      };
+        localStorage.removeItem('authToken'); // Remove the token from localStorage
+        dispatch(logoutSuccess()); // Update the state to reflect logout
+        navigate('/login'); // Redirect to the login page
+    };
 
     return (
         <div className="navbar">
@@ -49,7 +55,6 @@ function Navbar() {
                 <button onClick={handleLogout}>Logout</button>
             </div>
             {showViewAlertsModal && <ViewAlerts closeModal={closeViewAlertsModal} />}
-            
         </div>
     );
 }

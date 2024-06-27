@@ -5,6 +5,19 @@ import urls from "../utils/urls";
 const liveVerbatimsUrl = urls.LiveVerbatimsListUrl;
 const snapshotViewUrl = urls.SnapShotViewUrl;
 
+// const liveVerbatimsUrl =  "/Live_Verbatims_List/";
+// const snapshotViewUrl = "/analytics/snapshot_view/";
+const baseURL = 'http://127.0.0.1:8000'; // Replace with your actual backend URL
+
+const axiosInstance = axios.create({
+  baseURL,
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${localStorage.getItem('authToken')}`, // Retrieve token from localStorage
+  },
+});
+
+
 const initialState = {
   liveVerbatimsData: [],
   SSVMapData: [],
@@ -12,26 +25,12 @@ const initialState = {
   error: "",
 };
 
-// Add a request interceptor to include the authToken in the headers
-axios.interceptors.request.use(
-  (config) => {
-    const authToken = localStorage.getItem("authToken");
-    if (authToken) {
-      config.headers.Authorization = `Bearer ${authToken}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 // Async thunk for fetching live verbatims
 export const fetchLiveVerbatimsData = createAsyncThunk(
   "liveVerbatims/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(liveVerbatimsUrl);
+      const response = await axiosInstance.get(liveVerbatimsUrl);;
       console.log('datalll', response.data.Live_Verbatims_List);
       return response.data;
     } catch (error) {
@@ -44,7 +43,7 @@ export const fetchSnapShotViewData = createAsyncThunk(
   "mapData/fetchMapData",
   async (type, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${snapshotViewUrl}${type}`);
+      const response = await axiosInstance.get(`${snapshotViewUrl}${type}`);;
       console.log('data: ', response.data[type]);
       return response.data[type];
     } catch (error) {
