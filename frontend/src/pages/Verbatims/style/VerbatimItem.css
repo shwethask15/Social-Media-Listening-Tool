@@ -114,3 +114,28 @@
   padding: 5px 10px;
   border-radius: 3px;
 }
+
+.verbatim-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.verbatim-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.edit-dropdown {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+}
+
+.edit-dropdown label {
+  margin-bottom: 5px;
+}
