@@ -1,12 +1,14 @@
 .verbatim-item {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--gray);
-  border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
-  background-color: var(--beige);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--glass-bg-color);
+  border-radius: var(--glass-border-radius);
+  box-shadow: var(--glass-box-shadow);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid var(--glass-border-color);
 }
 
 .verbatim-header {
