@@ -10,17 +10,20 @@ from models.users_data_model import Token_Data,Roles
 from sqlalchemy.orm import Session
 # from user_auth.auth import ACCESS_TOKEN_EXPIRE_TIME,ALGORITHM,SECRET_KEY
 from config.settings import get_settings
+from user_auth.public_and_private_key_services import load_public_key
 
 settings = get_settings()
 
 # SECRET_KEY = "0f887850b2898e971380ac9334d00c8b0314e7c19630c54ecc1181c89213a4e1"
-# ALGORITHM = "HS256"
+ALGORITHM = "RS256"
+PUBLIC_KEY = load_public_key()
 # ACCESS_TOKEN_EXPIRE_TIME = 45
 
 def decodeJWT(jwtoken: str):
     try:
         # Decode and verify the token
-        payload = jwt.decode(jwtoken, settings.SECRET_KEY, settings.ALGORITHM)
+        payload = jwt.decode(jwtoken,PUBLIC_KEY , ALGORITHM)
+        # print(payload)
         return payload
     except Exception as e:
         return None
@@ -33,6 +36,7 @@ class JWTBearer(HTTPBearer):
     async def __call__(self, request: Request):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         # print(request.method.lower())
+        print(credentials.credentials)
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
@@ -54,7 +58,6 @@ class JWTBearer(HTTPBearer):
             return None
         try:
             payload = decodeJWT(jwtoken=jwtoken)
-            # print(payload)
         except:
             payload = None
         if payload:

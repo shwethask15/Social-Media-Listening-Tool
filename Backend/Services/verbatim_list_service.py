@@ -4,11 +4,17 @@ from http.client import HTTPException
 from schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update,Verbatims_List_create
 from database.session import SessionLocal,engine
 from sqlalchemy.orm import Session
+from database.session import SessionLocal
 from models.verbatims_list import Verbatims_List
 
 
 async def get_data1(db : Session):
-    data = Verbatims.get_all(db=db)
+    # print("hi")
+    da = SessionLocal()
+    # data = Verbatims.get_all(db=da)
+    data = da.query(verbatims_list.Verbatims_List).all()
+    da.close()
+    print(data)
     return data
 
 async def get_data_with_filters1(q : verbatims_filters,db : Session):

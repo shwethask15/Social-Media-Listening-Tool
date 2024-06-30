@@ -11,6 +11,7 @@ from collections import Counter
 from fastapi.responses import JSONResponse # type: ignore
 import nltk
 from nltk.corpus import stopwords
+from user_auth.auth_bearer import JWTBearer
 
 
 
@@ -18,7 +19,7 @@ router = APIRouter()
 
     
 @router.get("/analytics/snapshot_view/{filter_name}", response_model=Union[AggregatedResponse, FilteredResponse])
-async def get_aggregated_verbatims(filter_name: str, db: Session = Depends(get_db)):
+async def get_aggregated_verbatims(filter_name: str,token : str = Depends(JWTBearer()), db: Session = Depends(get_db)):
     """
     Endpoint to retrieve aggregated counts of all, virality, severity, and sentiment for each country.
     """
@@ -47,7 +48,7 @@ nltk.download('wordnet')
 lemmatizer = WordNetLemmatizer()
 
 @router.get("/analytics/snapshot_view/topic_filter/")
-async def get_word_counts(request: Request, brand: str = None, theme: str = None,  db: Session = Depends(get_db)):
+async def get_word_counts(request: Request, brand: str = None, theme: str = None,token : str = Depends(JWTBearer()),  db: Session = Depends(get_db)):
     # Start with base query to get all verbatims
     query = "SELECT translated_snippet FROM verbatims_list"
     # Apply filters if brand and theme are provided
