@@ -4,7 +4,8 @@ import TrendAnalysis from "./Components/Trend-Analysis";
 import SnapshotView from "./Components/Snapshot-View";
 import Navbar from "../Analytics/Components/Navbar";
 import '../Analytics/style/Navbar.css'
-import '../../App.css'
+import '../Analytics/style/smlShow.css'
+
 import { Provider } from "react-redux";
 import store from "./redux/store/store";
 

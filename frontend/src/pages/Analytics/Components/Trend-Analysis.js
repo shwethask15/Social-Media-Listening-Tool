@@ -1,56 +1,126 @@
-import React, { useState } from "react";
-import LineChart from "./LineChart";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTrendAnalysisData } from '../redux/slice/slice';
+import LineCharts from './LineCharts';
 
 const TrendAnalysis = () => {
-  const allData = {
-    March: [
-      { date: new Date("Wed Mar 16 2022"), count: 175 },
-      { date: new Date("Thu Mar 17 2022"), count: 140 },
-      { date: new Date("Fri Mar 18 2022"), count: 96 },
-      { date: new Date("Sat Mar 19 2022"), count: 61 },
-      { date: new Date("Sun Mar 20 2022"), count: 91 },
-      { date: new Date("Mon Mar 21 2022"), count: 129 },
-      { date: new Date("Tue Mar 22 2022"), count: 19 },
-    ],
-    April: [
-      { date: new Date("Wed Apr 13 2022"), count: 150 },
-      { date: new Date("Thu Apr 14 2022"), count: 100 },
-      { date: new Date("Fri Apr 15 2022"), count: 90 },
-      { date: new Date("Sat Apr 16 2022"), count: 70 },
-      { date: new Date("Sun Apr 17 2022"), count: 100 },
-      { date: new Date("Mon Apr 18 2022"), count: 130 },
-      { date: new Date("Tue Apr 19 2022"), count: 20 },
-    ],
-    May: [
-      { date: new Date("Wed May 11 2022"), count: 160 },
-      { date: new Date("Thu May 12 2022"), count: 110 },
-      { date: new Date("Fri May 13 2022"), count: 95 },
-      { date: new Date("Sat May 14 2022"), count: 65 },
-      { date: new Date("Sun May 15 2022"), count: 85 },
-      { date: new Date("Mon May 16 2022"), count: 125 },
-      { date: new Date("Tue May 17 2022"), count: 25 },
-    ],
+  const [selectedOption, setSelectedOption] = useState('verbatims');
+  const [selectedMonth, setSelectedMonth] = useState('may');
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const trendAnalysisData = useSelector((state) => state.analytics.trendAnalysisData);
+
+  useEffect(() => {
+    setLoading(true);
+    dispatch(fetchTrendAnalysisData('verbatim_count')).finally(() => setLoading(false));
+  }, [dispatch]);
+
+  const handleOptionChange = (event) => {
+    const value = event.target.value;
+    setSelectedOption(value);
+    let queryParam = '';
+
+    switch (value) {
+      case 'verbatims':
+        queryParam = 'verbatim_count';
+        break;
+      case 'severity':
+        queryParam = 'severity_count';
+        break;
+      case 'virality':
+        queryParam = 'virality_count';
+        break;
+      case 'sentiment':
+        queryParam = 'sentiment_count';
+        break;
+      default:
+        break;
+    }
+
+    if (queryParam) {
+      setLoading(true);
+      dispatch(fetchTrendAnalysisData(queryParam)).finally(() => setLoading(false));
+    }
   };
 
-  // Use a single state to manage the currently selected data
-  const [data, setData] = useState(allData["March"]);
-
   const handleMonthChange = (event) => {
-    const month = event.target.value;
-    setData(allData[month]);
+    setSelectedMonth(event.target.value);
+  };
+
+  const formatData = (data) => {
+    return data.map(item => {
+      const [year, month, day] = item.date.split('-');
+      return {
+        ...item,
+        date: new Date(`20${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`)
+      };
+    });
+  };
+
+  const getFilteredData = () => {
+    if (trendAnalysisData[selectedMonth]) {
+      return formatData(trendAnalysisData[selectedMonth]);
+    }
+    return [];
   };
 
   return (
-    <>
-      <h1>Trend Analysis</h1>
-      <label htmlFor="month-select">Choose a month:</label>
-      <select id="month-select" onChange={handleMonthChange}>
-        <option value="March">March</option>
-        <option value="April">April</option>
-        <option value="May">May</option>
-      </select>
-      <LineChart data={data} />
-    </>
+    <div className="trend-analysis-container">
+      <h2>Trend Analysis</h2>
+      <form className="trend-analysis-form">
+        <label>
+          <input
+            type="radio"
+            value="verbatims"
+            checked={selectedOption === 'verbatims'}
+            onChange={handleOptionChange}
+          />
+          Verbatims
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="severity"
+            checked={selectedOption === 'severity'}
+            onChange={handleOptionChange}
+          />
+          Severity
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="virality"
+            checked={selectedOption === 'virality'}
+            onChange={handleOptionChange}
+          />
+          Virality
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="sentiment"
+            checked={selectedOption === 'sentiment'}
+            onChange={handleOptionChange}
+          />
+          Sentiment
+        </label>
+      </form>
+      <div className="trend-analysis-month-select">
+        <label>
+          Select Month:
+          <select value={selectedMonth} onChange={handleMonthChange}>
+            <option value="april">April</option>
+            <option value="may">May</option>
+            <option value="june">June</option>
+          </select>
+        </label>
+      </div>
+      {loading ? (
+        <div className="trend-analysis-loading">Loading...</div>
+      ) : (
+        <LineCharts data={getFilteredData()} />
+      )}
+    </div>
   );
 };
 

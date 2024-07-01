@@ -1,26 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
 import urls from "../utils/urls";
+import axiosInstance from "../../../../Components/redux/axiosInstance";
 
-const liveVerbatimsUrl = urls.LiveVerbatimsListUrl;
-const snapshotViewUrl = urls.SnapShotViewUrl;
-
-// const liveVerbatimsUrl =  "/Live_Verbatims_List/";
-// const snapshotViewUrl = "/analytics/snapshot_view/";
-const baseURL = 'http://127.0.0.1:8000'; // Replace with your actual backend URL
-
-const axiosInstance = axios.create({
-  baseURL,
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('authToken')}`, // Retrieve token from localStorage
-  },
-});
-
+const liveVerbatimsUrl = urls.liveVerbatimsListUrl;
+const snapshotViewUrl = urls.snapShotViewUrl;
+const trendAnalysisBaseUrl = urls.trendAnalysisUrl; // Base URL for trend analysis
 
 const initialState = {
   liveVerbatimsData: [],
   SSVMapData: [],
+  trendAnalysisData: [],
   loading: false,
   error: "",
 };
@@ -30,7 +19,7 @@ export const fetchLiveVerbatimsData = createAsyncThunk(
   "liveVerbatims/fetch",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(liveVerbatimsUrl);;
+      const response = await axiosInstance.get(liveVerbatimsUrl);
       console.log('datalll', response.data.Live_Verbatims_List);
       return response.data;
     } catch (error) {
@@ -43,9 +32,23 @@ export const fetchSnapShotViewData = createAsyncThunk(
   "mapData/fetchMapData",
   async (type, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.get(`${snapshotViewUrl}${type}`);;
+      const response = await axiosInstance.get(`${snapshotViewUrl}${type}`);
       console.log('data: ', response.data[type]);
       return response.data[type];
+    } catch (error) {
+      return rejectWithValue(error.response ? error.response.data : "Network error");
+    }
+  }
+);
+
+// Async thunk for fetching trend analysis data with dynamic type
+export const fetchTrendAnalysisData = createAsyncThunk(
+  "trendAnalysis/fetch",
+  async (type, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`${trendAnalysisBaseUrl}?type=${type}`);
+      console.log('trend analysis data: ', response.data);
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response ? error.response.data : "Network error");
     }
@@ -79,6 +82,18 @@ const analyticsSlice = createSlice({
         state.error = "";
       })
       .addCase(fetchSnapShotViewData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchTrendAnalysisData.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchTrendAnalysisData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.trendAnalysisData = action.payload;
+        state.error = "";
+      })
+      .addCase(fetchTrendAnalysisData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
