@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { loginSuccess } from './authSlice';
+import { loginSuccess, logoutSuccess } from './authSlice';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -30,7 +30,25 @@ export const authApi = createApi({
         }
       },
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: '/logout/',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+        },
+      }),
+      async onQueryStarted(args, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(logoutSuccess());
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authApi;

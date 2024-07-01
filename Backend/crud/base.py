@@ -1,4 +1,4 @@
-from typing import Any,Dict,Generic,List,Optional,Type,TypeVar,Union
+from typing import Any,Dict,Generic,List,Optional,Type,TypeVar
 from fastapi.encoders import jsonable_encoder # type: ignore
 from pydantic import BaseModel # type: ignore
 from sqlalchemy.orm import Session # type: ignore

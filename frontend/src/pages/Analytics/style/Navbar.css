@@ -1,14 +1,16 @@
 .navbar-analytics {
+
+
     display: flex;
     justify-content: center; 
     background-color: rgb(255, 255, 255);
     color: #000000;
     padding: 10px 10px;
-    margin: 10px;
+  
     font-weight: lighter;
     width:fit-content;
     margin-left: 35%;
-    margin-top: 30px;
+    margin-top: 20px;
     margin-bottom: 20px;
     border-radius: 25px;
     border: 1px solid rgb(0, 0, 0);
@@ -17,7 +19,7 @@
   }
   
   .navbar-menu-analytics {
-    margin-top: 70px;
+
     list-style-type: none;
     padding: 0;
     margin: 0;

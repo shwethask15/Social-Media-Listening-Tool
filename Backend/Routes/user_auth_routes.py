@@ -11,9 +11,10 @@ from user_auth.auth_bearer import JWTBearer
 from user_auth.auth import create_token,authenticate
 from datetime import datetime
 from config.settings import get_settings
+from user_auth.public_and_private_key_services import load_public_key
 
 settings = get_settings()
-
+PUBLIC_KEY = load_public_key()
 router = APIRouter()
 
 def get_user(username : str,db : Session):
@@ -67,7 +68,7 @@ async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db))
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        data = jwt.decode(token,settings.SECRET_KEY,algorithms=[settings.ALGORITHM])
+        data = jwt.decode(token,PUBLIC_KEY,algorithms=[settings.ALGORITHM])
         user_name : str = data.get("user_data")
         if user_name is None:
             raise credentials_exception
@@ -82,13 +83,14 @@ async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db))
 @router.post('/logout')
 def logout(dependencies=Depends(JWTBearer()), db: Session = Depends(get_db)):
     token=dependencies
-    payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
+    payload = jwt.decode(token, PUBLIC_KEY, settings.ALGORITHM)
     user_id = payload['user_data']
     token_record = db.query(Token_Data).all()
     info=[]
     # print(token_record[0].__dict__)
     for record in token_record :
         # print("record",record)
+        print(datetime.now() - record.created_date)
         if (datetime.now() - record.created_date).days >1:
             info.append(record.use)
     if info:

@@ -1,5 +1,5 @@
 from fastapi import APIRouter,Depends # type: ignore
-from Services.verbatim_list_service import get_data1,get_data_with_filters1,get_data_by_mention_id1
+from Services.verbatim_list_service import get_data1,get_data_with_filters1,get_data_by_mention_id1,advanced_filters_query
 from schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update,Verbatims_List_create
 from typing import Dict,List
 from database.session import get_db
@@ -25,6 +25,13 @@ async def get_data_with_filters(q : verbatims_filters = None,token: str = Depend
 async def update_data(mention_id : str, update_body : verbatims_list_update,token: str = Depends(JWTBearer()), db: Session = Depends(get_db)):
     try:
         return await get_data_by_mention_id1(mention_id=mention_id,update_body=update_body,db=db)
+    except Exception as e:
+        return str(e)
+    
+@router.get("/verbatims_list_query/")
+async def verbatims_list_advanced_query(query : str, token : str = Depends(JWTBearer()),db : Session = Depends(get_db)):
+    try:
+        return await advanced_filters_query(query=query,db=db)
     except Exception as e:
         return str(e)
 

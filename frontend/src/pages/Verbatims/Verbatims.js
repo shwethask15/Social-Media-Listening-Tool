@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../../Components/redux/axiosInstance";
 import FilterModal from "./FilterModal";
 import VerbatimItem from "./VerbatimItem";
 import filterVerbatims from "./FilterVerbatims";
@@ -11,7 +10,6 @@ import redditIcon from "./assets/reddit-icon.png";
 import forumIcon from "./assets/forum-icon.png";
 import newsIcon from "./assets/news-icon.png";
 import VerbatimsPrompter from "./VerbatimsPrompter";
-import axiosInstance from "../../Components/redux/axiosInstance";
 
 const Verbatims = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,6 +49,7 @@ const Verbatims = () => {
           "http://127.0.0.1:8000/verbatims_list/"
         );
         const data = response.data.map((item) => ({
+          mention_id: item.mention_id,
           date: item.date,
           location: item.country || "Unknown",
           language: item.language,
@@ -224,7 +223,26 @@ const Verbatims = () => {
           <p>Loading...</p>
         ) : filteredVerbatimData.length > 0 ? (
           currentItems.map((item, index) => (
-            <VerbatimItem key={index} {...item} />
+            <VerbatimItem
+              key={index}
+              mention_id={item.mention_id}
+              date={item.date}
+              location={item.location}
+              language={item.language}
+              virality={item.virality}
+              sentiment={item.sentiment}
+              severity={item.severity}
+              subCategory={item.subCategory}
+              content={item.content}
+              brand={item.brand}
+              link={item.link}
+              icon={item.icon}
+              updateOptions={{
+                virality: filterOptions.viralities,
+                sentiment: filterOptions.sentiments,
+                severity: filterOptions.severities,
+              }}
+            />
           ))
         ) : (
           <p>No matches found</p>
@@ -258,4 +276,3 @@ const Verbatims = () => {
 };
 
 export default Verbatims;
-
