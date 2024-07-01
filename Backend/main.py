@@ -99,26 +99,53 @@ async def send_realtime_updates(websocket_connections) -> None:
             #print(f"Current total rows: {current_total_rows}, Last total rows: {last_total_rows}")
 
             # Compare current total rows with last known total rows
-            if current_total_rows != last_total_rows:
-                print("Detected change in Live trending verbatims")
+            if current_total_rows > last_total_rows:
+                print(f"Detected {current_total_rows - last_total_rows} new entries")
 
-                # Fetch all data if total rows have changed
-                new_data = db.query(Live_Verbatims_List).all()
+                # Fetch new entries
+                new_entries = (
+                    db.query(Live_Verbatims_List)
+                    .order_by(Live_Verbatims_List.mention_id.desc())
+                    .limit(current_total_rows - last_total_rows)
+                    .all()
+                )
 
-                if new_data:
-                    print(f"Sending notifications for {len(new_data)} items")
-                    recent_updates = [item.serialize() for item in new_data]
+                # Serialize new entries to send as notifications
+                recent_updates = [entry.serialize() for entry in new_entries]
+                
+                # Send notifications to websocket connections
+                print(f"Sending notifications for {len(new_entries)} items")
+                send_tasks = [
+                    connection.send_json({"type": "notification", "data": recent_updates})
+                    for connection in websocket_connections
+                ]
+                await asyncio.gather(*send_tasks)
+
+            # # Update last_total_rows to current_total_rows
+            # last_total_rows = current_total_rows
+
+
+            # # Compare current total rows with last known total rows
+            # if current_total_rows != last_total_rows:
+            #     print("Detected change in Live trending verbatims")
+
+            #     # Fetch all data if total rows have changed
+            #     new_data = db.query(Live_Verbatims_List).all()
+
+                # if new_data:
+                #     print(f"Sending notifications for {len(new_data)} items")
+                #     recent_updates = [item.serialize() for item in new_data]
                     #print(recent_updates)
                     # for connection in websocket_connections:
                     #     await connection.send_json({"type": "notification", "data": recent_updates})
-                    send_tasks = [connection.send_json({"type": "notification", "data": recent_updates}) for connection in websocket_connections]
-                    await asyncio.gather(*send_tasks)
+                # send_tasks = [connection.send_json({"type": "notification", "data": recent_updates}) for connection in websocket_connections]
+                # await asyncio.gather(*send_tasks)
 
-                    # Update last_total_rows to current_total_rows
-                    last_total_rows = current_total_rows
-                    # Save last_total_rows to file
-                    with open(LAST_TOTAL_ROWS_FILE, "w") as f:
-                        json.dump(last_total_rows, f)
+            # Update last_total_rows to current_total_rows
+            last_total_rows = current_total_rows
+            # Save last_total_rows to file
+            with open(LAST_TOTAL_ROWS_FILE, "w") as f:
+                json.dump(last_total_rows, f)
 
             db.close()
             await asyncio.sleep(5)  # Send updates every 5 seconds (adjust as needed)

@@ -4,17 +4,17 @@
   --gray: #ededec;
   --beige: #fbf9f5;
 }
-
-
+ 
 .App {
   text-align: center;
-  font-family: 'DM Serif display';
-  height: 100%;
-  margin: 0;
-  padding: 0;
+  font-family:'DM Serif display';
 }
-
-
+ 
+.analyticsBody {
+  font-family:'DM Serif display';
+  background-color:rgb(255, 255, 255);
+  margin-top:100px;
+}
 
 .sign-in-container {
   max-width: 400px;
@@ -76,32 +76,37 @@
   color: #007bff;
   text-decoration: none;
 }
-
 .sign-up-container {
-  max-width: 400px;
-  margin: 0 auto;
+  width: 400px;
+  margin: auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12.1px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  text-align: left; /* Ensure the text is aligned to the left */
 }
 
+.sign-in-container h2,
 .sign-up-container h2 {
   text-align: center;
   margin-bottom: 20px;
+  margin-top: 0;
+  color: black;
 }
 
-.sign-up-form .form-group {
+.form-group {
   margin-bottom: 15px;
 }
 
-.sign-up-form .form-group label {
+.form-group label {
   display: block;
   margin-bottom: 5px;
+  color: black;
 }
 
-.sign-up-form .form-group input {
+.form-group input {
   width: 100%;
   padding: 8px;
   box-sizing: border-box;
@@ -109,11 +114,13 @@
   border-radius: 4px;
 }
 
-.sign-up-form .error-message {
+.error-message {
   color: red;
   margin-bottom: 15px;
+  margin-top: 10px;
 }
 
+.sign-in-form .sign-in-button,
 .sign-up-form .sign-up-button {
   width: 100%;
   padding: 10px;
@@ -124,24 +131,19 @@
   cursor: pointer;
 }
 
+.sign-in-form .sign-in-button:disabled,
 .sign-up-form .sign-up-button:disabled {
   background-color: #ccc;
 }
 
+.signup-link,
 .signin-link {
   text-align: center;
   margin-top: 15px;
 }
 
+.signup-link a,
 .signin-link a {
   color: #007bff;
   text-decoration: none;
-}
-
-.custom-modal .modal-dialog {
-  max-width: 600px; /* Adjust the width as needed */
-}
-
-.custom-modal .modal-content {
-  border-radius: 10px; /* Optional: Add some border-radius for styling */
 }
