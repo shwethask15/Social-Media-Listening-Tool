@@ -1,4 +1,4 @@
-from fastapi import FastAPI,WebSocket, Depends # type: ignore
+from fastapi import FastAPI,WebSocket,Response,Depends # type: ignore
 from Routes.verbatims_list_routes import router as verbatims_list_router
 from Routes.live_verbatims_list_routes import router as live_verbatims_list_router
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
@@ -9,7 +9,10 @@ from database.session import SessionLocal, get_db
 import websockets
 from models.live_verbatims_list import Live_Verbatims_List
 from sqlalchemy import func
-
+from fastapi.responses import StreamingResponse
+from starlette.requests import Request
+from typing import AsyncGenerator,Generator
+import os
 from Routes.user_auth_routes import router as user_auth_router
 from Routes.trend_analysis_routes import router as trend_analysis_router
 from models import users_data_model
@@ -78,7 +81,7 @@ import json
 import os
 
 # File to store last_total_rows value
-LAST_TOTAL_ROWS_FILE = "Backend/config/last_total_rows.json"
+LAST_TOTAL_ROWS_FILE = "last_total_rows.json"
 
 # Function to send real-time updates
 async def send_realtime_updates(websocket_connections) -> None:
@@ -161,9 +164,84 @@ async def startup_event():
 
 
 
-"""
-user_data ={
-  "user_name": "abcdef@gmail.com",
-  "password": "abcdefg@123"
-}
-"""
+# """
+# user_data ={
+#   "user_name": "abcdef@gmail.com",
+#   "password": "abcdefg@123"
+# # }
+# # """
+# import json
+# # File to store last_total_rows value
+# LAST_TOTAL_ROWS_FILE = "last_total_rows.json"
+# # Function to generate Server-Sent Events
+# async def send_sse_updates():
+#     try:
+#         while True:
+#             if os.path.exists(LAST_TOTAL_ROWS_FILE):
+#                 with open(LAST_TOTAL_ROWS_FILE, "r") as f:
+#                     last_total_rows = json.load(f)
+#             else:
+#                 last_total_rows = 0
+            
+#             db = SessionLocal()
+            
+#             # Query current total rows in Live_Verbatims_List
+#             current_total_rows = db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
+            
+#             # Compare current total rows with last known total rows
+#             if current_total_rows > last_total_rows:
+#                 print(f"Detected {current_total_rows - last_total_rows} new entries")
+#                 print(f"sending {current_total_rows - last_total_rows} new entries")
+                
+#                 # Fetch new entries
+#                 new_entries = (
+#                     db.query(Live_Verbatims_List)
+#                     .order_by(Live_Verbatims_List.mention_id.desc())
+#                     .limit(current_total_rows - last_total_rows)
+#                     .all()
+#                 )
+                
+#                 # Serialize new entries to send as notifications
+#                 recent_updates = [entry.serialize() for entry in new_entries]
+                
+#                 # Yield each new entry as SSE event
+#                 for update in recent_updates:
+#                     yield f"data: {json.dumps(update)}\n\n"
+                
+#                 # Update last_total_rows to current_total_rows
+#             last_total_rows = current_total_rows
+#             with open(LAST_TOTAL_ROWS_FILE, "w") as f:
+#                  json.dump(last_total_rows, f)
+            
+#             db.close()
+#             await asyncio.sleep(5)  # Send updates every 5 seconds (adjust as needed)
+    
+#     except asyncio.CancelledError:
+#         print("Client disconnected from SSE.")
+    
+#     except Exception as e:
+#         print(f"Error sending updates: {e}")
+
+
+# @app.get("/sse")
+# async def sse_endpoint(request: Request):
+#     print("Connection established")
+#     return StreamingResponse(send_sse_updates(), media_type="text/event-stream")
+
+# # # Background task to send real-time updates
+# # async def send_realtime_updates():
+# #     websocket_connections = []  # Maintain a list of WebSocket connections
+    
+# #     try:
+# #         while True:
+# #             # Your real-time update logic here
+# #             await asyncio.sleep(5)  # Adjust as needed
+    
+# #     except asyncio.CancelledError:
+# #         print("Task send_realtime_updates cancelled.")
+
+# # # Startup event to start background tasks
+# # @app.on_event("startup")
+# # async def startup_event():
+# #     asyncio.create_task(send_realtime_updates())
+
