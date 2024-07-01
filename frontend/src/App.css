@@ -4,17 +4,17 @@
   --gray: #ededec;
   --beige: #fbf9f5;
 }
- 
+
+
 .App {
   text-align: center;
-  font-family:'DM Serif display';
+  font-family: 'DM Serif display';
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
- 
-.analyticsBody {
-  font-family:'DM Serif display';
-  background-color:rgb(255, 255, 255);
-  margin-top:100px;
-}
+
+
 
 .sign-in-container {
   max-width: 400px;
@@ -76,6 +76,7 @@
   color: #007bff;
   text-decoration: none;
 }
+
 .sign-up-container {
   max-width: 400px;
   margin: 0 auto;
@@ -135,4 +136,12 @@
 .signin-link a {
   color: #007bff;
   text-decoration: none;
+}
+
+.custom-modal .modal-dialog {
+  max-width: 600px; /* Adjust the width as needed */
+}
+
+.custom-modal .modal-content {
+  border-radius: 10px; /* Optional: Add some border-radius for styling */
 }

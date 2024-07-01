@@ -11,8 +11,7 @@ function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return (
-    <Router>
-      <div className='App'>
+    <Router>      
         {isAuthenticated && <Navbar />}
         <Routes>
           {!isAuthenticated ? (
@@ -30,7 +29,7 @@ function App() {
             </>
           )}
         </Routes>
-      </div>
+ 
     </Router>
   );
 }
