@@ -1,12 +1,23 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  /* overflow: hidden;  */
+}
+
 .verbatim-item {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--gray);
-  border-radius: 10px;
+  position: relative;
   padding: 20px;
   margin-bottom: 20px;
-  background-color: var(--beige);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: var(--glass-bg-color);
+  border-radius: var(--glass-border-radius);
+  box-shadow: var(--glass-box-shadow);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid var(--glass-border-color);
+  z-index: 1;
 }
 
 .verbatim-header {
@@ -81,4 +92,61 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+.edit-icon {
+  background: none;
+  color: #007bff;
+  border: none;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.edit-dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-option {
+  margin-bottom: 8px;
+}
+
+.save-button {
+  margin-top: 8px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.verbatim-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.verbatim-field {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.edit-dropdown {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+}
+
+.edit-dropdown label {
+  margin-bottom: 5px;
 }

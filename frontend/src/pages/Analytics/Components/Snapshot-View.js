@@ -2,17 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnapShotViewData } from '../redux/slice/slice';
 import SnapshotViewMap from './SnapShotViewMap'; 
-
+import BasicButtonGroup from './ButtonGroup';
+import TopicFilter from './TopicFilter'; // Import the new TopicFilter component
 
 function SnapshotView() {
   const dispatch = useDispatch();
   const MapData = useSelector((state) => state.analytics.SSVMapData);
   const [selectedOption, setSelectedOption] = useState('All');
   const [loading, setLoading] = useState(false); // State to track loading
+  const [currentPage, setCurrentPage] = useState('map'); // State to track the current page
 
   useEffect(() => {
-    handleFetchData();
-  }, [selectedOption]);
+    if (currentPage === 'map') {
+      handleFetchData();
+    }
+  }, [selectedOption, currentPage]);
 
   const handleFetchData = () => {
       setLoading(true); 
@@ -43,10 +47,23 @@ function SnapshotView() {
       return <SnapshotViewMap data={MapData} selectedOption={selectedOption} loading={loading} />;
   };
 
+  const renderContent = () => {
+    if (currentPage === 'map') {
+      return (
+        <>
+          {renderRadioButtons()}
+          {renderMap()}
+        </>
+      );
+    } else if (currentPage === 'topicFilter') {
+      return <TopicFilter />;
+    }
+  };
+
   return (
     <div>
-      {renderRadioButtons()}
-      {renderMap()}
+      <BasicButtonGroup setCurrentPage={setCurrentPage} />
+      {renderContent()}
     </div>
   );
 }
