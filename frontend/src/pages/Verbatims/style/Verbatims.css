@@ -7,22 +7,30 @@
   --gradient-end: #ffc0cb;
   --glass-bg-color: rgba(255, 255, 255, 0.23);
   --glass-bg-color-header: rgba(255, 255, 255, 0.5);
-  --glass-border-radius: 16px;
+  --glass-border-radius: 6px;
   --glass-box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   --glass-backdrop-filter: blur(5px);
   --glass-border-color: rgba(255, 255, 255, 0.71);
 }
-
+ 
 .Verbatims {
   margin-top: 50px;
   position: fixed;
   padding: 20px;
   min-width: 97vw;
-  background: var(--gradient-start);  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, var(--gradient-start), var(--gradient-end));  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
+  background: var(--gradient-start); /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    var(--gradient-start),
+    var(--gradient-end)
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    var(--gradient-start),
+    var(--gradient-end)
+  );
 }
-
+ 
 .filter-button {
   padding: 8px 12px;
   background-color: var(--purple);
@@ -32,7 +40,7 @@
   cursor: pointer;
   gap: 0;
 }
-
+ 
 .download-button {
   padding: 8px 12px;
   background-color: var(--purple);
@@ -42,7 +50,7 @@
   cursor: pointer;
   margin-left: 10px;
 }
-
+ 
 .verbatims-header {
   display: flex;
   justify-content: space-between;
@@ -57,27 +65,29 @@
   padding: 15px;
   height: 45px;
 }
-
+ 
 .search-bar {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
+ 
 .verbatims-count {
   font-weight: bold;
 }
-
+ 
 .verbatims-info {
   display: flex;
   align-items: center;
 }
-
+ 
 .verbatims-list {
   margin-top: 20px;
   position: relative;
   z-index: 1;
-  height: calc(100vh - 280px); /* Adjust based on any other fixed headers/footers */
+  height: calc(
+    100vh - 280px
+  ); /* Adjust based on any other fixed headers/footers */
   overflow-y: auto;
   padding: 20px;
   background: var(--glass-bg-color);
@@ -87,18 +97,22 @@
   -webkit-backdrop-filter: var(--glass-backdrop-filter);
   border: 1px solid var(--glass-border-color);
 }
-
+ 
 .verbatims-list::-webkit-scrollbar {
-  width: 15px;
+  width: 12px;
 }
-
+ 
 .verbatims-list::-webkit-scrollbar-thumb {
-  background: var(--gradient-start);
-  background: -webkit-linear-gradient(to right, var(--gradient-start), var(--gradient-end));  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, var(--gradient-start), var(--gradient-end));
   border-radius: var(--glass-border-radius);
+  background: var(--gray);
 }
-
+ 
+.verbatims-list::-webkit-scrollbar-track {
+  border-radius: 16px;
+  background-color: transparent;
+  border: 1px solid var
+}
+ 
 .pagination {
   display: flex;
   justify-content: center;
@@ -106,7 +120,7 @@
   gap: 10px;
   margin-top: 10px;
 }
-
+ 
 .pagination button {
   padding: 8px 12px;
   border: 1px solid var(--purple);
@@ -115,12 +129,12 @@
   cursor: pointer;
   outline: none;
 }
-
+ 
 .pagination button.active {
   background-color: var(--purple);
   color: black;
 }
-
+ 
 .pagination button:disabled {
   background-color: var(--gray);
   cursor: not-allowed;
