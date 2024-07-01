@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, IconButton } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Badge, Button } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import { FaCalendarAlt, FaExternalLinkAlt } from 'react-icons/fa';
-import '../../src/App.css'
+import './Navbar.css';
 
 const NotificationList = () => {
   const [notifications, setNotifications] = useState([]);
@@ -47,26 +48,28 @@ const NotificationList = () => {
 
   return (
     <div>
-      <Button variant="contained" color="primary" onClick={handleAlertClick}>
-        Notifications ({newNotifications.length})
-      </Button>
+      <IconButton className="icon-button" color="primary" onClick={handleAlertClick}>
+        <Badge badgeContent={newNotifications.length} color="secondary">
+          <NotificationsIcon />
+        </Badge>
+      </IconButton>
 
       <Dialog open={showModal} onClose={() => setShowModal(false)} maxWidth="sm" fullWidth>
         <DialogTitle>New Notifications</DialogTitle>
         <DialogContent>
           {notifications.map((notification, index) => (
-            <div key={index} style={{ marginBottom: '15px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <FaCalendarAlt style={{ marginRight: '5px', color: '#0056b3' }} />
-                  <p style={{ margin: 0, color: '#0056b3' }}>{new Date(notification.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
+            <div key={index} className="notification-item">
+              <div className="notification-header">
+                <div className="notification-date">
+                  <FaCalendarAlt style={{ marginRight: '5px' }} />
+                  <p>{new Date(notification.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                 </div>
                 <IconButton href={notification.url} target="_blank" rel="noopener noreferrer">
-                  <FaExternalLinkAlt style={{ color: '#0056b3' }} />
+                  <FaExternalLinkAlt className="notification-link" />
                 </IconButton>
               </div>
-              <p style={{ margin: '5px 0' }}>{notification.snippet}</p>
-              <hr style={{ border: '0.5px solid #0056b3' }} />
+              <p className="notification-snippet">{notification.snippet}</p>
+              <hr className="notification-divider" />
             </div>
           ))}
         </DialogContent>

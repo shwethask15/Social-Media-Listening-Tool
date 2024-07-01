@@ -9,8 +9,7 @@ from sqlalchemy.engine import URL
 #     host="codx-minerva.postgres.database.azure.com",
 #     database="dap_session",
 # )
-database_URL = "sqlite:///C:/Users/VenkateshAdinani/OneDrive - TheMathCompany Private Limited/Desktop/Social-Media-Listening-Tool/capstone_db.db"
-
+database_URL = "sqlite:///C:/Users/GaganaR/OneDrive - TheMathCompany Private Limited/Desktop/Social-Media-Listening-Tool/capstone_db.db"
 engine = create_engine(database_URL,connect_args={"check_same_thread": False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
