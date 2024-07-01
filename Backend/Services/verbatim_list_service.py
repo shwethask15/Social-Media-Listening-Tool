@@ -10,11 +10,11 @@ from models.verbatims_list import Verbatims_List
 
 async def get_data1(db : Session):
     # print("hi")
-    da = SessionLocal()
-    # data = Verbatims.get_all(db=da)
-    data = da.query(verbatims_list.Verbatims_List).all()
-    da.close()
-    print(data)
+    # da = SessionLocal()
+    data = Verbatims.get_all(db=db)
+    # data = da.query(verbatims_list.Verbatims_List).all()
+    # da.close()
+    # print(data)
     return data
 
 async def get_data_with_filters1(q : verbatims_filters,db : Session):
@@ -124,3 +124,101 @@ async def get_data_by_mention_id1(mention_id : str,update_body : verbatims_list_
     # db.commit()
     db.refresh(data)
     return data
+
+async def advanced_filters_query(query : str,db : Session):
+    data = Verbatims.get_all(db=db)
+    key_words = ["sentiment","virality","severity"]
+    key_words_values = ["low","high","medium","no_threat","positive","negative","neutral"]
+    query = query.lower()
+    query = query.split()
+    filters = {"virality":[],"sentiment":[],"severity":[] }
+    i = 0
+    while i<len(query):
+    # print(input_string[i])
+        if query[i] in key_words:
+            print(i,query[i])
+            temp = []
+            temp.append(query[i])
+            c = 0
+            for j in range(i+1,len(query)):
+                print(query[j])
+                if query[j] in key_words_values:
+                    c+=1
+                    for k in temp:
+                        filters[k].append(query[j])
+                elif query[j] in key_words and c==0:
+                    temp.append(query[j])
+                elif query[j] in key_words and c!=0:
+                    i = j-1
+                    break
+                if len(query)-1 == j:
+                    i = j
+            # print(temp,c,filters)
+        elif query[i] in key_words_values:
+            temp = []
+            temp.append(query[i])
+            print(temp)
+            c = 0
+            print(i,query[i])
+            for j in range(i+1,len(query)):
+                print(query[j],c,j)
+                if query[j] in key_words:
+                    c+=1
+                    for k in temp:
+                        filters[query[j]].append(k)
+                elif query[j] in key_words_values and c==0:
+                    temp.append(query[j])
+                elif query[j] in key_words_values and c!=0:
+                    i = j-1
+                    # print(i)
+                    break
+            # print(j,temp,c,filters)
+                if len(query)-1 == j:
+                    i = j
+        i+=1
+    # print(filters,i)
+    
+    print(filters)
+    r1 = data
+    r = []
+    # print(len(r))
+    for i in filters["virality"]:
+        c=0
+        for j in data:
+            temp = j.__dict__
+            # print(j["virality"])
+            # print(i!=temp["virality"].lower())
+            if i == temp["virality"].lower():
+                    r.append(j)
+                    r1.remove(j)
+
+    # print(len(r))
+    for i in r1:
+        print(i.virality)
+    r1 =[]
+    for i in filters["sentiment"]:
+        for j in r:
+            temp=j.__dict__
+            # print(j)
+            if i!=temp["sentiment"].lower():
+                # print(j in r)
+                r1.append
+    print(len(r))
+    for i in filters["severity"]:
+        # print(i)
+        for j in r:
+            temp=j.__dict__
+            if i!=temp["severity"].lower():
+                r.remove(j)
+                # print(len(r),temp["severity"])
+            # else:
+            #     print(temp["severity"])
+    # print(len(r))
+    # for i in r:
+    #     print(i.severity)
+# for i in r:
+#     print(i["virality"])
+
+    # print(len(r))
+    
+    return r

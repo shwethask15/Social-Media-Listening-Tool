@@ -38,12 +38,12 @@ async def get_aggregated_verbatims(filter_name: str,token : str = Depends(JWTBea
   
 
 # Download NLTK stop words data 
-nltk.download('stopwords')
+# nltk.download('stopwords')
 # Set of NLTK English stop words
 stop_words = set(stopwords.words('english'))
 
 from nltk.stem import WordNetLemmatizer
-nltk.download('wordnet')
+# nltk.download('wordnet')
 
 lemmatizer = WordNetLemmatizer()
 
@@ -61,6 +61,8 @@ async def get_word_counts(request: Request, brand: str = None, theme: str = None
         result = conn.execute(text(query))
         # Initialize word counter
         word_counter = Counter()
+
+
         # Process query results
         for row in result:
             translated_snippet = row[0]  # Access the first element of the tuple

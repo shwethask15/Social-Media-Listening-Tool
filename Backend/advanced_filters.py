@@ -21,13 +21,14 @@ input_string = input_string.split()
 filters = {"virality":[],"sentiment":[],"severity":[] }
 i = 0
 while i<len(input_string):
+    # print(input_string[i])
     if input_string[i] in key_words:
-        # print(i,input_string[i])
+        print(i,input_string[i])
         temp = []
         temp.append(input_string[i])
         c = 0
         for j in range(i+1,len(input_string)):
-            # print(input_string[j])
+            print(input_string[j])
             if input_string[j] in key_words_values:
                 c+=1
                 for k in temp:
@@ -35,7 +36,7 @@ while i<len(input_string):
             elif input_string[j] in key_words and c==0:
                 temp.append(input_string[j])
             elif input_string[j] in key_words and c!=0:
-                i = j-2 
+                i = j-1
                 break
             if len(input_string)-1 == j:
                 i = j
@@ -43,9 +44,11 @@ while i<len(input_string):
     elif input_string[i] in key_words_values:
         temp = []
         temp.append(input_string[i])
+        print(temp)
         c = 0
-        # print(i,input_string[i])
+        print(i,input_string[i])
         for j in range(i+1,len(input_string)):
+            print(input_string[j],c,j)
             if input_string[j] in key_words:
                 c+=1
                 for k in temp:
@@ -53,13 +56,14 @@ while i<len(input_string):
             elif input_string[j] in key_words_values and c==0:
                 temp.append(input_string[j])
             elif input_string[j] in key_words_values and c!=0:
-                i = j-2
+                i = j-1
                 # print(i)
                 break
             # print(j,temp,c,filters)
             if len(input_string)-1 == j:
                 i = j
     i+=1
+    print(filters,i)
     
 print(filters)
 r = data

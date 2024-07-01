@@ -7,7 +7,7 @@ from typing import List
 import asyncio
 from database.session import SessionLocal, get_db
 import websockets
-# from models.live_verbatims_list import Live_Verbatims_List
+from models.live_verbatims_list import Live_Verbatims_List
 from crud.crud_verbatims_list import Verbatims
 from sqlalchemy import func
 from models.verbatims_list import Verbatims_List
@@ -20,10 +20,10 @@ from user_auth.security import get_password_hash
 from config.settings import settings
 
 
-db = SessionLocal()
-data = Verbatims.get_all(db=db)
-print(data)
-db.close()
+# db = SessionLocal()
+# data = Verbatims.get_all(db=db)
+# print(data)
+# db.close()
 # users_data_model.Base.metadata.create_all(bind = engine)
 # app = FastAPI()
 # db = SessionLocal()
@@ -66,71 +66,98 @@ app.include_router(user_auth_router,tags=["user_auth"],prefix="")
 app.include_router(trend_analysis_router,tags=["trend_analysis"],prefix="")
 
 
-# websocket_connections = []  # List to store WebSocket connections
+websocket_connections = []  # List to store WebSocket connections
 
-# # WebSocket endpoint (defined in your router or separate module)
-# @app.websocket("/ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await websocket.accept()
-#     websocket_connections.append(websocket)
-#     try:
-#         while True:
-#             await asyncio.sleep(1)  # Keep connection open
-#     except Exception:
-#         websocket_connections.remove(websocket)
+# WebSocket endpoint (defined in your router or separate module)
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    websocket_connections.append(websocket)
+    try:
+        while True:
+            await asyncio.sleep(1)  # Keep connection open
+    except Exception:
+        websocket_connections.remove(websocket)
 
 
-# import json
-# import os
+import json
+import os
 
-# # File to store last_total_rows value
-# LAST_TOTAL_ROWS_FILE = "Backend/config/last_total_rows.json"
+# File to store last_total_rows value
+LAST_TOTAL_ROWS_FILE = "Backend/config/last_total_rows.json"
 
-# # Function to send real-time updates
-# async def send_realtime_updates(websocket_connections) -> None:
-#     #last_total_rows = 0  # Track the last known total rows in the table
-#     recent_updates = []  # List to store recent updates
-#     if os.path.exists(LAST_TOTAL_ROWS_FILE):
-#         with open(LAST_TOTAL_ROWS_FILE, "r") as f:
-#             last_total_rows = json.load(f)
-#     else:
-#         last_total_rows = 0
+# Function to send real-time updates
+async def send_realtime_updates(websocket_connections) -> None:
+    #last_total_rows = 0  # Track the last known total rows in the table
+    recent_updates = []  # List to store recent updates
+    if os.path.exists(LAST_TOTAL_ROWS_FILE):
+        with open(LAST_TOTAL_ROWS_FILE, "r") as f:
+            last_total_rows = json.load(f)
+    else:
+        last_total_rows = 0
 
-#     while True:
-#         try:
-#             db = SessionLocal()
+    while True:
+        try:
+            db = SessionLocal()
 
-#             # Query current total rows in Live_Verbatims_List
-#             current_total_rows = db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
-#             #print(f"Current total rows: {current_total_rows}, Last total rows: {last_total_rows}")
+            # Query current total rows in Live_Verbatims_List
+            current_total_rows = db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
+            #print(f"Current total rows: {current_total_rows}, Last total rows: {last_total_rows}")
 
-#             # Compare current total rows with last known total rows
-#             if current_total_rows != last_total_rows:
-#                 print("Detected change in Live trending verbatims")
+            #Compare current total rows with last known total rows
+            if current_total_rows > last_total_rows:
+                print(f"Detected {current_total_rows - last_total_rows} new entries")
 
-#                 # Fetch all data if total rows have changed
-#                 new_data = db.query(Live_Verbatims_List).all()
+                # Fetch new entries
+                new_entries = (
+                    db.query(Live_Verbatims_List)
+                    .order_by(Live_Verbatims_List.mention_id.desc())
+                    .limit(current_total_rows - last_total_rows)
+                    .all()
+                )
 
-#                 if new_data:
-#                     print(f"Sending notifications for {len(new_data)} items")
-#                     recent_updates = [item.serialize() for item in new_data]
-#                     #print(recent_updates)
-#                     # for connection in websocket_connections:
-#                     #     await connection.send_json({"type": "notification", "data": recent_updates})
-#                     send_tasks = [connection.send_json({"type": "notification", "data": recent_updates}) for connection in websocket_connections]
-#                     await asyncio.gather(*send_tasks)
+                # Serialize new entries to send as notifications
+                recent_updates = [entry.serialize() for entry in new_entries]
+                
+                # Send notifications to websocket connections
+                print(f"Sending notifications for {len(new_entries)} items")
+                send_tasks = [
+                    connection.send_json({"type": "notification", "data": recent_updates})
+                    for connection in websocket_connections
+                ]
+                await asyncio.gather(*send_tasks)
 
-#                     # Update last_total_rows to current_total_rows
-#                     last_total_rows = current_total_rows
-#                     # Save last_total_rows to file
-#                     with open(LAST_TOTAL_ROWS_FILE, "w") as f:
-#                         json.dump(last_total_rows, f)
+            # Update last_total_rows to current_total_rows
+            #last_total_rows = current_total_rows
 
-#             db.close()
-#             await asyncio.sleep(5)  # Send updates every 5 seconds (adjust as needed)
 
-#         except Exception as e:
-#             print(f"Error sending updates: {e}")
+            # # Compare current total rows with last known total rows
+            # if current_total_rows != last_total_rows:
+            #     print("Detected change in Live trending verbatims")
+
+            #     # Fetch all data if total rows have changed
+            #     new_data = db.query(Live_Verbatims_List).all()
+
+            #     if new_data:
+            #         print(f"Sending notifications for {len(new_data)} items")
+            #         recent_updates = [item.serialize() for item in new_data]
+            #         print(recent_updates)
+            #         for connection in websocket_connections:
+            #             await connection.send_json({"type": "notification", "data": recent_updates})
+            #     send_tasks = [connection.send_json({"type": "notification", "data": recent_updates}) for connection in websocket_connections]
+            #     await asyncio.gather(*send_tasks)
+
+            # Update last_total_rows to current_total_rows
+            last_total_rows = current_total_rows
+            # Save last_total_rows to file
+            with open(LAST_TOTAL_ROWS_FILE, "w") as f:
+                json.dump(last_total_rows, f)
+
+            db.close()
+            await asyncio.sleep(5)  # Send updates every 5 seconds (adjust as needed)
+
+        except Exception as e:
+            print(f"Error sending updates: {e}")
 
        
 # @app.on_event("startup")
