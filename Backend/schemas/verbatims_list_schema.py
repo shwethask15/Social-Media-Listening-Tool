@@ -44,7 +44,7 @@ class verbatims_list_update(BaseModel):
     virality : str | None = None
     sentiment : str | None = None
     severity : str | None = None
-    theme : str | None = None
+    # theme : str | None = None
 
 class verbatims_snapshot_filter(BaseModel):
     pass

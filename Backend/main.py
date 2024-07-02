@@ -131,21 +131,21 @@ async def send_realtime_updates(websocket_connections) -> None:
             #last_total_rows = current_total_rows
 
 
-            # # Compare current total rows with last known total rows
-            # if current_total_rows != last_total_rows:
-            #     print("Detected change in Live trending verbatims")
+            # Compare current total rows with last known total rows
+            if current_total_rows != last_total_rows:
+                print("Detected change in Live trending verbatims")
 
-            #     # Fetch all data if total rows have changed
-            #     new_data = db.query(Live_Verbatims_List).all()
+                # Fetch all data if total rows have changed
+                new_data = db.query(Live_Verbatims_List).all()
 
-            #     if new_data:
-            #         print(f"Sending notifications for {len(new_data)} items")
-            #         recent_updates = [item.serialize() for item in new_data]
-            #         print(recent_updates)
-            #         for connection in websocket_connections:
-            #             await connection.send_json({"type": "notification", "data": recent_updates})
-            #     send_tasks = [connection.send_json({"type": "notification", "data": recent_updates}) for connection in websocket_connections]
-            #     await asyncio.gather(*send_tasks)
+                if new_data:
+                    print(f"Sending notifications for {len(new_data)} items")
+                    recent_updates = [item.serialize() for item in new_data]
+                    print(recent_updates)
+                    for connection in websocket_connections:
+                        await connection.send_json({"type": "notification", "data": recent_updates})
+                send_tasks = [connection.send_json({"type": "notification", "data": recent_updates}) for connection in websocket_connections]
+                await asyncio.gather(*send_tasks)
 
             # Update last_total_rows to current_total_rows
             last_total_rows = current_total_rows
