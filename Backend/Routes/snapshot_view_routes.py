@@ -73,6 +73,7 @@ async def get_word_counts(request: Request, brand: str = None, theme: str = None
             word_counter.update(filtered_words)
     # Sort words by count in descending order
     sorted_word_counts = sorted(word_counter.items(), key=lambda item: item[1], reverse=True)
+    # print(sorted_word_counts)
     # Get top 50 most repeated words (excluding stop words)
     top_50_most_repeated = sorted_word_counts[:50]
     # Prepare response data
