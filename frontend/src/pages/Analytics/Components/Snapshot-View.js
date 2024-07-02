@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnapShotViewData } from '../redux/slice/slice';
 import SnapshotViewMap from './SnapShotViewMap'; 
 import BasicButtonGroup from './ButtonGroup';
-import TopicFilter from './TopicFilter'; // Import the new TopicFilter component
+import TopicFilter from './TopicFilter';
 
 function SnapshotView() {
   const dispatch = useDispatch();
   const MapData = useSelector((state) => state.analytics.SSVMapData);
   const [selectedOption, setSelectedOption] = useState('All');
-  const [loading, setLoading] = useState(false); // State to track loading
-  const [currentPage, setCurrentPage] = useState('map'); // State to track the current page
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState('map');
 
   useEffect(() => {
     if (currentPage === 'map') {
@@ -19,8 +19,8 @@ function SnapshotView() {
   }, [selectedOption, currentPage]);
 
   const handleFetchData = () => {
-      setLoading(true); 
-      dispatch(fetchSnapShotViewData(selectedOption.toLowerCase())).finally(() => setLoading(false)); 
+    setLoading(true); 
+    dispatch(fetchSnapShotViewData(selectedOption.toLowerCase())).finally(() => setLoading(false)); 
   };
 
   const handleOptionChange = (event) => {
@@ -43,9 +43,9 @@ function SnapshotView() {
     </div>
   );
 
-  const renderMap = () => {
-      return <SnapshotViewMap data={MapData} selectedOption={selectedOption} loading={loading} />;
-  };
+  const renderMap = () => (
+    <SnapshotViewMap data={MapData} selectedOption={selectedOption} loading={loading} />
+  );
 
   const renderContent = () => {
     if (currentPage === 'map') {
@@ -56,7 +56,11 @@ function SnapshotView() {
         </>
       );
     } else if (currentPage === 'topicFilter') {
-      return <TopicFilter />;
+      return (
+        <>
+          <TopicFilter />
+        </>
+      );
     }
   };
 

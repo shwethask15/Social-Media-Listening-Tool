@@ -1,18 +1,18 @@
 import React from 'react';
 import ChartComponent from './TopicFilterChart';
+import '../style/TopicFilter.css'
+import WordCloud from './WordCloud';
 
 const TopicFilter = () => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-      <div style={{ width: '50%' }}>
+    <div className="topic-filter-page">
+      <div className="topic-filter-container">
         <h2>Topic Filter</h2>
         <ChartComponent />
       </div>
-      <div style={{ width: '50%' }}>
+      <div className="wordcloud-container">
         <h2>Petcare</h2>
-        <div style={{ height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <img src="/mnt/data/image.png" alt="Petcare Word Cloud" style={{ maxWidth: '100%', maxHeight: '100%' }} />
-        </div>
+        <WordCloud />
       </div>
     </div>
   );
