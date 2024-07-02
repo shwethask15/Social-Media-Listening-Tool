@@ -69,7 +69,8 @@ app.include_router(snapshot_router,tags=["snapshot_apis"],prefix="")
 app.include_router(user_auth_router,tags=["user_auth"],prefix="")
 app.include_router(trend_analysis_router,tags=["trend_analysis"],prefix="")
 
-
+#Working one
+#____________________________________________________________________________
 websocket_connections = []  # List to store WebSocket connections
 
 # WebSocket endpoint (defined in your router or separate module)
@@ -167,9 +168,8 @@ async def send_realtime_updates(websocket_connections) -> None:
 @app.on_event("startup")
 async def startup_event():
     asyncio.create_task(send_realtime_updates(websocket_connections))
-
-
-
+# ____________________________________________________________________________________________________
+##Websocket with swagger endpoint
 # # Function to send real-time updates
 # async def send_realtime_updates(websocket_connections) -> None:
 #     print("Inside  function")
@@ -244,10 +244,112 @@ async def startup_event():
 # async def start_updates(request: Request):
 #     asyncio.create_task(send_realtime_updates(websocket_connections))
 #     return {"message": "Started sending real-time updates."}
-
+#_______________________________________________________________________________________________
 """
 user_data ={
   "user_name": "abcdef@gmail.com",
   "password": "abcdefg@123"
 }
-"""
+# """
+# #SSE Implementation
+
+# from fastapi.responses import StreamingResponse
+# from queue import Queue
+# import uuid,json
+
+# # Queue to store missed notifications for each client
+# missed_notifications = {}
+
+# # SSE endpoint
+# @app.get("/sse")
+# async def sse_endpoint():
+#     async def stream():
+#         client_id = str(uuid.uuid4())  # Generate a unique client ID
+#         missed_notifications[client_id] = Queue()  # Queue for missed notifications
+#         print(f"Client connected: {client_id}")
+#         # Yield missed notifications first
+#         async for notification in get_notification(client_id):
+#             yield f"data: {json.dumps(notification)}\n\n"
+
+#         try:
+#             while True:
+#                 notification = await get_notification(client_id)
+#                 print(f"Sending notification to client {client_id}: {notification}")
+#                 yield f"data: {json.dumps(notification)}\n\n"
+#         except Exception as e:
+#             print(f"Client disconnected: {client_id}, Error: {e}")
+#         finally:
+#             # Clean up on client disconnect
+#             del missed_notifications[client_id]
+
+#     return StreamingResponse(stream(), media_type="text/event-stream")
+
+# async def get_notification(client_id):
+#     while True:
+#         if client_id in missed_notifications:
+#             # Check for any missed notifications in the queue
+#             while not missed_notifications[client_id].empty():
+#                 notification = missed_notifications[client_id].get()
+#                 print(f"Retrieved missed notification for client {client_id}: {notification}")
+#                 yield notification
+
+#         # Wait for new notifications
+#         await asyncio.sleep(1)  # Adjust as needed
+
+# # File to store last_total_rows value
+# LAST_TOTAL_ROWS_FILE = "last_total_rows.json"
+
+# # Function to send real-time updates
+# async def send_realtime_updates() -> None:
+#     recent_updates = []  # List to store recent updates
+#     if os.path.exists(LAST_TOTAL_ROWS_FILE):
+#         with open(LAST_TOTAL_ROWS_FILE, "r") as f:
+#             last_total_rows = json.load(f)
+#     else:
+#         last_total_rows = 0
+
+#     while True:
+#         try:
+#             db = SessionLocal()
+
+#             # Query current total rows in Live_Verbatims_List
+#             current_total_rows = db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
+
+#             # Compare current total rows with last known total rows
+#             if current_total_rows > last_total_rows:
+#                 print(f"Detected {current_total_rows - last_total_rows} new entries")
+
+#                 # Fetch new entries
+#                 new_entries = (
+#                     db.query(Live_Verbatims_List)
+#                     .order_by(Live_Verbatims_List.mention_id.desc())
+#                     .limit(current_total_rows - last_total_rows)
+#                     .all()
+#                 )
+
+#                 # Serialize new entries to send as notifications
+#                 recent_updates = [entry.serialize() for entry in new_entries]
+
+#                 # Send notifications to SSE clients
+#                 for client_id, notifications_queue in missed_notifications.items():
+#                     for update in recent_updates:
+#                         print(f"Queuing update for client {client_id}: {update}")
+#                         notifications_queue.put(update)
+
+#             # Update last_total_rows to current_total_rows
+#             last_total_rows = current_total_rows
+
+#             # Save last_total_rows to file
+#             with open(LAST_TOTAL_ROWS_FILE, "w") as f:
+#                 json.dump(last_total_rows, f)
+
+#             db.close()
+#             await asyncio.sleep(5)  # Send updates every 5 seconds (adjust as needed)
+
+#         except Exception as e:
+#             print(f"Error sending updates: {e}")
+
+# # Start the real-time updates task on app startup
+# @app.on_event("startup")
+# async def startup_event():
+#     asyncio.create_task(send_realtime_updates())
