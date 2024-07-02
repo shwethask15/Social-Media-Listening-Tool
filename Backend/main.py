@@ -284,14 +284,6 @@ user_data ={
 
 #     return StreamingResponse(stream(), media_type="text/event-stream")
 
-# async def get_notification(client_id):
-#     while True:
-#         if client_id in missed_notifications:
-#             # Check for any missed notifications in the queue
-#             while not missed_notifications[client_id].empty():
-#                 notification = missed_notifications[client_id].get()
-#                 print(f"Retrieved missed notification for client {client_id}: {notification}")
-#                 yield notification
 
 #         # Wait for new notifications
 #         await asyncio.sleep(1)  # Adjust as needed
