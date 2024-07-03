@@ -264,7 +264,6 @@ user_data ={
 # @app.get("/sse")
 # async def sse_endpoint():
 #     async def stream():
-#         client_id = str(uuid.uuid4())  # Generate a unique client ID
 #         missed_notifications[client_id] = Queue()  # Queue for missed notifications
 #         print(f"Client connected: {client_id}")
 #         # Yield missed notifications first
