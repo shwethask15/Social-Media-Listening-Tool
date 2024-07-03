@@ -1,0 +1,19 @@
+.topic-filter-page {
+  display: flex;
+  justify-content: space-around;
+}
+
+.topic-filter-container,
+.wordcloud-container {
+  width: 50%;
+  gap: 5px;
+  position: relative;
+  padding: 20px;
+  margin-bottom: 20px;
+  background: var(--glass-bg-color);
+  border-radius: var(--glass-border-radius);
+  box-shadow: var(--glass-box-shadow);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid var(--glass-border-color);
+}
