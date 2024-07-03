@@ -3,15 +3,16 @@
   --purple: #e3cffd;
   --gray: #ededec;
   --beige: #fbf9f5;
-  --white: #ffffff;
+  --white: #220047;
 }
-
+ 
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--primary);
-  border-bottom: 1px solid #ddd;
+  background-color:none;
+  background: none;
+  border-bottom: 1px solid #bf99bd;
   height: 50px;
   position: fixed;
   top: 0;
@@ -20,20 +21,17 @@
   z-index: 1000;
   box-sizing: border-box;
 }
-.navbar-icons{
-  padding-right: 40px;
-}
-
+ 
 .navbar-brand{
   padding-left: 40px;
 }
-
+ 
 .navbar-brand h3 {
   margin: 0;
   color: var(--white);
   font-size: 18px;
 }
-
+ 
 .navbar-menu {
   list-style: none;
   display: flex;
@@ -41,11 +39,11 @@
   margin: 0;
   padding: 0;
 }
-
+ 
 .navbar-menu li {
   display: inline;
 }
-
+ 
 .navbar-menu li a {
   text-decoration: none;
   color: var(--white);
@@ -54,66 +52,69 @@
   border-radius: 5px;
   transition: color 0.3s, background-color 0.3s;
 }
-
+ 
 .navbar-menu li a:hover {
   color: var(--primary);
-  background-color: var(--purple);
+  background-color: #cbb5c7;
 }
-
+ 
 .navbar-menu li a.active {
   color: var(--primary);
-  background-color: var(--purple);
+  background-color:#dab9dc;
 }
-
+ 
 .navbar-icons {
   display: flex;
   align-items: center;
   gap: 20px;
+  padding-right: 40px;
+  background: none;
+  color: white;
 }
-
+ 
 .icon-container {
   position: relative;
   cursor: pointer;
 }
-
+ 
 .icon {
   font-size: 24px;
   color: var(--white);
 }
-
+ 
 .icon-button .MuiBadge-root {
-  color: rgb(255, 255, 255); /* Change the color of the bell icon */
+  color: #220047; /* Change the color of the bell icon */
 }
-
+ 
 .notification-item {
   margin-bottom: 15px;
 }
-
+ 
 .notification-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
+ 
 .notification-date {
   display: flex;
   align-items: center;
   color: #0056b3;
 }
-
+ 
 .notification-date p {
   margin: 0;
   color: #0056b3;
 }
-
+ 
 .notification-link {
   color: #0056b3;
 }
-
+ 
 .notification-snippet {
   margin: 5px 0;
 }
-
+ 
 .notification-divider {
   border: 0.5px solid #0056b3;
 }
