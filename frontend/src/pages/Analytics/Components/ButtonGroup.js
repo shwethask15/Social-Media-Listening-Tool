@@ -4,7 +4,6 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import { styled } from '@mui/material/styles';
 
 const CustomButtonGroup = styled(ButtonGroup)(({ theme }) => ({
-  // borderRadius: '25px',
   boxShadow: '0 0 15px rgba(0, 0, 0, 0.1)',
   alignItems: 'center',
   border: '1px solid black',
@@ -54,4 +53,3 @@ export default function BasicButtonGroup({ setCurrentPage }) {
     </CustomButtonGroup>
   );
 }
- 

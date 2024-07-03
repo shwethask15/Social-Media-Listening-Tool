@@ -32,7 +32,11 @@ const FilterModal = ({ show, onClose, filterOptions, appliedFilters, setAppliedF
   };
 
   const handleReset = () => {
-    setLocalFilters(filterOptions);
+    const allFiltersSelected = {};
+    Object.keys(filterOptions).forEach((category) => {
+      allFiltersSelected[category] = filterOptions[category];
+    });
+    setLocalFilters(allFiltersSelected);
   };
 
   const renderOptions = (category) => {

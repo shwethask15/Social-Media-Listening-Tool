@@ -6,6 +6,7 @@ import Verbatims from './pages/Verbatims/Verbatims';
 import Navbar from './Components/Navbar';
 import SignIn from './Components/SignIn';
 import SignUp from './Components/SignUp';
+import './App.css'
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

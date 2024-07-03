@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { FaBell, FaQuestionCircle } from 'react-icons/fa'; 
+import { FaBell } from 'react-icons/fa'; 
 import '../style/Navbar.css'
 
 function Navbar() {

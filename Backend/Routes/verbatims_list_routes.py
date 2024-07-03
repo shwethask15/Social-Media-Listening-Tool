@@ -8,9 +8,12 @@ from user_auth.auth_bearer import JWTBearer
 router = APIRouter()
 
 @router.get("/verbatims_list/",response_model=List[Verbatims_List_create])
-async def get_data(token: str = Depends(JWTBearer()),db : Session = Depends(get_db)):
+async def get_data(query : str | None = None,token: str = Depends(JWTBearer()),db : Session = Depends(get_db)):
     try:
-        return await get_data1(db=db)
+        if query == None:
+            return await get_data1(db=db)
+        else:
+            return await advanced_filters_query(query=query,db=db)
     except Exception as e:
         return str(e)
 
@@ -28,10 +31,10 @@ async def update_data(mention_id : str, update_body : verbatims_list_update,toke
     except Exception as e:
         return str(e)
     
-@router.get("/verbatims_list_query/")
-async def verbatims_list_advanced_query(query : str, token : str = Depends(JWTBearer()),db : Session = Depends(get_db)):
-    try:
-        return await advanced_filters_query(query=query,db=db)
-    except Exception as e:
-        return str(e)
+# @router.get("/verbatims_list_query/")
+# async def verbatims_list_advanced_query(query : str, token : str = Depends(JWTBearer()),db : Session = Depends(get_db)):
+#     try:
+#         return await advanced_filters_query(query=query,db=db)
+#     except Exception as e:
+#         return str(e)
 

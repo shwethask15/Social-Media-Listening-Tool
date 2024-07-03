@@ -8,7 +8,10 @@ router = APIRouter()
 
 @router.get("/trend_analysis/")
 async def get_trend_analysis(type : str,token : str = Depends(JWTBearer()),db : Session = Depends(get_db)):
-    return await get_trend_analysis1(type=type,db=db)
+    try:
+        return await get_trend_analysis1(type=type,db=db)
+    except Exception as e:
+        return str(e)
         
 
 
