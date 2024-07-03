@@ -190,6 +190,34 @@ const Verbatims = () => {
     setCurrentPage(1);
   };
 
+  const handleUpdate = (mention_id, updatedData) => {
+    // Filter out metadata fields
+    const relevantData = {
+      date: updatedData.date,
+      source: updatedData.source,
+      translated_snippet: updatedData.translated_snippet,
+      brand: updatedData.brand ? updatedData.brand.trim() : "",
+      severity: updatedData.severity,
+      snippet: updatedData.snippet,
+      theme: updatedData.theme,
+      country: updatedData.country,
+      originalURL: updatedData.originalURL,
+      impact_index: updatedData.impact_index,
+      datasource: updatedData.datasource,
+      virality: updatedData.virality,
+      mention_id: updatedData.mention_id,
+      full_text: updatedData.full_text,
+      language: updatedData.language,
+      sentiment: updatedData.sentiment,
+    };
+  
+    setVerbatimData((prevData) =>
+      prevData.map((item) =>
+        item.mention_id === mention_id ? { ...item, ...relevantData } : item
+      )
+    );
+  };  
+
   return (
     <div className="Verbatims">
       <FilterModal
@@ -242,6 +270,7 @@ const Verbatims = () => {
                 sentiment: filterOptions.sentiments,
                 severity: filterOptions.severities,
               }}
+              onUpdate={handleUpdate} // Pass the handleUpdate function
             />
           ))
         ) : (

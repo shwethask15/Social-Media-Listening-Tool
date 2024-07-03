@@ -13,7 +13,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import { height } from "@amcharts/amcharts4/.internal/core/utils/Utils";
 
 const style = {
   position: 'absolute',
@@ -62,7 +61,7 @@ const VerbatimItem = ({
   link,
   icon,
   updateOptions,
-  onUpdate, // Pass the onUpdate function
+  onUpdate, // Expect onUpdate function
 }) => {
   const [isEditing, setIsEditing] = useState({
     virality: false,
@@ -115,7 +114,9 @@ const VerbatimItem = ({
       );
 
       if (response.status === 200) {
-        onUpdate(mention_id, data); // Call onUpdate with mention_id and updated values
+        if (typeof onUpdate === 'function') {
+          onUpdate(mention_id, data); // Ensure onUpdate is a function before calling
+        }
         handleModalClose(); // Close the modal after saving
       }
     } catch (error) {

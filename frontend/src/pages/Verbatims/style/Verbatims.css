@@ -3,8 +3,8 @@
   --gray: #ededec;
   --beige: #fbf9f5;
   --blue: #007bff;
-  --gradient-start: #fdeff9;
-  --gradient-end: #d4d3dd;
+  --gradient-start: #c0b4df;
+  --gradient-end: #fabbda;
   --glass-bg-color: rgba(255, 255, 255, 0.23);
   --glass-bg-color-header: rgba(255, 255, 255, 0.5);
   --glass-border-radius: 6px;
@@ -20,12 +20,12 @@
   min-width: 97vw;
   background: var(--gradient-start); /* fallback for old browsers */
   background: -webkit-linear-gradient(
-    to right,
+    to bottom,
     var(--gradient-start),
     var(--gradient-end)
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
-    to right,
+    to bottom,
     var(--gradient-start),
     var(--gradient-end)
   );
@@ -39,6 +39,7 @@
   border-radius: 4px;
   cursor: pointer;
   gap: 0;
+  border: 1px solid black;
 }
  
 .download-button {
@@ -49,6 +50,7 @@
   border-radius: 4px;
   cursor: pointer;
   margin-left: 10px;
+  border: 1px solid black;
 }
  
 .verbatims-header {
