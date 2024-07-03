@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LiveMapChart from './LiveMapChart';
 import SmlList from './SmlList';
 import Loader from './Loader';
-import '../style/smlShow.css';
+import '../style/Analytics.css';
 
 function LiveTrendingVerbatims() {
   const [loading, setLoading] = useState(true);

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../style/smlShow.css'; 
+import '../style/Analytics.css';
 
 const Loader = () => (
   <div className="loader">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { formatDateTime, getIconWithTooltip, getSourceIcon } from '../utils/utilities';
-import '../style/smlShow.css';
+import '../style/Analytics.css';
 
 const SmlShow = ({ item }) => {
     const { sentiment, mention_updated_date, impact_index, virality, severity, snippet, country_name, two_digit_country_code, url, source } = item;

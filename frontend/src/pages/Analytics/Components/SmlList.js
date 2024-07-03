@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchLiveVerbatimsData } from '../redux/slice/slice';
 import SmlShow from './Sml-Show';
 import Loader from './Loader';
-import '../style/smlShow.css';
+import '../style/Analytics.css';
 
 const SmlList = () => {
   const dispatch = useDispatch();
