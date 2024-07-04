@@ -6,6 +6,7 @@ import Verbatims from './pages/Verbatims/Verbatims';
 import Navbar from './Components/Navbar';
 import SignIn from './Components/SignIn';
 import SignUp from './Components/SignUp';
+import './App.css'
 
 function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -22,10 +23,10 @@ function App() {
             </>
           ) : (
             <>
-              <Route path="/" element={<Navigate to="/page1" />} />
-              <Route path="/page1/*" element={<Analytics />} />
+              <Route path="/" element={<Navigate to="/analytics" />} />
+              <Route path="/analytics/*" element={<Analytics />} />
               <Route path="/page2/*" element={<Verbatims />} />
-              <Route path="*" element={<Navigate to="/page1" />} />
+              <Route path="*" element={<Navigate to="/analytics" />} />
             </>
           )}
         </Routes>

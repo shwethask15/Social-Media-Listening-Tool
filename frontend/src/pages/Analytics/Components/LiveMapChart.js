@@ -5,7 +5,7 @@ import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLiveVerbatimsData } from '../redux/slice/slice';
-import '../style/smlShow.css'; // Ensure this path is correct
+import '../style/Analytics.css'; 
 
 function LiveMapChart({ setLoading }) {
   const dispatch = useDispatch();
@@ -30,7 +30,7 @@ function LiveMapChart({ setLoading }) {
       am5map.MapPolygonSeries.new(root, {
         geoJSON: am5geodata_worldLow,
         exclude: ["AQ"],
-        fill: am5.color(0xffffff),
+        fill: am5.color(0xbf99bd),
         stroke: am5.color(0x000000), // Stroke color
         strokeWidth: 2, // Increase the stroke width (adjust as needed)
       })
