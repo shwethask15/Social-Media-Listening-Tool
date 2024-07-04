@@ -1,14 +1,14 @@
 import { NavLink } from 'react-router-dom';
-import { FaBell, FaQuestionCircle } from 'react-icons/fa'; 
+import { FaBell } from 'react-icons/fa'; 
 import '../style/Navbar.css'
 
 function Navbar() {
     return (
         <div className="navbar-analytics">
             <ul className="navbar-menu-analytics">
-                <li><NavLink to="LiveTrendingVerbatims">Live Trending Verbatims</NavLink></li>
-                <li><NavLink to="TrendAnalysis">Trend Analysis</NavLink></li>
-                <li><NavLink to="SnapshotView">Snapshot View</NavLink></li>
+                <li><NavLink to="live-trending-verbatims">LIVE TRENDING VERBATIMS</NavLink></li>
+                <li><NavLink to="trend-analysis">TREND ANALYSIS</NavLink></li>
+                <li><NavLink to="snapshot-view">SNAPSHOT VIEW</NavLink></li>
             </ul>
 
         </div>

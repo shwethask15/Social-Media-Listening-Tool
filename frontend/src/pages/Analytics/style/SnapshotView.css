@@ -1,0 +1,80 @@
+.ssvMap {
+    width: 100%;
+    height: 250px;
+  }
+  
+  .SnapShotViewMap {
+    border: 1px solid #000000;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .legend-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .legend-color-box {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5em;
+    color: #333;
+  }
+  
+  .snapshot-view-buttons {
+    display: flex;
+    align-items: center; /* Center buttons vertically */
+    padding: 2px 1px;
+    border: 1px solid #6F52ED;
+    border-radius: 25px;
+    margin-bottom: 20px; /* Add some margin below the button group */
+    width: fit-content;
+  }
+  
+  .snapshot-view-buttons button {
+    background: none;
+    color: #000000;
+    font-size: 14px;
+    padding: 6px 4px;
+    border-radius: 25px;
+    margin: 0 2px;
+    cursor: pointer;
+    border: none;
+    outline: none; /* Remove default outline */
+    box-shadow: none; /* Remove box shadow on focus */
+  }
+  
+  .snapshot-view-buttons button:hover {
+    background: rgba(111, 82, 237, 0.1);
+    border-radius: 25px;
+    border: none;
+  }
+  
+  .snapshot-view-buttons button.active {
+    background-color: #6F52ED;
+    color: white;
+    border: none;
+    border-radius: 25px;
+  }
+  
+  /* Optional: to maintain the button's active state without transition */
+  .snapshot-view-buttons button,
+  .snapshot-view-buttons button.active {
+    transition: none;
+  }
+  

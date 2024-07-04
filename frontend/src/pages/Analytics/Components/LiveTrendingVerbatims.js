@@ -13,7 +13,7 @@ function LiveTrendingVerbatims() {
       <div className="content-container">
         <div className="map-container">
           <LiveMapChart setLoading={setLoading} />
-          <p className='MapLabel'> * Live Trending Verbatims shows the recent records</p>
+          <p className='MapLabel'> * Live trending verbatims map</p>
         </div>
 
         <div className="comments-container">

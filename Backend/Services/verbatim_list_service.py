@@ -74,7 +74,8 @@ async def get_data_with_filters1(q : verbatims_filters,db : Session):
     return r
 async def get_data_by_mention_id1(mention_id : str,update_body : verbatims_list_update,db : Session):
     data = Verbatims.get_By_Id(mention_id=mention_id,db=db)
-    ref = {"virality" : "virality_altered","sentiment" : "sentiment_altered","severity":"severity_altered","theme":"theme_altered" }
+    print(update_body)
+    ref = {"virality" : "virality_altered","sentiment" : "sentiment_altered","severity":"severity_altered"}
     update_body = dict(update_body)
     temp = data
     temp = temp.__dict__
@@ -92,9 +93,9 @@ async def get_data_by_mention_id1(mention_id : str,update_body : verbatims_list_
                 res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
                 res.severity = update_body[i]
                 # res.severity_altered = True
-            else:
-                res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
-                res.theme = update_body[i]
+            # else:
+            #     res = db.query(Verbatims_List).filter_by(mention_id = mention_id).first()
+            #     res.theme = update_body[i]
                 # res.theme_altered = True
     db.commit()
     # for i in ref:
@@ -127,11 +128,44 @@ async def get_data_by_mention_id1(mention_id : str,update_body : verbatims_list_
 
 async def advanced_filters_query(query : str,db : Session):
     data = Verbatims.get_all(db=db)
+    countries =[]
+    for i in data:
+        if i.country.lower() not in countries:
+            countries.append(i.country.lower())
+    print(countries)
     key_words = ["sentiment","virality","severity"]
     key_words_values = ["low","high","medium","no_threat","positive","negative","neutral"]
     query = query.lower()
     query = query.split()
-    filters = {"virality":[],"sentiment":[],"severity":[] }
+    filters = {"virality":[],"sentiment":[],"severity":[],"country":[] }
+    l = len(query)
+    # for i in range(len(query)):
+    #     if query[i] == "united":
+    #         # print(query)
+    #         query[i] = query[i]+" "+query[i+1]
+    #         query.remove(query[i+1])
+    i = 0
+    while i < l:
+        if query[i] == "united":
+            query[i] = query[i]+" "+query[i+1]
+            query.remove(query[i+1])
+            l-=1
+            i-=1
+        i+=1
+    print(query)
+    res = query
+    query = []
+    for i in res:
+        if i[0] == ',':
+            query.append(i[1:])
+        elif i[-1] == ',':
+            query.append(i[:len(i)-1])
+        elif ',' in i:
+            temp = i.split(',')
+            query.extend(temp)
+        else:
+            query.append(i)
+    print(query)
     i = 0
     while i<len(query):
     # print(input_string[i])
@@ -168,57 +202,97 @@ async def advanced_filters_query(query : str,db : Session):
                         filters[query[j]].append(k)
                 elif query[j] in key_words_values and c==0:
                     temp.append(query[j])
-                elif query[j] in key_words_values and c!=0:
+                elif query[j] in key_words_values or c!=0:
+                    print(query[j])
                     i = j-1
                     # print(i)
                     break
             # print(j,temp,c,filters)
                 if len(query)-1 == j:
                     i = j
+        elif query[i] in countries:
+            filters["country"].append(query[i])
         i+=1
     # print(filters,i)
     
     print(filters)
-    r1 = data
-    r = []
+    r1 = []
+    # print(len(data))
+    # for j in range(len(data)):
+    #     print(j)
+    for j in data:
+        r1.append(j.__dict__)
+    # r = []
     # print(len(r))
-    for i in filters["virality"]:
-        c=0
+    if len(filters["virality"])!=0:
         for j in data:
             temp = j.__dict__
+            c+=1
             # print(j["virality"])
-            # print(i!=temp["virality"].lower())
-            if i == temp["virality"].lower():
-                    r.append(j)
-                    r1.remove(j)
-
+            # print(i,temp["virality"].lower(),c)
+            if temp["virality"].lower() not in filters["virality"]:
+                # r.append(j)
+                # r1.remove(temp)
+                for k in r1:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r1.remove(k)
+                        break
+    data = []
     # print(len(r))
     for i in r1:
-        print(i.virality)
-    r1 =[]
-    for i in filters["sentiment"]:
-        for j in r:
+        data.append(Verbatims_List_create(**i))
+    # r1 =[]
+    print(len(data))
+    if len(filters["sentiment"]):
+        for j in data:
             temp=j.__dict__
             # print(j)
-            if i!=temp["sentiment"].lower():
+            if temp["sentiment"].lower() not in filters["sentiment"]:
                 # print(j in r)
-                r1.append
-    print(len(r))
-    for i in filters["severity"]:
-        # print(i)
-        for j in r:
-            temp=j.__dict__
-            if i!=temp["severity"].lower():
-                r.remove(j)
-                # print(len(r),temp["severity"])
-            # else:
-            #     print(temp["severity"])
+                # r1.append
+                for k in r1:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r1.remove(k)
+                        break
     # print(len(r))
-    # for i in r:
-    #     print(i.severity)
+    data = []
+    # print(len(r))
+    for i in r1:
+        data.append(Verbatims_List_create(**i))
+    print(len(data))
+    # print(i)
+    if len(filters["severity"])!=0:
+        for j in data:
+            temp=j.__dict__
+            if temp["severity"].lower() not in filters["severity"]:
+                # r1.remove(temp)
+                for k in r1:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r1.remove(k)
+                        break
+            # print(len(r),temp["severity"])
+        # else:
+        #     print(temp["severity"])
+    data = []
+    # print(len(r))
+    for i in r1:
+        data.append(Verbatims_List_create(**i))
+    print(len(data))
+    if len(filters["country"])!=0:
+        for j in data:
+            temp = j.__dict__
+            if temp["country"].lower() not in filters["country"]:
+                for k in r1:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r1.remove(k)
+                        break
+# print(len(r))
+# for i in r:
+#     print(i.severity)
 # for i in r:
 #     print(i["virality"])
 
     # print(len(r))
+    print(len(r1))
     
-    return r
+    return r1

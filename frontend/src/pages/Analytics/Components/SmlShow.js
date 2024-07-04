@@ -20,7 +20,6 @@ const SmlShow = ({ item }) => {
                 <p>{snippet}</p>
             </div>
             <div className="sml-show-footer">
-                {/* <span>{country_name || 'Unknown'}</span> */}
                 <span>🌎 {country_name || 'Unknown'}</span>
                 <a href={url} target="_blank" rel="noopener noreferrer">🔗</a>
             </div>
