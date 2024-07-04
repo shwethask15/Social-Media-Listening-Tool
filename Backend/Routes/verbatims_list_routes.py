@@ -5,6 +5,13 @@ from typing import Dict,List
 from database.session import get_db
 from sqlalchemy.orm import Session # type: ignore
 from user_auth.auth_bearer import JWTBearer
+from datetime import datetime
+from Services.websocket_service import manager
+import asyncio
+from sqlalchemy.orm import class_mapper
+
+def model_to_dict(instance):
+    return {c.key: getattr(instance, c.key) for c in class_mapper(instance.__class__).mapped_table.c}
 router = APIRouter()
 
 @router.get("/verbatims_list/",response_model=List[Verbatims_List_create])
@@ -25,10 +32,28 @@ async def get_data_with_filters(q : verbatims_filters = None,token: str = Depend
         return str(e)
     
 @router.put("/verbatims_list/{mention_id}")
-async def update_data(mention_id : str, update_body : verbatims_list_update,token: str = Depends(JWTBearer()), db: Session = Depends(get_db)):
+async def update_data(mention_id: str, update_body: verbatims_list_update, token: str = Depends(JWTBearer()), db: Session = Depends(get_db)):
     try:
-        return await get_data_by_mention_id1(mention_id=mention_id,update_body=update_body,db=db)
+        # Fetch data from database
+        data = await get_data_by_mention_id1(mention_id=mention_id, update_body=update_body, db=db)
+
+        # Convert SQLAlchemy model instance to dictionary
+        temp = model_to_dict(data)
+
+        # Update dictionary with additional fields
+        temp["updated_at"] = datetime.now().isoformat()
+        temp["url"] = temp["originalURL"]  # Assuming originalURL is an attribute in your model
+
+        # print(temp["updated_at"], temp["snippet"], temp["url"])
+
+        # Send notification to WebSocket connections
+        notification_message = {"type": "notification", "data": [temp]}
+        for connection in manager.connections:
+            await connection.send_json(notification_message)
+
+        return data
     except Exception as e:
+        print(e)
         return str(e)
     
 # @router.get("/verbatims_list_query/")

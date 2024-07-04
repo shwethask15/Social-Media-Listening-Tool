@@ -31,9 +31,9 @@ class Verbatims_List_create(BaseModel):
 
 class verbatims_filters(BaseModel):
     brand : List | None = None
-    datasource : List | None = None
+    # datasource : List | None = None
     country : List | None = None
-    theme : List | None =None
+    # theme : List | None =None
     source : List | None = None
     sentiment : List | None = None
     virality : List | None = None
