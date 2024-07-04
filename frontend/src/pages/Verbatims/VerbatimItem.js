@@ -22,23 +22,23 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 300,
-  height: 250,
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center'
+  borderRadius: '8px'
 };
 
 const headerStyle = {
   backgroundColor: '#0000FF',
-  width: '100%',
-  padding: '10px',
+  width: '108%',
+  padding: '10px 20px',
   color: 'white',
   display: 'flex',
   justifyContent: 'space-between',
-  alignItems: 'center'
+  alignItems: 'center',
+  borderTopLeftRadius: '8px',
+  borderTopRightRadius: '8px',
+  margin: '-32px -32px 0 -32px'
 };
 
 const saveButtonStyle = {
@@ -191,7 +191,7 @@ const VerbatimItem = ({
                   name={currentField}
                   value={newValues[currentField]}
                   onChange={(e) => handleChange(currentField, e.target.value)}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingLeft: '20px' }}
                 >
                   {updateOptions[currentField].map((option) => (
                     <FormControlLabel
@@ -205,7 +205,7 @@ const VerbatimItem = ({
                 </RadioGroup>
               </FormControl>
             )}
-            <Button onClick={handleSave} variant="text" style={saveButtonStyle}>
+            <Button onClick={handleSave} variant="contained" style={saveButtonStyle}>
               SAVE
             </Button>
           </Box>

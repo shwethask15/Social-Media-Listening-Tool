@@ -156,40 +156,6 @@ const Verbatims = () => {
     document.body.removeChild(link);
   };
 
-  const handleSearch = (query) => {
-    const severityMatch = query.match(/(high|medium|low) severity/i);
-    const viralityMatch = query.match(/(high|medium|low) virality/i);
-    const sentimentMatch = query.match(
-      /(positive|negative|neutral) sentiment/i
-    );
-    const locationMatch = query.match(/in (\w+)/i);
-
-    const severity = severityMatch ? severityMatch[1] : null;
-    const virality = viralityMatch ? viralityMatch[1] : null;
-    const sentiment = sentimentMatch ? sentimentMatch[1] : null;
-    const location = locationMatch ? locationMatch[1] : null;
-
-    const result = verbatimData.filter((verbatim) => {
-      return (
-        (severity
-          ? verbatim.severity.toLowerCase() === severity.toLowerCase()
-          : true) &&
-        (virality
-          ? verbatim.virality.toLowerCase() === virality.toLowerCase()
-          : true) &&
-        (sentiment
-          ? verbatim.sentiment.toLowerCase() === sentiment.toLowerCase()
-          : true) &&
-        (location
-          ? verbatim.location.toLowerCase() === location.toLowerCase()
-          : true)
-      );
-    });
-
-    setFilteredVerbatimData(result);
-    setCurrentPage(1);
-  };
-
   const handleUpdate = (mention_id, updatedData) => {
     // Filter out metadata fields
     const relevantData = {
@@ -229,10 +195,9 @@ const Verbatims = () => {
       />
       <div className="verbatims-header">
         <VerbatimsPrompter
-          verbatimData={verbatimData}
           setFilteredVerbatimData={setFilteredVerbatimData}
-          handleSearch={handleSearch}
           setCurrentPage={setCurrentPage}
+          setLoading={setLoading} // pass setLoading to handle loading state
         />
         <div className="verbatims-count">
           Total Verbatims: {filteredVerbatimData.length}

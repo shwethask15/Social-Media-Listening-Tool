@@ -1,51 +1,62 @@
 import React, { useState } from "react";
+import axiosInstance from "../../Components/redux/axiosInstance";
 import "./style/VerbatimsPrompter.css";
+import twitterIcon from "./assets/twitter-icon.png";
+import blogIcon from "./assets/blog-icon.png";
+import redditIcon from "./assets/reddit-icon.png";
+import forumIcon from "./assets/forum-icon.png";
+import newsIcon from "./assets/news-icon.png";
 
-const VerbatimsPrompter = ({ verbatimData, setFilteredVerbatimData, setCurrentPage }) => {
+const VerbatimsPrompter = ({ setFilteredVerbatimData, setCurrentPage, setLoading }) => {
   const [query, setQuery] = useState("");
 
   const handleInputChange = (e) => {
     setQuery(e.target.value);
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      handleSearch(query);
+      await handleSearch(query);
     }
   };
 
-  const handleSearch = (query) => {
-    // Split the query into words
-    const words = query.toLowerCase().split(/[,\s]+/);
-
-    let severity = null;
-    let virality = null;
-    let sentiment = null;
-    let location = null;
-
-    words.forEach((word, index) => {
-      if (word.match(/(high|medium|low)/) && words[index + 1] === "severity") {
-        severity = word;
-      } else if (word.match(/(high|medium|low)/) && words[index + 1] === "virality") {
-        virality = word;
-      } else if (word.match(/(positive|negative|neutral)/) && words[index + 1] === "sentiment") {
-        sentiment = word;
-      } else if (word === "in" && words[index + 1]) {
-        location = words[index + 1];
-      }
-    });
-
-    const result = verbatimData.filter((verbatim) => {
-      return (
-        (!severity || verbatim.severity.toLowerCase() === severity) &&
-        (!virality || verbatim.virality.toLowerCase() === virality) &&
-        (!sentiment || verbatim.sentiment.toLowerCase() === sentiment) &&
-        (!location || verbatim.location.toLowerCase() === location)
+  const handleSearch = async (query) => {
+    setLoading(true);
+    try {
+      const response = await axiosInstance.get(
+        `http://127.0.0.1:8000/verbatims_list/?query=${encodeURIComponent(query)}`
       );
-    });
-
-    setFilteredVerbatimData(result);
-    setCurrentPage(1);
+      const data = response.data.map((item) => ({
+        mention_id: item.mention_id,
+        date: item.date,
+        location: item.country || "Unknown",
+        language: item.language,
+        virality: item.virality,
+        sentiment: item.sentiment,
+        severity: item.severity,
+        subCategory: item.theme || "Unknown",
+        content: item.translated_snippet,
+        brand: item.brand.trim(),
+        source: item.source,
+        link: item.originalURL,
+        icon:
+          item.source === "twitter"
+            ? twitterIcon
+            : item.source === "blog"
+            ? blogIcon
+            : item.source === "reddit"
+            ? redditIcon
+            : item.source === "news"
+            ? newsIcon
+            : forumIcon,
+      }));
+      setFilteredVerbatimData(data);
+      setCurrentPage(1);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching filtered verbatims:", error);
+      setLoading(false);
+    }
   };
 
   return (
