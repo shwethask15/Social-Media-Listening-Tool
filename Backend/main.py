@@ -8,7 +8,7 @@ import asyncio
 from database.session import SessionLocal, get_db
 import websockets
 from models.live_verbatims_list import Live_Verbatims_List
-from models.notification import verbatims_list_audit
+from models.alerts import verbatims_list_audit
 from crud.crud_verbatims_list import Verbatims
 from sqlalchemy import func
 from fastapi.responses import StreamingResponse
@@ -150,82 +150,6 @@ app.include_router(trend_analysis_router,tags=["trend_analysis"],prefix="")
 # async def startup_event():c
 #     asyncio.create_task(send_realtime_updates(websocket_connections))
 # ____________________________________________________________________________________________________
-##Websocket with swagger endpoint
-# # Function to send real-time updates
-# async def send_realtime_updates(websocket_connections) -> None:
-#     print("Inside  function")
-#     if os.path.exists(LAST_TOTAL_ROWS_FILE):
-#         with open(LAST_TOTAL_ROWS_FILE, "r") as f:
-#             last_total_rows = json.load(f)
-#     else:
-#         last_total_rows = 0
-
-#     while True:
-#         try:
-#             db = SessionLocal()
-
-#             # Query current total rows in Live_Verbatims_List
-#             current_total_rows = db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
-
-#             # Compare current total rows with last known total rows
-#             if current_total_rows > last_total_rows:
-#                 print(f"Detected {current_total_rows - last_total_rows} new entries")
-
-#                 # Fetch new entries
-#                 new_entries = (
-#                     db.query(Live_Verbatims_List)
-#                     .order_by(Live_Verbatims_List.mention_id.desc())
-#                     .limit(current_total_rows - last_total_rows)
-#                     .all()
-#                 )
-
-#                 # Serialize new entries to send as notifications
-#                 recent_updates = [entry.serialize() for entry in new_entries]
-
-#                 # Send notifications to websocket connections
-#                 print(f"Sending notifications for {len(new_entries)} items")
-#                 send_tasks = [
-#                     connection.send_json({"type": "notification", "data": recent_updates})
-#                     for connection in websocket_connections
-#                 ]
-#                 await asyncio.gather(*send_tasks)
-
-#             # Update last_total_rows to current_total_rows
-#             last_total_rows = current_total_rows
-
-#             # Save last_total_rows to file
-#             with open(LAST_TOTAL_ROWS_FILE, "w") as f:
-#                 json.dump(last_total_rows, f)
-
-#             db.close()
-#             await asyncio.sleep(5)  # Send updates every 5 seconds (adjust as needed)
-
-#         except Exception as e:
-#             print(f"Error sending updates: {e}")
-
-# # Example WebSocket endpoint
-# websocket_connections = []
-
-# @app.websocket("/ws")
-# async def websocket_endpoint(websocket: WebSocket):
-#     await websocket.accept()
-#     websocket_connections.append(websocket)
-#     print(f"WebSocket connected: {websocket}")
-
-#     try:
-#         while True:
-#             await asyncio.sleep(1)  # Keep connection open
-#     except Exception:
-#         websocket_connections.remove(websocket)
-#         print(f"WebSocket disconnected: {websocket}")
-
-
-# # Example route to start the real-time updates
-# @app.get("/start_updates")
-# async def start_updates(request: Request):
-#     asyncio.create_task(send_realtime_updates(websocket_connections))
-#     return {"message": "Started sending real-time updates."}
-#_______________________________________________________________________________________________
 """
 user_data ={
   "user_name": "abcdef@gmail.com",
@@ -240,7 +164,7 @@ import uuid,json
 
 missed_notifications = {}
 
-# # SSE endpoint
+# # # SSE endpoint
 # @app.get("/sse")
 # async def sse_endpoint(client_id: str = uuid.uuid4()):
 #     async def stream():
@@ -355,7 +279,7 @@ missed_notifications = {}
 #     asyncio.create_task(send_realtime_updates(client_id))
 
 
-#_____________________________________
+# _____________________________________
 # SSE endpoint
 @app.get("/sse")
 async def sse_endpoint():
@@ -414,8 +338,8 @@ async def send_realtime_updates() -> None:
             db = SessionLocal()
 
             # Query current total rows in Live_Verbatims_List
-            current_total_rows_live_verbatims = db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
-            current_total_rows_verbatims_list=db.query(func.count(verbatims_list_audit.audit_id)).scalar()
+            current_total_rows_live_verbatims =db.query(func.count(Live_Verbatims_List.mention_id)).scalar()
+            current_total_rows_verbatims_list = db.query(func.count(verbatims_list_audit.audit_id)).scalar()
             # Compare current total rows with last known total rows of live verbatims table
             if current_total_rows_live_verbatims > last_total_rows_live_verbatims:
                 print(f"Detected {current_total_rows_live_verbatims - last_total_rows_live_verbatims} new entries")
