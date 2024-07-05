@@ -1,67 +1,49 @@
 .navbar-analytics {
+  display: flex;
+  justify-content: center; 
+  background-color: none;
+  color: #220047;
+  padding: 10px 1px;
+  font-weight: 18px;
+  width: fit-content;
+  margin: 20px auto; /* Centering the navbar */
+  border-radius: 25px;
+  border: 1px solid  #bf99bd;
+  /* box-shadow: 4px 4px 0px rgba(0, 0, 0, 1); */
+}
 
+.navbar-menu-analytics {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
-    display: flex;
-    justify-content: center; 
-    background-color: rgb(255, 255, 255);
-    color: #000000;
-    padding: 10px 10px;
-  
-    font-weight: lighter;
-    width:fit-content;
-    margin-left: 35%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 25px;
-    border: 1px solid rgb(0, 0, 0);
-    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
-    box-shadow: 4px 4px 0px rgba(0, 0, 0, 1);
-  }
-  
-  .navbar-menu-analytics {
+.navbar-menu-analytics li {
+  display: inline-block;
+  font-size: 15px;
+  padding: 5px;
+}
 
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
+.navbar-menu-analytics li:last-child {
+  margin-right: 0;
+}
 
-  .navbar-menu-analytics li {
-    display: inline-block;
-    /* margin-right: 20px; */
-    font-size: 15px;
-    padding: 5px;
-  }
-  
-  .navbar-menu-analytics li:last-child {
-    margin-right: 0;
-  }
-  
-  .navbar-menu-analytics li a {
-    color: #000000;
-    text-decoration: none;
+.navbar-menu-analytics li a {
+  color: #000000;
+  text-decoration: none;
+}
 
-   
-  }
-  
-  .navbar-menu-analytics li a:hover {
-    /* background-color: #555; */
-    /* border: 1px solid #ccc; */
-    padding:5px;
-    border-bottom: 2px solid  rgb(227, 207, 253);
-    /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */
-    /* border: 1px solid rgb(227, 207, 253); */
-  }
-  
-  .navbar-menu-analytics li a.active {
-    background-color:rgb(227, 207, 253) ;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 10px;
-    border-radius: 25px; 
-    /* border: 1px solid #67a9f4; */
-    color: rgb(0, 0, 0);
-  }
+.navbar-menu-analytics li a:hover {
+  padding: 10px 2px;
+  /* border-bottom: 2px solid  #bc9fba; */
+  background-color: #cbb5c7;
+  border-radius: 25px; 
+}
 
-
-
-  
+.navbar-menu-analytics li a.active {
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px 3px;
+  border-radius: 25px; 
+  color: #220047;
+}

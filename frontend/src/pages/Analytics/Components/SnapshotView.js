@@ -2,10 +2,42 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSnapShotViewData } from '../redux/slice/slice';
 import SnapshotViewMap from './SnapShotViewMap';
-import BasicButtonGroup from './ButtonGroup';
 import TopicFilter from './TopicFilter';
-import { Button, ButtonGroup } from '@mui/material'; // Import Material-UI components
-import '../style/SnapshotView.css'; // Import the CSS file
+import { Button, Menu, MenuItem, ButtonGroup } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import '../style/SnapshotView.css';
+
+const CustomButton = styled(Button)(({ theme }) => ({
+  backgroundColor: 'transparent',
+  color: '#220047',
+  boxShadow:'none',
+  '&:hover': {
+    backgroundColor: '#e3e3e3',
+  },
+  '&.Mui-selected': {
+    backgroundColor: '#e3cffd',
+    color: '#220047',
+    boxShadow: 'inset 0 0 5px rgba(0, 0, 0, 0.2)',
+  },
+}));
+
+const CustomButtonGroup = styled(ButtonGroup)(({ theme }) => ({
+  '& .MuiButton-root': {
+    backgroundColor: 'transparent',
+    color: '#220047',
+    boxShadow:'none',
+  
+    borderColor: '#ccc',
+    '&:hover': {
+      backgroundColor: '#e3e3e3',
+    },
+    '&.Mui-selected': {
+      backgroundColor: '#dab9dc',
+      color: '#220047',
+      boxShadow: 'inset 0 0 5px rgba(0, 0, 0, 0.2)',
+    },
+  },
+}));
 
 function SnapshotView() {
   const dispatch = useDispatch();
@@ -13,6 +45,7 @@ function SnapshotView() {
   const [selectedOption, setSelectedOption] = useState('All');
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState('map');
+  const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
     if (currentPage === 'map') {
@@ -27,33 +60,49 @@ function SnapshotView() {
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);
+    setAnchorEl(null);
   };
 
-  const renderButtons = () => (
-    <ButtonGroup className="snapshot-view-buttons">
-      {['All', 'Virality', 'Sentiment', 'Severity'].map(option => (
-        <Button
-          key={option}
-          className={selectedOption === option ? 'active' : ''}
-          onClick={() => handleOptionChange(option)}
-          variant="outlined"
-        >
-          {option}
-        </Button>
-      ))}
-    </ButtonGroup>
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const renderFilterButton = () => (
+    <CustomButton
+      onClick={handleMenuOpen}
+      variant="contained"
+      className="filter-button"
+    >
+      <i className="fa fa-filter" aria-hidden="true"></i> Filter
+    </CustomButton>
   );
 
-  const renderMap = () => {
-    return <SnapshotViewMap data={MapData} selectedOption={selectedOption} loading={loading} />;
-  };
+  const renderSwitchButtons = () => (
+    <CustomButtonGroup className="switch-buttons">
+      <CustomButton
+        className={currentPage === 'map' ? 'Mui-selected' : ''}
+        onClick={() => setCurrentPage('map')}
+      >
+        World Map
+      </CustomButton>
+      <CustomButton
+        className={currentPage === 'topicFilter' ? 'Mui-selected' : ''}
+        onClick={() => setCurrentPage('topicFilter')}
+      >
+        Topic Filter
+      </CustomButton>
+    </CustomButtonGroup>
+  );
 
   const renderContent = () => {
     if (currentPage === 'map') {
       return (
         <>
-          {renderButtons()}
-          {renderMap()}
+          <SnapshotViewMap data={MapData} selectedOption={selectedOption} loading={loading} />
         </>
       );
     } else if (currentPage === 'topicFilter') {
@@ -63,7 +112,27 @@ function SnapshotView() {
 
   return (
     <div>
-      <BasicButtonGroup setCurrentPage={setCurrentPage} />
+      <div className="snapshot-view-controls">
+        
+        {renderSwitchButtons()}
+        {currentPage === 'map' && renderFilterButton()}
+      </div>
+      <Menu
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        {['All', 'Virality', 'Sentiment', 'Severity'].map((option) => (
+          <MenuItem
+            key={option}
+            selected={selectedOption === option}
+            onClick={() => handleOptionChange(option)}
+          >
+            {option}
+          </MenuItem>
+        ))}
+      </Menu>
       {renderContent()}
     </div>
   );

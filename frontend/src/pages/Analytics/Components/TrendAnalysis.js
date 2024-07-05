@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTrendAnalysisData } from '../redux/slice/slice';
 import LineCharts from './LineCharts';
-import { useMemo } from 'react';
-import { Button, Modal, Box, Typography } from '@mui/material'; // Import Material-UI components
-import '../style/TrendAnalysis.css'; // Import the CSS file
+import { Button, Menu, MenuItem, MenuList } from '@mui/material';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import '../style/TrendAnalysis.css';
 
 const TrendAnalysis = () => {
   const [selectedOption, setSelectedOption] = useState('verbatims');
   const [selectedMonth, setSelectedMonth] = useState('may');
   const [loading, setLoading] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
+  const [submenuType, setSubmenuType] = useState(null); // Track submenu type
   const dispatch = useDispatch();
   const trendAnalysisData = useSelector((state) => state.analytics.trendAnalysisData);
 
@@ -21,9 +23,8 @@ const TrendAnalysis = () => {
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);
-
+    closeMenus();
     const queryParam = getQueryParam(value);
-
     if (queryParam) {
       setLoading(true);
       dispatch(fetchTrendAnalysisData(queryParam)).finally(() => setLoading(false));
@@ -32,7 +33,7 @@ const TrendAnalysis = () => {
 
   const handleMonthChange = (month) => {
     setSelectedMonth(month);
-    setIsModalOpen(false); // Close the modal after selection
+    closeMenus();
   };
 
   const getQueryParam = (option) => {
@@ -75,67 +76,99 @@ const TrendAnalysis = () => {
     });
   };
 
-  const filteredData = useMemo(() => {
+  const filteredData = React.useMemo(() => {
     if (trendAnalysisData[selectedMonth]) {
       return formatData(trendAnalysisData[selectedMonth]);
     }
     return [];
   }, [selectedMonth, trendAnalysisData]);
 
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    closeSubmenu();
+  };
+
+  const handleClose = () => {
+    closeMenus();
+  };
+
+  const handleSubmenuOpen = (event, type) => {
+    setSubmenuType(type);
+    setSubmenuAnchorEl(event.currentTarget);
+  };
+
+  const closeSubmenu = () => {
+    setSubmenuAnchorEl(null);
+    setSubmenuType(null);
+  };
+
+  const closeMenus = () => {
+    setAnchorEl(null);
+    closeSubmenu();
+  };
+
   return (
     <div className="trend-analysis-container">
       <div className="trend-analysis-controls">
-        <div className="trend-analysis-month-select">
-          <Button onClick={() => setIsModalOpen(true)} variant="contained" className="filter-icon-button">
-            <i className="fa fa-filter" aria-hidden="true"></i> Filter
-          </Button>
-        </div>
-        <div className="trend-analysis-buttons">
-          {['verbatims', 'severity', 'virality', 'sentiment'].map((option) => (
-            <Button
+        <Button onClick={handleClick} variant="contained" className="filter-icon-button" style={{ backgroundColor: 'transparent', color: '#220047', boxShadow: 'none', fontSize: '16px', textTransform: 'none' }}>
+          <i className="fa fa-filter" aria-hidden="true"></i> Filter
+        </Button>
+        <h2 className="trend-analysis-heading">{getHeading()}</h2>
+        <Menu
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          className="filter-dropdown"
+        >
+          <MenuList>
+            <MenuItem
+              onClick={(event) => handleSubmenuOpen(event, 'month')}
+              aria-haspopup="true"
+            >
+              Select Month <ArrowRightIcon />
+            </MenuItem>
+            <MenuItem
+              onClick={(event) => handleSubmenuOpen(event, 'trend')}
+              aria-haspopup="true"
+            >
+              Select Trend <ArrowRightIcon />
+            </MenuItem>
+          </MenuList>
+        </Menu>
+        <Menu
+          anchorEl={submenuAnchorEl}
+          keepMounted
+          open={Boolean(submenuAnchorEl)}
+          onClose={closeSubmenu}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          className="filter-dropdown"
+        >
+          {submenuType === 'month' && ['april', 'may', 'june'].map((month) => (
+            <MenuItem
+              key={month}
+              selected={selectedMonth === month}
+              onClick={() => handleMonthChange(month)}
+            >
+              {month.charAt(0).toUpperCase() + month.slice(1)}
+            </MenuItem>
+          ))}
+          {submenuType === 'trend' && ['verbatims', 'severity', 'virality', 'sentiment'].map((option) => (
+            <MenuItem
               key={option}
-              className={selectedOption === option ? 'active' : ''}
+              selected={selectedOption === option}
               onClick={() => handleOptionChange(option)}
-              variant="outlined"
             >
               {option.charAt(0).toUpperCase() + option.slice(1)}
-            </Button>
-           
+            </MenuItem>
           ))}
-        </div>
+        </Menu>
       </div>
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <Box className="month-modal">
-          <Typography variant="h6" id="modal-title">
-            Select Month
-          </Typography>
-          <div className="month-options">
-            {['april', 'may', 'june'].map((month) => (
-              <Button
-                key={month}
-                onClick={() => handleMonthChange(month)}
-                variant={selectedMonth === month ? 'contained' : 'outlined'}
-                className={`month-button ${selectedMonth === month ? 'active' : ''}`}
-              >
-                {month.charAt(0).toUpperCase() + month.slice(1)}
-              </Button>
-            ))}
-          </div>
-          <Button onClick={() => setIsModalOpen(false)} variant="contained" className="close-modal-button">
-            Close
-          </Button>
-        </Box>
-      </Modal>
       {loading ? (
         <div className="trend-analysis-loading">Loading...</div>
       ) : (
         <>
-          <h2 className="trend-analysis-heading">{getHeading()}</h2>
           <LineCharts data={filteredData} />
         </>
       )}

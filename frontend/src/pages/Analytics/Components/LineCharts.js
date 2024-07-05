@@ -56,7 +56,7 @@ const LineCharts = ({ data }) => {
     };
   }, [data]);
 
-  return <div id="line-chart-container" ref={chartRef} style={{ width: "100%", height: "300px" }}></div>;
+  return <div id="line-chart-container" ref={chartRef} style={{ width: "100%", height: "370px" }}></div>;
 };
 
 export default LineCharts;

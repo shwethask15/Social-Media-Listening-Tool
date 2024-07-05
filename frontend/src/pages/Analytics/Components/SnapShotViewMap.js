@@ -8,7 +8,7 @@ import '../style/Analytics.css';
 const LoadingIndicator = () => <div>Loading...</div>;
 
 const MapContainer = () => (
-  <div id="chartdiv"></div>
+  <div id="chartdiv" className='ssvMap'></div>
 );
 
 const Legend = ({ legendData }) => (

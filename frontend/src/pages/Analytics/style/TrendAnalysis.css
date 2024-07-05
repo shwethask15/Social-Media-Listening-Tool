@@ -1,145 +1,64 @@
-.trend-analysis-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%; /* Ensure the container takes the full width */
-}
+/* TrendAnalysis.css */
 
 .trend-analysis-controls {
   display: flex;
-  justify-content: space-between; /* Space elements to the left and right */
-  width: 100%; /* Ensure the controls take the full width */
-  padding: 10px; /* Add padding for some spacing */
-}
-
-.trend-analysis-buttons {
-  display: flex;
-  align-items: center; /* Center buttons vertically */
-  padding: 2px 1px;
-  border: 1px solid #6F52ED;
-  border-radius: 25px;
-}
-
-.trend-analysis-buttons button {
-  background: none;
-  border: 1px solid #ffffff;
-  color: #000000;
-  /* font-weight: bold; */
-  font-size: 14px;
-  padding: 6px 4px;
-  border-radius: 25px;
-  margin: 0 2px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.trend-analysis-buttons button:hover {
-  background-color: rgba(111, 82, 237, 0.1);
-  border: 1px solid #ffffff;
-}
-
-.trend-analysis-buttons button.active {
-  background-color: #6F52ED;
-  color: white;
-}
-
-.trend-analysis-month-select {
-  display: flex;
-  align-items: center; /* Center filter button vertically */
-}
-
-.trend-analysis-month-select .filter-icon-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 8px;
-  transition: background-color 0.3s, color 0.3s;
-  border: 1px solid #6F52ED;
-  border-radius: 25px;
-  color: #000000;
-  margin-left: 20px;
-  box-shadow: none;
-
-}
-
-.trend-analysis-month-select .filter-icon-button:hover {
-  background-color: rgba(111, 82, 237, 0.1);
-}
-
-.trend-analysis-loading {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.month-modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 200px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-.month-modal-overlay {
-  background: rgba(0, 0, 0, 0.5);
-}
-
-.month-options {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
   margin-bottom: 20px;
+  margin: 0px 20px;
+  justify-content:space-between; /* Align items to the left */
+  color:  #220047;
 }
 
-.month-options button {
-  background: #ffffff;
-  border: 1px solid #6F52ED;
-  padding: 8px 4px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  color: #000000;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  border-radius: 4px;
+.trend-analysis-controls h2{
+  font-size: 16px;
 }
 
-.month-options button:hover {
-  background: #e0e0e0;
-}
-
-.month-options button.active {
-  background-color: #6F52ED;
+.filter-icon-button{
+  background-color: #4CAF50; 
   color: white;
+  font-weight: bold;
+  margin-right: 10px;
+  margin-left: 0; /* Remove margin-left or adjust as needed */
 }
 
-.month-modal button.close-modal-button {
-  background: none;
-  border: none;
-  color: #007bff;
+.filter-icon-button:hover {
+  background-color: #115293;
+}
+
+.filter-dropdown {
+  z-index: 1000;
+}
+
+.filter-dropdown .MuiMenu-list {
+  padding: 0;
+}
+
+.filter-dropdown .MuiMenuItem-root {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: color 0.3s ease;
-  margin-top: 20px;
 }
 
-.month-modal button.close-modal-button:hover {
-  color: #0056b3;
-}
-
-.trend-analysis-loading {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #666;
+.filter-dropdown .MuiMenuItem-root:hover {
+  background-color: #f0f0f0;
 }
 
 .trend-analysis-heading {
-  text-align: center;
-  font-size: 1.5rem;
-  color: #333;
+  font-size: 24px;
+  font-weight: bold;
   margin-bottom: 20px;
+}
+
+.trend-analysis-loading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #1976d2;
+}
+
+.trend-analysis-chart {
+  width: 100%;
+  max-width: 900px;
 }

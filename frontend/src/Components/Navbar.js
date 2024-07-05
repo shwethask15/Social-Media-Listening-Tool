@@ -30,8 +30,8 @@ function Navbar() {
                 <h3>SOCIAL MEDIA LISTENING TOOL</h3>
             </div>
             <ul className="navbar-menu">
-                <li><NavLink to="/analytics" className="nav-link">Analytics</NavLink></li>
-                <li><NavLink to="/page2" className="nav-link">Verbatims</NavLink></li>
+                <li><NavLink to="/analytics" className="nav-link">ANALYTICS</NavLink></li>
+                <li><NavLink to="/page2" className="nav-link">VERBATIMS</NavLink></li>
             </ul>
             <div className="navbar-icons">
  
