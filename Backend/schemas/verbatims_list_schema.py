@@ -30,15 +30,15 @@ class Verbatims_List_create(BaseModel):
         orm_mode = True
 
 class verbatims_filters(BaseModel):
-    brand : List | None = None
-    datasource : List | None = None
-    country : List | None = None
-    theme : List | None =None
-    source : List | None = None
-    sentiment : List | None = None
-    virality : List | None = None
-    severity : List | None = None
-    profanity : List | None = None
+    brand : Optional[List] | None = None
+    # datasource : List | None = None
+    country : Optional[List] | None = None
+    # theme : List | None =None
+    source : Optional[List] | None = None
+    sentiment : Optional[List] | None = None
+    virality : Optional[List] | None = None
+    severity : Optional[List] | None = None
+    profanity : Optional[List] | None = None
     # relevancy_filter : bool | None = None
 class verbatims_list_update(BaseModel):
     virality : str | None = None

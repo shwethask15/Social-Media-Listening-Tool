@@ -19,58 +19,98 @@ async def get_data1(db : Session):
 
 async def get_data_with_filters1(q : verbatims_filters,db : Session):
     data = Verbatims.get_all(db=db)
-    d = {}
+    d = {"brand":[],"country":[],"source":[],"sentiment":[],"virality":[],"severity":[],"profanity":[]}
     q= dict(q)
     for i in q:
-        if q[i][0] != "string":
-            # print(q[i])
-            d[i] = q[i]
-            #print([ord[i] for i in q[i]])
-            # print(d[i])
-        else:
-            d[i] = []
+        if q[i]!= None and len(q[i])!=0:
+            print(q[i])
+            if q[i][0] != "string":
+                # print(q[i])
+                d[i] = q[i]
+                #print([ord[i] for i in q[i]])
+                # print(d[i])
+
+    print(d)
     r = []
+    for i in data:
+        r.append(i.__dict__)
     # print(d)
-    for i in d["brand"]:
+    # print(r)
+    if len(d["brand"])!=0:
         for j in data:
-            j = j.__dict__
-            if i == j["brand"][1:]:
-                r.append(j)
-    for i in d["datasource"]:
-        for j in r:
-            if i != j["datasource"]:
-                r.remove(j)
+            temp = j.__dict__
+            if temp["brand"][1:] not in d["brand"]:
+                for k in r:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r.remove(k)
+                        break
+    data = []
+    for i in r:
+        data.append(Verbatims_List_create(**i))
+    if len(d["country"])!=0:
+        for j in data:
+            temp = j.__dict__
+            if temp["country"] not in d["country"]:
+                for k in r:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r.remove(k)
+                        break
     print(r)
-    for i in d["country"]:
-        for j in r:
-            if i != j["country"]:
-                r.remove(j)
-    for i in d["theme"]:
-        for j in r:
-            if i != j["theme"]:
-                r.remove(j)
-    for i in d["source"]:
-        for j in r:
-            if i != j["source"]:
-                r.remove(j)
-    for i in d["sentiment"]:
-        for j in r:
-            if i != j["sentiment"]:
-                r.remove(j)
-    for i in d["virality"]:
-        for j in r:
-            if i != j["virality"]:
-                r.remove(j)
-    for i in d["severity"]:
-        for j in r:
-            if i != j["severity"]:
-                r.remove(j)
-    for i in d["profanity"]:
-        # print(i)
-        for j in r:
-            # print(type(i),type(j["profanity_filter"]))
-            if i != j["profanity_filter"]:
-                r.remove(j)    
+    data = []
+    for i in r:
+        data.append(Verbatims_List_create(**i))
+    if len(d["source"])!=0:
+        for j in data:
+            temp = j.__dict__
+            if temp["source"] not in d["source"]:
+                for k in r:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r.remove(k)
+                        break
+    data = []
+    for i in r:
+        data.append(Verbatims_List_create(**i))            
+    if len(d["sentiment"])!=0:
+        for j in data:
+            temp = j.__dict__
+            if temp["sentiment"] not in d["sentiment"]:
+                for k in r:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r.remove(k)
+                        break
+    data = []
+    for i in r:
+        data.append(Verbatims_List_create(**i))
+    if len(d["virality"]):
+        for j in data:
+            temp = j.__dict__
+            if temp["virality"] not in d["virality"]:
+                for k in r:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r.remove(k)
+                        break
+    data = []
+    for i in r:
+        data.append(Verbatims_List_create(**i))
+    if len(d["severity"])!=0:
+        for j in data:
+            temp = j.__dict__
+            if temp["severity"] not in d["severity"]:
+                for k in r:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r.remove(k)
+                        break
+    data = []
+    for i in r:
+        data.append(Verbatims_List_create(**i))
+    if len(d["profanity"])!=0:
+        for j in data:
+            temp = j.__dict__
+            if temp["virality"] not in d["profanity"]:
+                for k in r:
+                    if k["mention_id"] == temp["mention_id"]:
+                        r.remove(k)
+                        break    
     return r
 async def get_data_by_mention_id1(mention_id : str,update_body : verbatims_list_update,db : Session):
     data = Verbatims.get_By_Id(mention_id=mention_id,db=db)

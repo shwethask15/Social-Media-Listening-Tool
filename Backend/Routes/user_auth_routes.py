@@ -88,14 +88,14 @@ def logout(dependencies=Depends(JWTBearer()), db: Session = Depends(get_db)):
     token_record = db.query(Token_Data).all()
     info=[]
     # print(token_record[0].__dict__)
-    for record in token_record :
-        # print("record",record)
-        print(datetime.now() - record.created_date)
-        if (datetime.now() - record.created_date).days >1:
-            info.append(record.use)
-    if info:
-        existing_token = db.query(Token_Data).where(Token_Data.user_name.in_(info)).delete()
-        db.commit()
+    # for record in token_record :
+    #     # print("record",record)
+    #     print(datetime.now() - record.created_date)
+    #     if (datetime.now() - record.created_date).days >1:
+    #         info.append(record.use)
+    # if info:
+    #     existing_token = db.query(Token_Data).where(Token_Data.user_name.in_(info)).delete()
+    #     db.commit()
         
     existing_token = db.query(Token_Data).filter(Token_Data.user_name == user_id, Token_Data.access_token==token).first()
     if existing_token:
