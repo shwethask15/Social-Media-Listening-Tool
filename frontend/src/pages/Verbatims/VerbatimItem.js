@@ -16,21 +16,21 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
   position: 'absolute',
-  padding: 0,
-  margin: 0,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 300,
   bgcolor: 'background.paper',
   boxShadow: 24,
-  p: 4,
-  borderRadius: '8px'
+  borderRadius: '8px',
+  display: 'flex',
+  flexDirection: 'column',
+  padding: '20px'
 };
 
 const headerStyle = {
   backgroundColor: '#0000FF',
-  width: '108%',
+  width: '100%',
   padding: '10px 20px',
   color: 'white',
   display: 'flex',
@@ -38,13 +38,14 @@ const headerStyle = {
   alignItems: 'center',
   borderTopLeftRadius: '8px',
   borderTopRightRadius: '8px',
-  margin: '-32px -32px 0 -32px'
+  margin: '-20px -20px 0 -20px'
 };
 
 const saveButtonStyle = {
   marginTop: '20px',
   color: '#0000FF',
-  alignSelf: 'flex-end'
+  alignSelf: 'flex-end',
+  backgroundColor: 'transparent'
 };
 
 const VerbatimItem = ({

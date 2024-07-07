@@ -6,6 +6,7 @@
   padding: 10px;
   background-color: none;
   font-family: Arial, sans-serif;
+  overflow-y: hidden;
 }
 
 .title-ltv h1 {

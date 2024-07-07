@@ -1,11 +1,4 @@
-:root {
-  --primary: black;
-  --purple: #e3cffd;
-  --gray: #ededec;
-  --beige: #fbf9f5;
-  --white: #220047;
-}
- 
+
 .navbar {
   display: flex;
   justify-content: space-between;

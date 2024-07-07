@@ -5,10 +5,11 @@
 
 .topic-filter-container,
 .wordcloud-container {
-  width: 50%;
+  width: 48%;
   gap: 5px;
   position: relative;
-  padding: 20px;
+  padding: 0;
+  height: 400px;
   margin-bottom: 20px;
   background: var(--glass-bg-color);
   border-radius: var(--glass-border-radius);
@@ -17,3 +18,9 @@
   -webkit-backdrop-filter: var(--glass-backdrop-filter);
   border: 1px solid var(--glass-border-color);
 }
+
+/* .chart-display {
+  padding: 0;
+  top: 0;
+  left: 0;
+} */
