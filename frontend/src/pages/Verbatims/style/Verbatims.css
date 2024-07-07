@@ -36,17 +36,7 @@
   );
 }
 
-.filter-button {
-  padding: 8px 12px;
-  background-color: var(--purple);
-  color: black;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  gap: 0;
-  /* border: 1px solid black; */
-}
-
+.filter-button,
 .download-button {
   padding: 8px 12px;
   background-color: var(--purple);
@@ -55,6 +45,7 @@
   border-radius: 4px;
   cursor: pointer;
   margin-left: 10px;
+  font-size: 14px;
   /* border: 1px solid black; */
 }
 
@@ -142,3 +133,13 @@
   background-color: var(--gray);
   cursor: not-allowed;
 }
+
+/* .right-buttons {
+  padding: 8px 12px;
+  background-color: var(--purple);
+  color: black;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  gap: 0;
+} */

@@ -152,3 +152,22 @@ html, body {
 .edit-dropdown label {
   margin-bottom: 5px;
 }
+
+.mail-icon {
+  font-size: 20px;
+  margin-left: auto;
+  margin-top: -10px;
+  align-items: end;
+  padding: 8px;
+  color: var(--border-gray);
+  border: none; 
+  background: transparent; 
+  cursor: pointer; 
+  display: inline-flex; 
+  justify-content: center;
+  align-items: center;
+}
+
+.mail-icon i {
+  font-size: 20px; /* Adjust icon size */
+}

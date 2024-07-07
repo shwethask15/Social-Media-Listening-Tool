@@ -1,51 +1,51 @@
 import React, { useState } from "react";
 import axiosInstance from "../../Components/redux/axiosInstance";
 import "./style/VerbatimItem.css";
-import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import Backdrop from "@mui/material/Backdrop";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 300,
-  bgcolor: 'background.paper',
+  bgcolor: "background.paper",
   boxShadow: 24,
-  borderRadius: '8px',
-  display: 'flex',
-  flexDirection: 'column',
-  padding: '20px'
+  borderRadius: "8px",
+  display: "flex",
+  flexDirection: "column",
+  padding: "20px",
 };
 
 const headerStyle = {
-  backgroundColor: '#0000FF',
-  width: '100%',
-  padding: '10px 20px',
-  color: 'white',
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  borderTopLeftRadius: '8px',
-  borderTopRightRadius: '8px',
-  margin: '-20px -20px 0 -20px'
+  backgroundColor: "#0000FF",
+  width: "100%",
+  padding: "10px 20px",
+  color: "white",
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  borderTopLeftRadius: "8px",
+  borderTopRightRadius: "8px",
+  margin: "-20px -20px 0 -20px",
 };
 
 const saveButtonStyle = {
-  marginTop: '20px',
-  color: '#0000FF',
-  alignSelf: 'flex-end',
-  backgroundColor: 'transparent'
+  marginTop: "20px",
+  color: "#0000FF",
+  alignSelf: "flex-end",
+  backgroundColor: "transparent",
 };
 
 const VerbatimItem = ({
@@ -115,7 +115,7 @@ const VerbatimItem = ({
       );
 
       if (response.status === 200) {
-        if (typeof onUpdate === 'function') {
+        if (typeof onUpdate === "function") {
           onUpdate(mention_id, data); // Ensure onUpdate is a function before calling
         }
         handleModalClose(); // Close the modal after saving
@@ -128,12 +128,23 @@ const VerbatimItem = ({
     }
   };
 
+  const handleMailClick = () => {
+    const subject = encodeURIComponent("MARS SML data");
+    const body = encodeURIComponent(
+      `Source: ${link}\n\nDescription: ${content}`
+    );
+    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+  };
+
   return (
     <div className="verbatim-item">
       <div className="verbatim-header">
         <span className="verbatim-date">{date}</span>
         <span className="verbatim-location">{location}</span>
         <span className="verbatim-language">{language}</span>
+        <button onClick={handleMailClick} className="mail-icon">
+          <i className="fa fa-envelope"></i>
+        </button>
       </div>
       <div className="verbatim-content">
         {icon && (
@@ -178,21 +189,37 @@ const VerbatimItem = ({
         <Fade in={modalOpen}>
           <Box sx={style}>
             <div style={headerStyle}>
-              <Typography id="transition-modal-title" variant="h6" component="h2">
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+              >
                 {currentField && currentField.toUpperCase()}
               </Typography>
-              <IconButton aria-label="close" onClick={handleModalClose} sx={{ color: 'white' }}>
+              <IconButton
+                aria-label="close"
+                onClick={handleModalClose}
+                sx={{ color: "white" }}
+              >
                 <CloseIcon />
               </IconButton>
             </div>
             {currentField && (
-              <FormControl component="fieldset" style={{ width: '100%', marginTop: '20px' }}>
+              <FormControl
+                component="fieldset"
+                style={{ width: "100%", marginTop: "20px" }}
+              >
                 <RadioGroup
                   aria-label={currentField}
                   name={currentField}
                   value={newValues[currentField]}
                   onChange={(e) => handleChange(currentField, e.target.value)}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', paddingLeft: '20px' }}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    paddingLeft: "20px",
+                  }}
                 >
                   {updateOptions[currentField].map((option) => (
                     <FormControlLabel
@@ -200,13 +227,22 @@ const VerbatimItem = ({
                       value={option}
                       control={<Radio />}
                       label={option}
-                      style={{ color: newValues[currentField] === option ? '#0000FF' : '#000' }}
+                      style={{
+                        color:
+                          newValues[currentField] === option
+                            ? "#0000FF"
+                            : "#000",
+                      }}
                     />
                   ))}
                 </RadioGroup>
               </FormControl>
             )}
-            <Button onClick={handleSave} variant="contained" style={saveButtonStyle}>
+            <Button
+              onClick={handleSave}
+              variant="contained"
+              style={saveButtonStyle}
+            >
               SAVE
             </Button>
           </Box>
