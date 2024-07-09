@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../Components/redux/axiosInstance";
 import FilterModal from "./FilterModal";
 import VerbatimItem from "./VerbatimItem";
+import filterVerbatims from "./FilterVerbatims";
 import "./style/Verbatims.css";
 import twitterIcon from "./assets/twitter-icon.png";
 import blogIcon from "./assets/blog-icon.png";
@@ -9,8 +10,7 @@ import redditIcon from "./assets/reddit-icon.png";
 import forumIcon from "./assets/forum-icon.png";
 import newsIcon from "./assets/news-icon.png";
 import VerbatimsPrompter from "./VerbatimsPrompter";
-import { useLocation } from 'react-router-dom'; // Import useLocation
-
+ 
 const Verbatims = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [verbatimData, setVerbatimData] = useState([]);
@@ -34,16 +34,14 @@ const Verbatims = () => {
     severities: [],
     languages: [],
   });
-
+ 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  
-  const location = useLocation(); // Initialize the useLocation hook
-
+ 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
-
+ 
   useEffect(() => {
     const fetchVerbatims = async () => {
       try {
@@ -60,7 +58,7 @@ const Verbatims = () => {
           severity: item.severity,
           subCategory: item.theme || "Unknown",
           content: item.translated_snippet,
-          brand: item.brand.trim(), // Trim whitespace for consistency
+          brand: item.brand.trim(),
           source: item.source,
           link: item.originalURL,
           icon:
@@ -77,17 +75,19 @@ const Verbatims = () => {
         setVerbatimData(data);
         setFilteredVerbatimData(data);
         setLoading(false);
-
+ 
         const uniqueOptions = {
           brands: [...new Set(data.map((item) => item.brand))].sort(),
           regions: [...new Set(data.map((item) => item.location))].sort(),
           sources: [...new Set(data.map((item) => item.source))].sort(),
-          sentiments: [...new Set(data.map((item) => item.sentiment))].reverse(),
+          sentiments: [
+            ...new Set(data.map((item) => item.sentiment)),
+          ].reverse(),
           viralities: [...new Set(data.map((item) => item.virality))],
           severities: [...new Set(data.map((item) => item.severity))],
           languages: [...new Set(data.map((item) => item.language))].sort(),
         };
-
+ 
         const initialFilters = {
           brands: uniqueOptions.brands,
           regions: uniqueOptions.regions,
@@ -97,83 +97,24 @@ const Verbatims = () => {
           severities: uniqueOptions.severities,
           languages: uniqueOptions.languages,
         };
-
+ 
         setFilterOptions(uniqueOptions);
-        setAppliedFilters(initialFilters); // Default: select all
+        setAppliedFilters(initialFilters); //default: select all
       } catch (error) {
         console.error("Error fetching verbatims:", error);
         setLoading(false);
       }
     };
-
+ 
     fetchVerbatims();
   }, []);
-
+ 
   useEffect(() => {
-    const fetchFilteredVerbatims = async () => {
-      setLoading(true);
-
-      const queryParams = new URLSearchParams(location.search);
-      const word = queryParams.get('word');
-
-      const filters = {
-        brand: appliedFilters.brands,
-        datasource: appliedFilters.sources,
-        country: appliedFilters.regions,
-        sentiment: appliedFilters.sentiments,
-        virality: appliedFilters.viralities,
-        severity: appliedFilters.severities,
-        language: appliedFilters.languages,
-        word, // Include the word in the filter request
-      };
-
-      try {
-        const response = await axiosInstance.post(
-          "http://127.0.0.1:8000/verbatims_list/",
-          filters,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = response.data.map((item) => ({
-          mention_id: item.mention_id,
-          date: item.date,
-          location: item.country || "Unknown",
-          language: item.language,
-          virality: item.virality,
-          sentiment: item.sentiment,
-          severity: item.severity,
-          subCategory: item.theme || "Unknown",
-          content: item.translated_snippet,
-          brand: item.brand.trim(), // Trim whitespace for consistency
-          source: item.source,
-          link: item.originalURL,
-          icon:
-            item.source === "twitter"
-              ? twitterIcon
-              : item.source === "blog"
-              ? blogIcon
-              : item.source === "reddit"
-              ? redditIcon
-              : item.source === "news"
-              ? newsIcon
-              : forumIcon,
-        }));
-
-        setFilteredVerbatimData(data);
-        setCurrentPage(1); // Reset to first page when filters change
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching filtered verbatims:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchFilteredVerbatims();
-  }, [appliedFilters, location]); // Add location to dependency array to re-fetch on URL change
-
+    const filteredData = filterVerbatims(verbatimData, appliedFilters);
+    setFilteredVerbatimData(filteredData);
+    setCurrentPage(1);
+  }, [verbatimData, appliedFilters]);
+ 
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -182,11 +123,11 @@ const Verbatims = () => {
     indexOfLastItem
   );
   const totalPages = Math.ceil(filteredVerbatimData.length / itemsPerPage);
-
+ 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+ 
   const handleDownload = () => {
     const csvData = filteredVerbatimData.map((verbatim) => ({
       date: verbatim.date,
@@ -199,13 +140,13 @@ const Verbatims = () => {
       content: verbatim.content,
       brand: verbatim.brand,
     }));
-
+ 
     const csvContent =
       "data:text/csv;charset=utf-8," +
       Object.keys(csvData[0]).join(",") +
       "\n" +
       csvData.map((e) => Object.values(e).join(",")).join("\n");
-
+ 
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -214,7 +155,7 @@ const Verbatims = () => {
     link.click();
     document.body.removeChild(link);
   };
-
+ 
   const handleUpdate = (mention_id, updatedData) => {
     // Filter out metadata fields
     const relevantData = {
@@ -235,14 +176,14 @@ const Verbatims = () => {
       language: updatedData.language,
       sentiment: updatedData.sentiment,
     };
-
+ 
     setVerbatimData((prevData) =>
       prevData.map((item) =>
         item.mention_id === mention_id ? { ...item, ...relevantData } : item
       )
     );
-  };
-
+  };  
+ 
   return (
     <div className="Verbatims">
       <FilterModal
@@ -274,34 +215,58 @@ const Verbatims = () => {
         {loading ? (
           <p>Loading...</p>
         ) : filteredVerbatimData.length > 0 ? (
-          currentItems.map((verbatim) => (
+          currentItems.map((item, index) => (
             <VerbatimItem
-              key={verbatim.mention_id}
-              {...verbatim}
-              onUpdate={handleUpdate}
+              key={index}
+              mention_id={item.mention_id}
+              date={item.date}
+              location={item.location}
+              language={item.language}
+              virality={item.virality}
+              sentiment={item.sentiment}
+              severity={item.severity}
+              subCategory={item.subCategory}
+              content={item.content}
+              brand={item.brand}
+              link={item.link}
+              icon={item.icon}
+              updateOptions={{
+                virality: filterOptions.viralities,
+                sentiment: filterOptions.sentiments,
+                severity: filterOptions.severities,
+              }}
+              onUpdate={handleUpdate} // Pass the handleUpdate function
             />
           ))
         ) : (
-          <p>No verbatims found.</p>
+          <p>No matches found</p>
         )}
       </div>
-      {totalPages > 1 && (
-        <div className="pagination">
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map(
-            (pageNumber) => (
-              <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-                className={currentPage === pageNumber ? "active" : ""}
-              >
-                {pageNumber}
-              </button>
-            )
-          )}
-        </div>
-      )}
+      <div className="pagination">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          Prev
+        </button>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => handlePageChange(index + 1)}
+            className={currentPage === index + 1 ? "active" : ""}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
-
+ 
 export default Verbatims;
