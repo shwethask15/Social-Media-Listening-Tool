@@ -14,6 +14,7 @@ from Services.database_table_service import init_db_with_data
 from Routes.user_auth_routes import router as user_auth_router
 from Routes.trend_analysis_routes import router as trend_analysis_router
 from database.session import engine,SessionLocal
+from datetime import datetime
 app = FastAPI()
 
 # init_db_with_data()
@@ -136,6 +137,11 @@ async def send_realtime_updates() -> None:
                     .limit(current_total_rows_verbatims_list - last_total_rows_verbatims_list)
                     .all()
                 )
+                # datetime_str = new_entries2[0].date
+                # datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S.%f")
+                # iso_format = datetime_obj.isoformat()
+                # new_entries2[0].date = iso_format
+                # print(type(new_entries2[0].date),type(iso_format),iso_format)
 
                 # Serialize new entries to send as notifications
                 recent_updates2 = [entry.serialize() for entry in new_entries2]
