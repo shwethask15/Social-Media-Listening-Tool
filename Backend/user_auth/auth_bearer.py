@@ -39,6 +39,7 @@ class JWTBearer(HTTPBearer):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
         # print(request.method.lower())
         # print(request.body.__dict__)
+        print(self.action)
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
@@ -86,6 +87,7 @@ class JWTBearer(HTTPBearer):
     #     return hasAccess
     async def check_permissions(self,action: str,jwttoken : str):
         db = SessionLocal()
+        # print(action)
         data = decodeJWT(jwtoken=jwttoken)
         action_obj = db.query(Action).filter(Action.name == action).first()
         if not action_obj:

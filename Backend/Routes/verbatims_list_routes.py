@@ -32,22 +32,17 @@ async def get_data_with_filters(q : verbatims_filters = None,token: str = Depend
     except Exception as e:
         return str(e)
     
-@router.put("/verbatims_list/{mention_id}")
+@router.put("/verbatims_list/{mention_id}",response_model=Verbatims_List_create)
 async def update_data(mention_id: str, update_body: verbatims_list_update, token: str = Depends(JWTBearer(action="action_update_verbatims_list")), db: Session = Depends(get_db)):
     try:
-        data = await get_data_by_mention_id1(mention_id=mention_id, update_body=update_body, db=db)
-
-        temp = model_to_dict(data)
-
-
-        temp["updated_at"] = datetime.now().isoformat()
-        temp["url"] = temp["originalURL"]
-
-        notification_message = {"type": "notification", "data": [temp]}
-        for connection in manager.connections:
-            await connection.send_json(notification_message)
-
-        return data
+        # data = 
+        # temp = model_to_dict(data)
+        # temp["updated_at"] = datetime.now().isoformat()
+        # temp["url"] = temp["originalURL"]
+        # notification_message = {"type": "notification", "data": [temp]}
+        # for connection in manager.connections:
+        #     await connection.send_json(notification_message)
+        return await get_data_by_mention_id1(mention_id=mention_id, update_body=update_body, db=db)
     except Exception as e:
         print(e)
         return str(e)
