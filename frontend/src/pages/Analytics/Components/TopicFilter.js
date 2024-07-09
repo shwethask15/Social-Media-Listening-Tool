@@ -20,6 +20,7 @@ const TopicFilter = () => {
       </div>
       <div className="wordcloud-container">
         <div className="wordcloud">
+        <h2>WordCloud</h2>
           <WordCloud selectedBubble={selectedBubble} className='chart-display' />
         </div>
       </div>

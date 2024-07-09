@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchLiveVerbatimsData } from '../redux/slice/slice';
-import SmlShow from './Sml-Show';
+import SmlShow from './SmlShow';
 import Loader from './Loader';
 import '../style/Analytics.css';
 

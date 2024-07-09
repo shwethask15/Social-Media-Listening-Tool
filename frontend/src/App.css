@@ -23,6 +23,14 @@ html {
   color: #fff;
 } */
  
+:root {
+  --heading-color: #220047;
+  --primary: #bf99bd; /* Adjust the primary color as needed */
+  --hover-background: #cbb5c7;
+  --active-background: #dab9dc;
+  --icon-color: #220047;
+}
+ 
 .App {
   text-align: center;
   font-family: Arial, sans-serif;

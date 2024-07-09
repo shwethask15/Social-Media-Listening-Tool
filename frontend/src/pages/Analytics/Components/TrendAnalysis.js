@@ -12,7 +12,7 @@ const TrendAnalysis = () => {
   const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [submenuAnchorEl, setSubmenuAnchorEl] = useState(null);
-  const [submenuType, setSubmenuType] = useState(null); // Track submenu type
+  const [submenuType, setSubmenuType] = useState(null);
   const dispatch = useDispatch();
   const trendAnalysisData = useSelector((state) => state.analytics.trendAnalysisData);
 
@@ -92,11 +92,15 @@ const TrendAnalysis = () => {
     closeMenus();
   };
 
-  const handleSubmenuOpen = (event, type) => {
-    setSubmenuType(type);
-    setSubmenuAnchorEl(event.currentTarget);
-  };
-
+const handleSubmenuOpen = (event, type) => {
+  // Check if the submenu type is changing
+  if (submenuType !== type) {
+    closeSubmenu(); // Close the currently open submenu first
+  }
+  setSubmenuType(type);
+  setSubmenuAnchorEl(event.currentTarget);
+}
+  
   const closeSubmenu = () => {
     setSubmenuAnchorEl(null);
     setSubmenuType(null);

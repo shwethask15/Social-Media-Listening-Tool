@@ -111,9 +111,8 @@ function SnapshotView() {
   };
 
   return (
-    <div>
+    <div className="snapshot-view-container">
       <div className="snapshot-view-controls">
-        
         {renderSwitchButtons()}
         {currentPage === 'map' && renderFilterButton()}
       </div>
@@ -133,7 +132,9 @@ function SnapshotView() {
           </MenuItem>
         ))}
       </Menu>
+      <div className='snapshot-view-content'>
       {renderContent()}
+      </div>
     </div>
   );
 }
