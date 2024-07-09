@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 # from user_auth.auth import ACCESS_TOKEN_EXPIRE_TIME,ALGORITHM,SECRET_KEY
 from config.settings import get_settings
 from user_auth.public_and_private_key_services import load_public_key
+from models.role_based_access import Role,Action
 
 settings = get_settings()
 
@@ -30,7 +31,8 @@ def decodeJWT(jwtoken: str):
 
 
 class JWTBearer(HTTPBearer):
-    def __init__(self, auto_error: bool = True):
+    def __init__(self, auto_error: bool = True,action : str | None = None):
+        self.action = action
         super(JWTBearer, self).__init__(auto_error=auto_error)
 
     async def __call__(self, request: Request):
@@ -42,7 +44,10 @@ class JWTBearer(HTTPBearer):
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
             if not await self.verify_jwt(credentials.credentials):
                 raise HTTPException(status_code=403, detail="Invalid token or expired token.")
-            if not await self.has_access(request=request,jwtoken=credentials.credentials):
+            # if not await self.has_access(request=request,jwtoken=credentials.credentials):
+            #     raise HTTPException(status_code=405, detail="No Access to do this operation")
+            # print(self.action)
+            if not await self.check_permissions(action = self.action,jwttoken=credentials.credentials):
                 raise HTTPException(status_code=405, detail="No Access to do this operation")
             return credentials.credentials
         else:
@@ -63,19 +68,37 @@ class JWTBearer(HTTPBearer):
         if payload:
             isTokenValid = True
         return isTokenValid
-    async def has_access(self,request : Request,jwtoken : str):
-        method = request.method.lower()
-        data = decodeJWT(jwtoken=jwtoken)
+    # async def has_access(self,request : Request,jwtoken : str):
+    #     method = request.method.lower()
+    #     data = decodeJWT(jwtoken=jwtoken)
+    #     print(data)
+    #     db = SessionLocal()
+    #     role_data = db.query(Roles).filter_by(role=data['role']).first()
+    #     print(role_data.__dict__)
+    #     db.close()
+    #     # print(role_data.__dict__)
+    #     role_data = role_data.__dict__
+    #     # print(role_data[method]==True)
+    #     hasAccess = False
+    #     if role_data[method] == True:
+    #         hasAccess = True
+    #     print(hasAccess)
+    #     return hasAccess
+    async def check_permissions(self,action: str,jwttoken : str):
         db = SessionLocal()
-        role_data = db.query(Roles).filter_by(role=data['role']).first()
-        print(role_data)
+        data = decodeJWT(jwtoken=jwttoken)
+        action_obj = db.query(Action).filter(Action.name == action).first()
+        if not action_obj:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN, detail="Action not found"
+            )
+        role_obj = db.query(Role).filter(Role.name == data["role"]).first()
+        if role_obj and action_obj in role_obj.action:
+            return True
         db.close()
-        # print(role_data.__dict__)
-        role_data = role_data.__dict__
-        # print(role_data[method]==True)
-        hasAccess = False
-        if role_data[method] == True:
-            hasAccess = True
-        return hasAccess
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to perform this action",
+        )
 
 jwt_bearer = JWTBearer()

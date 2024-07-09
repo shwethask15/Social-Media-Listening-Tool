@@ -1,4 +1,5 @@
-from sqlalchemy import Column,Integer,String,Boolean,DateTime,BigInteger
+from sqlalchemy import Column,Integer,String,Boolean,DateTime,BigInteger,Table,ForeignKey,MetaData
+from sqlalchemy.orm import relationship
 import datetime
 from database.base import Base
 
@@ -22,3 +23,4 @@ class Roles(Base):
     post = Column(Boolean)
     put = Column(Boolean)
     patch = Column(Boolean)
+

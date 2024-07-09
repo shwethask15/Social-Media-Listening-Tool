@@ -15,6 +15,7 @@ from fastapi.responses import StreamingResponse
 from starlette.requests import Request
 from typing import AsyncGenerator,Generator
 import os
+from Services.database_table_service import init_db_with_data
 from models.verbatims_list import Verbatims_List
 from Routes.user_auth_routes import router as user_auth_router
 from Routes.trend_analysis_routes import router as trend_analysis_router
@@ -25,7 +26,7 @@ from user_auth.security import get_password_hash
 from config.settings import settings
 from Services.websocket_service import manager
 
-
+# init_db_with_data()
 # db = SessionLocal()
 # data = Verbatims.get_all(db=db)
 # print(data)
