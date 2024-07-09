@@ -1,12 +1,37 @@
+/* Scrollbar styles for Webkit browsers (Chrome, Safari) */
+.content-container::-webkit-scrollbar {
+  width: 5px; /* Width of the scrollbar */
+}
+
+.content-container::-webkit-scrollbar-track {
+  background: transparent; /* Background color of the scrollbar track */
+  border-radius: 10px;
+}
+
+.content-container::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Color of the scrollbar thumb */
+  border-radius: 10px;
+  border: 2px solid none; /* Border around the scrollbar thumb */
+}
+
+.content-container::-webkit-scrollbar-thumb:hover {
+  background-color: transparent; /* Color of the scrollbar thumb on hover */
+}
+
+/* Scrollbar styles for Firefox */
+.content-container {
+  scrollbar-width:thin; /* Make scrollbar thin */
+  scrollbar-color: #c0bfbf transparent; /* Color of the scrollbar thumb and track */
+}
+
+/* Other styles */
 .analyticsBody {
   height: calc(100vh - 60px);
-  /* Adjust this based on your layout */
   overflow-y: auto;
   margin-top: 40px;
   padding: 10px;
   background-color: none;
   font-family: Arial, sans-serif;
-  overflow-y: hidden;
 }
 
 .title-ltv h1 {
@@ -19,42 +44,29 @@
 }
 
 .content-container {
-  scrollbar-width: thin;
-  scrollbar-color: #000 none;
   box-sizing: border-box;
-  /* padding-right: 15px; Adjust this value as needed */
   display: flex;
   overflow-y: auto;
   gap: 20px;
   width: 100%;
   height: calc(100vh - 164px);
-  /* Adjust height based on your needs */
 }
 
 .map-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  /* Align items to the left */
   width: 60%;
-  /* Adjust width to take more space */
   border-radius: 8px;
   padding: 10px;
   background-color: none;
   border: 1px solid #bf99bd;
 }
 
-/* #chartdiv {
-  width: 100%;
-  height: 850px;
-} */
 .MapChart {
   width: 100%;
   height: 950px;
   margin-top: 20px;
-  /* Adjust margin as needed */
-  /* max-height: calc(100% - 40px); Adjust height to fit container */
-
   background-color: none;
   border-radius: 25px;
 }
@@ -62,22 +74,16 @@
 .MapLabel {
   font-size: 14px;
   margin-top: 10px;
-  /* Adjust as needed for spacing */
 }
 
 .comments-container {
   overflow-y: auto;
   padding: 10px;
-  /* Adjust padding to reduce space */
   width: 40%;
-  /* Adjust width to take less space */
-  /* border: 1px solid #000000; */
   border-radius: 8px;
-  /* background-color: rgb(251, 249, 245); */
   background-color: none;
   border: 1px solid #bf99bd;
 }
-
 
 .smlHeading {
   display: flex;
@@ -95,13 +101,6 @@
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
-  /* From https://css.glass */
-  /* background: rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(4.3px);
-  -webkit-backdrop-filter: blur(4.3px);
-  border: 1px solid rgba(255, 255, 255, 0.13); */
   background-color: #ffffff;
   transition: transform 0.2s, box-shadow 0.2s;
   color: #000000;
@@ -156,8 +155,6 @@
   width: 10px;
   height: 10px;
 }
-
-
 
 .radio-buttons {
   margin-left: 900px;
