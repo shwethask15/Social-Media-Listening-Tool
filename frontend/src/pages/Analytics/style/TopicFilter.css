@@ -1,16 +1,16 @@
 .topic-filter-page {
   display: flex;
-  justify-content: space-around;
+  width:100% ;
+  padding: 0 50px;
+  gap: 50px;
+ 
 }
-
+ 
 .topic-filter-container,
 .wordcloud-container {
-  width: 48%;
-  gap: 5px;
-  position: relative;
-  padding: 0;
-  height: 400px;
-  margin-bottom: 20px;
+  width: 50%;
+  padding: 5px;
+  /* margin-bottom: 20px; */
   background: var(--glass-bg-color);
   border-radius: var(--glass-border-radius);
   box-shadow: var(--glass-box-shadow);
@@ -18,9 +18,13 @@
   -webkit-backdrop-filter: var(--glass-backdrop-filter);
   border: 1px solid var(--glass-border-color);
 }
-
-/* .chart-display {
-  padding: 0;
-  top: 0;
-  left: 0;
-} */
+ 
+.topic-filter-chart{
+  height: 50vh;
+ 
+}
+.wordCloud{
+  height: 50vh;
+ 
+ 
+}

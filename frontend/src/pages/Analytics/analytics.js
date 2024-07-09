@@ -6,15 +6,9 @@ import Navbar from "../Analytics/Components/Navbar";
 import '../Analytics/style/Navbar.css'
 import '../Analytics/style/Analytics.css'
 
-import { Provider } from "react-redux";
-import store from "./redux/store/store";
-
 function Analytics() {
-
-
     return (
         <div className="analyticsBody">
-            <Provider store={store}>
             <Navbar />
             <Routes>
                 <Route path="/" element={<Navigate to="live-trending-verbatims" /> } />
@@ -22,9 +16,7 @@ function Analytics() {
                 <Route path="trend-analysis" element={<TrendAnalysis />} />
                 <Route path="snapshot-view" element={<SnapshotView />} />
             </Routes>
-            </Provider>
         </div>
-
     )
 }
 

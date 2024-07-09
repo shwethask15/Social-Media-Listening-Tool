@@ -3,6 +3,7 @@ import LiveMapChart from './LiveMapChart';
 import SmlList from './SmlList';
 import Loader from './Loader';
 import '../style/Analytics.css';
+import MultipleFilter from './filter';
 
 function LiveTrendingVerbatims() {
   const [loading, setLoading] = useState(true);
@@ -13,6 +14,7 @@ function LiveTrendingVerbatims() {
       <div className="content-container">
         <div className="map-container">
           <LiveMapChart setLoading={setLoading} />
+    
           <p className='MapLabel'> * Live trending verbatims map</p>
         </div>
 
