@@ -3,10 +3,11 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5wc from '@amcharts/amcharts5/wc';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 import axiosInstance from '../../../Components/redux/axiosInstance';
-import '../style/TopicFilter.css'
+import '../style/TopicFilter.css';
+
 const WordCloud = () => {
   const [data, setData] = useState([]);
- 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,30 +27,32 @@ const WordCloud = () => {
         console.error('Error fetching the data', error);
       }
     };
- 
+
     fetchData();
   }, []);
- 
+
   useEffect(() => {
     let root = am5.Root.new("wordCloudDiv");
     root.setThemes([
       am5themes_Animated.new(root)
     ]);
- 
+
     let series = root.container.children.push(am5wc.WordCloud.new(root, {
       categoryField: "tag",
       valueField: "weight",
       maxFontSize: am5.percent(15)
     }));
- 
+
     series.labels.template.setAll({
       fontFamily: "Courier New"
     });
- 
+
+    series.labels.template.set("tooltipText", "{tag}: {weight}");
+
     if (data.length > 0) {
       series.data.setAll(data);
     }
- 
+
     const intervalId = setInterval(() => {
       am5.array.each(series.dataItems, function(dataItem) {
         let value = Math.random() * 65;
@@ -58,14 +61,14 @@ const WordCloud = () => {
         dataItem.set("valueWorking", value);
       });
     }, 5000);
- 
+
     return () => {
       clearInterval(intervalId);
       root.dispose();
     };
   }, [data]);
- 
+
   return <div id="wordCloudDiv" className='wordCloud'></div>;
 };
- 
+
 export default WordCloud;
