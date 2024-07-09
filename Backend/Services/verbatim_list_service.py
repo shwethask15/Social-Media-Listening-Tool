@@ -179,11 +179,11 @@ async def advanced_filters_query(query : str,db : Session):
     query = query.split()
     filters = {"virality":[],"sentiment":[],"severity":[],"country":[] }
     l = len(query)
-    # for i in range(len(query)):
-    #     if query[i] == "united":
-    #         # print(query)
-    #         query[i] = query[i]+" "+query[i+1]
-    #         query.remove(query[i+1])
+    for i in range(len(query)):
+        if query[i] == "united":
+            # print(query)
+            query[i] = query[i]+" "+query[i+1]
+            # query.remove(query[i+1])
     i = 0
     while i < l:
         if query[i] == "united":
