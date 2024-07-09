@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import axiosInstance from "../../Components/redux/axiosInstance";
 import FilterModal from "./FilterModal";
 import VerbatimItem from "./VerbatimItem";
-import filterVerbatims from "./FilterVerbatims";
 import "./style/Verbatims.css";
 import twitterIcon from "./assets/twitter-icon.png";
 import blogIcon from "./assets/blog-icon.png";
@@ -10,7 +9,7 @@ import redditIcon from "./assets/reddit-icon.png";
 import forumIcon from "./assets/forum-icon.png";
 import newsIcon from "./assets/news-icon.png";
 import VerbatimsPrompter from "./VerbatimsPrompter";
- 
+
 const Verbatims = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [verbatimData, setVerbatimData] = useState([]);
@@ -34,14 +33,14 @@ const Verbatims = () => {
     severities: [],
     languages: [],
   });
- 
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
- 
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
- 
+
   useEffect(() => {
     const fetchVerbatims = async () => {
       try {
@@ -75,7 +74,7 @@ const Verbatims = () => {
         setVerbatimData(data);
         setFilteredVerbatimData(data);
         setLoading(false);
- 
+
         const uniqueOptions = {
           brands: [...new Set(data.map((item) => item.brand))].sort(),
           regions: [...new Set(data.map((item) => item.location))].sort(),
@@ -87,7 +86,7 @@ const Verbatims = () => {
           severities: [...new Set(data.map((item) => item.severity))],
           languages: [...new Set(data.map((item) => item.language))].sort(),
         };
- 
+
         const initialFilters = {
           brands: uniqueOptions.brands,
           regions: uniqueOptions.regions,
@@ -97,7 +96,7 @@ const Verbatims = () => {
           severities: uniqueOptions.severities,
           languages: uniqueOptions.languages,
         };
- 
+
         setFilterOptions(uniqueOptions);
         setAppliedFilters(initialFilters); //default: select all
       } catch (error) {
@@ -105,16 +104,71 @@ const Verbatims = () => {
         setLoading(false);
       }
     };
- 
+
     fetchVerbatims();
   }, []);
- 
+
   useEffect(() => {
-    const filteredData = filterVerbatims(verbatimData, appliedFilters);
-    setFilteredVerbatimData(filteredData);
-    setCurrentPage(1);
-  }, [verbatimData, appliedFilters]);
- 
+    const fetchFilteredVerbatims = async () => {
+      setLoading(true);
+
+      const filters = {
+        brand: appliedFilters.brands,
+        datasource: appliedFilters.sources,
+        country: appliedFilters.regions,
+        sentiment: appliedFilters.sentiments,
+        virality: appliedFilters.viralities,
+        severity: appliedFilters.severities,
+        language: appliedFilters.languages,
+      };
+
+      try {
+        const response = await axiosInstance.post(
+          "http://127.0.0.1:8000/verbatims_list/",
+          filters,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = response.data.map((item) => ({
+          mention_id: item.mention_id,
+          date: item.date,
+          location: item.country || "Unknown",
+          language: item.language,
+          virality: item.virality,
+          sentiment: item.sentiment,
+          severity: item.severity,
+          subCategory: item.theme || "Unknown",
+          content: item.translated_snippet,
+          brand: item.brand.trim(),
+          source: item.source,
+          link: item.originalURL,
+          icon:
+            item.source === "twitter"
+              ? twitterIcon
+              : item.source === "blog"
+              ? blogIcon
+              : item.source === "reddit"
+              ? redditIcon
+              : item.source === "news"
+              ? newsIcon
+              : forumIcon,
+        }));
+
+        setFilteredVerbatimData(data);
+        setCurrentPage(1); // Reset to first page when filters change
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching filtered verbatims:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchFilteredVerbatims();
+  }, [appliedFilters]);
+
   // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -123,11 +177,11 @@ const Verbatims = () => {
     indexOfLastItem
   );
   const totalPages = Math.ceil(filteredVerbatimData.length / itemsPerPage);
- 
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
- 
+
   const handleDownload = () => {
     const csvData = filteredVerbatimData.map((verbatim) => ({
       date: verbatim.date,
@@ -140,13 +194,13 @@ const Verbatims = () => {
       content: verbatim.content,
       brand: verbatim.brand,
     }));
- 
+
     const csvContent =
       "data:text/csv;charset=utf-8," +
       Object.keys(csvData[0]).join(",") +
       "\n" +
       csvData.map((e) => Object.values(e).join(",")).join("\n");
- 
+
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -155,7 +209,7 @@ const Verbatims = () => {
     link.click();
     document.body.removeChild(link);
   };
- 
+
   const handleUpdate = (mention_id, updatedData) => {
     // Filter out metadata fields
     const relevantData = {
@@ -176,14 +230,14 @@ const Verbatims = () => {
       language: updatedData.language,
       sentiment: updatedData.sentiment,
     };
- 
+
     setVerbatimData((prevData) =>
       prevData.map((item) =>
         item.mention_id === mention_id ? { ...item, ...relevantData } : item
       )
     );
-  };  
- 
+  };
+
   return (
     <div className="Verbatims">
       <FilterModal
@@ -268,5 +322,5 @@ const Verbatims = () => {
     </div>
   );
 };
- 
+
 export default Verbatims;
