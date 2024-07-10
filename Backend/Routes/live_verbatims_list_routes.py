@@ -58,5 +58,5 @@ async def get_live_data(db: Session):#get the dependency function
 
 # Define route to fetch both verbatims and graph data
 @router.get("/Live_Verbatims_List/",response_model=GraphItemResult)
-async def get_live_data_endpoint(token : str = Depends(JWTBearer()),db: Session = Depends(get_db)):
+async def get_live_data_endpoint(token : str = Depends(JWTBearer(action="action_view_live_verbatims")),db: Session = Depends(get_db)):
     return await get_live_data(db=db)

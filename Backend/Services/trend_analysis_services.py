@@ -40,6 +40,7 @@ async def get_trend_analysis1(type : str,db : Session):
                 temp["may"].append(i)
             elif temp1["date"][4] == "6":
                 temp["june"].append(i)
+        # print(temp["april"][0].__dict__)
         return temp
     elif type == "sentiment_count":
         data = sentiment_count.get_all(db=db)

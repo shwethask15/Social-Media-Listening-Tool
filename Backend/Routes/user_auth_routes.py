@@ -61,7 +61,7 @@ async def login(data : Login_data,db : Session = Depends(get_db)):
     return {"access_token":access_token,"token_type":"Bearer"}
 
 @router.get("/users/me",response_model=Get_user_data)
-async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db)):
+async def get(token : str = Depends(JWTBearer(action="action_view_user")),db : Session = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -81,22 +81,11 @@ async def get(token : str = Depends(JWTBearer()),db : Session = Depends(get_db))
     return user
 
 @router.post('/logout')
-def logout(dependencies=Depends(JWTBearer()), db: Session = Depends(get_db)):
+def logout(dependencies=Depends(JWTBearer(action="action_view_user")), db: Session = Depends(get_db)):
     token=dependencies
     payload = jwt.decode(token, PUBLIC_KEY, settings.ALGORITHM)
     user_id = payload['user_data']
     token_record = db.query(Token_Data).all()
-    info=[]
-    # print(token_record[0].__dict__)
-    # for record in token_record :
-    #     # print("record",record)
-    #     print(datetime.now() - record.created_date)
-    #     if (datetime.now() - record.created_date).days >1:
-    #         info.append(record.use)
-    # if info:
-    #     existing_token = db.query(Token_Data).where(Token_Data.user_name.in_(info)).delete()
-    #     db.commit()
-        
     existing_token = db.query(Token_Data).filter(Token_Data.user_name == user_id, Token_Data.access_token==token).first()
     if existing_token:
         existing_token.status=False

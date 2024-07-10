@@ -29,10 +29,10 @@ const style = {
 };
 
 const headerStyle = {
-  backgroundColor: "#0000FF",
+  backgroundColor: "#dab9dc",
   width: "100%",
   padding: "10px 20px",
-  color: "white",
+  color: "black",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
@@ -43,9 +43,9 @@ const headerStyle = {
 
 const saveButtonStyle = {
   marginTop: "20px",
-  color: "#0000FF",
+  color: "black",
+  backgroundColor: "#fcf3f3",
   alignSelf: "flex-end",
-  backgroundColor: "transparent",
 };
 
 const VerbatimItem = ({
@@ -225,12 +225,12 @@ const VerbatimItem = ({
                     <FormControlLabel
                       key={option}
                       value={option}
-                      control={<Radio />}
+                      control={<Radio sx={{ '&.Mui-checked': { color: '#220047' } }} />}
                       label={option}
                       style={{
                         color:
                           newValues[currentField] === option
-                            ? "#0000FF"
+                            ? "#220047"
                             : "#000",
                       }}
                     />
