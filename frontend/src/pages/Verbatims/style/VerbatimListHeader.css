@@ -17,7 +17,7 @@
 
 .verbatims-count {
   font-size: 16px;
-  color: #333;
+  color: var(--purple-text);
 }
 
 .download-button {

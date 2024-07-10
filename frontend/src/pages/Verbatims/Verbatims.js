@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../../Components/redux/axiosInstance";
+import FileSaver from 'file-saver';
 import FilterModal from "./FilterModal";
 import VerbatimItem from "./VerbatimItem";
 import "./style/Verbatims.css";
@@ -196,18 +197,12 @@ const Verbatims = () => {
     }));
 
     const csvContent =
-      "data:text/csv;charset=utf-8," +
       Object.keys(csvData[0]).join(",") +
       "\n" +
       csvData.map((e) => Object.values(e).join(",")).join("\n");
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "verbatims.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    FileSaver.saveAs(blob, "verbatims.csv");
   };
 
   const handleUpdate = (mention_id, updatedData) => {

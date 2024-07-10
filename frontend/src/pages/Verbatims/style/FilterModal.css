@@ -88,7 +88,7 @@
 .reset-button,
 .cancel-button {
   padding: 10px 20px;
-  border: 1px solid var(--blue);
+  border: 1px solid var(--purple-text);
   cursor: pointer;
   font-size: 16px;
   margin-left: 10px;
@@ -97,15 +97,14 @@
 }
 
 .apply-button {
-  color: var(--blue);
+  color: var(--purple-text);
 }
 
 .reset-button {
-  color: var(--blue);
+  color: var(--purple-text);
 }
 
 .cancel-button {
-  background-color: white;
   color: #dc3545;
-  border: none;
+  border: 1px solid var(--purple-text);
 }
