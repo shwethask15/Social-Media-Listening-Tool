@@ -9,12 +9,12 @@
   height: 50vh;
 }
 
-.SnapShotViewMap h2{
+.SnapShotViewMap h4{
   margin: 5px;
   padding: 0;
   border-bottom: #000000;
-  /* width: fit-content; */
-  display: flex;
+  width: fit-content; 
+   display: flex;
   justify-content: center;
 }
 .SnapShotViewMap {

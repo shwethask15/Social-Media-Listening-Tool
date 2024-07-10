@@ -7,6 +7,7 @@ import './Navbar.css';
 const NotificationList = () => {
   const [notifications, setNotifications] = useState([]);
   const [newNotifications, setNewNotifications] = useState([]);
+  const [displayedNotifications, setDisplayedNotifications] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -14,6 +15,7 @@ const NotificationList = () => {
 
     eventSource.onmessage = (event) => {
       const notification = JSON.parse(event.data);
+      console.log('Received notification:', notification); // Log the received notification
       setNewNotifications((prevNewNotifications) => [
         ...prevNewNotifications,
         notification,
@@ -31,6 +33,7 @@ const NotificationList = () => {
   }, []);
 
   const handleAlertClick = () => {
+    setDisplayedNotifications(newNotifications);
     setNotifications((prevNotifications) => [
       ...newNotifications,
       ...prevNotifications,
@@ -41,6 +44,7 @@ const NotificationList = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
+    setDisplayedNotifications([]); // Clear displayed notifications after closing modal
   };
 
   return (
@@ -54,7 +58,7 @@ const NotificationList = () => {
       <Dialog open={showModal} onClose={handleCloseModal} maxWidth="sm" fullWidth>
         <DialogTitle>New Notifications</DialogTitle>
         <DialogContent>
-          {notifications.map((notification, index) => (
+          {displayedNotifications.map((notification, index) => (
             <div key={index} className="notification-item">
               <div className="notification-header">
                 <div className="notification-date">

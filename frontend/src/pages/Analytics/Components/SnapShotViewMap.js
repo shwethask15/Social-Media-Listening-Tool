@@ -14,7 +14,7 @@ const Legend = ({ legendData }) => (
   <div className="legend-container">
     {legendData.map((item, index) => (
       <div key={index} className="legend-item">
-        <div className="legend-color-box" style={{ backgroundColor: item.fill }}></div>
+        <div className="legend-color-box" style={{ backgroundColor: item.fill,marginRight:'5px' }}></div>
         <span>{item.name}</span>
       </div>
     ))}
@@ -179,7 +179,7 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
         <Loader />
       ) : (
         <>
-          <h2>{selectedOption}</h2>
+          <h4>{selectedOption}</h4>
           <MapContainer />
           <Legend legendData={legendData} />
         </>

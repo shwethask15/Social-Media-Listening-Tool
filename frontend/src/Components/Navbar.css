@@ -83,3 +83,44 @@
 .icon-button .MuiBadge-root {
   color: var(--icon-color); /* Change the color of the bell icon */
 }
+
+/* Navbar.css */
+
+.icon-button {
+  position: relative;
+}
+
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-date {
+  display: flex;
+  align-items: center;
+  color: #220047; /* Adjust color to match your design */
+}
+
+.notification-link {
+  color: #220047; 
+  width: 15px;
+  height: 15px;
+}
+
+.notification-snippet {
+  margin: 10px 0;
+  color: black; /* Adjust color to match your design */
+}
+
+.notification-divider {
+  margin-top: 10px;
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+}

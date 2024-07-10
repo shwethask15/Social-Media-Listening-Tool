@@ -18,7 +18,7 @@ const SignIn = () => {
       const data = await login({ user_name, password }).unwrap();
       localStorage.setItem("authToken", data.access_token); // Store token in localStorage
       dispatch(loginSuccess({ token: data.access_token, user: user_name }));
-      navigate("/page1"); // Redirect to a protected route
+      navigate("/analytics"); // Redirect to a protected route
     } catch (err) {
       console.error(err);
     }
