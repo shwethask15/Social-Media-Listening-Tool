@@ -13,7 +13,6 @@ class User_Data(Base):
 class Token_Data(Base):
     user_name = Column(String)
     access_token = Column(String,primary_key=True)
-    # refresh_token = Column(String,nullable=False)
     status = Column(Boolean)
     created_date = Column(DateTime, default=datetime.datetime.now)
 

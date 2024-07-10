@@ -12,25 +12,8 @@ class VerbatimService:
     def __init__(self, db: Session):
         self.db = db
 
-    # def get_filtered_verbatims(self, country: str = None, brand: str = None, datasource: str = None, source: str = None) -> List[Verbatims_List_create]:
-    #     """
-    #     Retrieve verbatims filtered by country, brand, datasource, and source.
-    #     """
-    #     query = self.db.query(VerbatimModel)
 
-    #     if country:
-    #         query = query.filter(VerbatimModel.country == country)
-    #     if brand:
-    #         query = query.filter(VerbatimModel.brand == brand)
-    #     if datasource:
-    #         query = query.filter(VerbatimModel.datasource == datasource)
-    #     if source:
-    #         query = query.filter(VerbatimModel.source == source)
-
-    #     verbatims = query.all()
-    #     return [Verbatims_List_create.from_orm(verbatim) for verbatim in verbatims]
-
-#function to fetch particular filter data
+    #function to fetch particular filter data
     async def aggregate_counts(self, data, filter_by) -> FilteredResponse:
         """
         Aggregate counts based on the filter type for each country.
@@ -60,7 +43,7 @@ class VerbatimService:
         return FilteredResponse(**{filter_by: result})
     
    
-#function to fetch the data from database
+    #function to fetch the data from database
     async def get_filtered_data(self, filter_name: str) -> List[VerbatimModel]:
         """
         Retrieve data filtered by the given filter name.

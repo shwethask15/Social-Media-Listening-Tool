@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-# from typing import
 from sqlalchemy import BigInteger
 import datetime
 
@@ -20,7 +19,6 @@ class Get_user_data(BaseModel):
 class Token_Create(BaseModel):
     user_name : str
     access_token : str
-    # refresh_token : str
     status : bool
     created_date : datetime.datetime
 

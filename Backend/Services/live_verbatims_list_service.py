@@ -28,39 +28,10 @@ async def get_graph_data(db:Session) -> List[GraphItem]:
     res =[]
     c = 0
     for i in ref:
-        # graph_data = GraphItem
-        # graph_data.two_digit_country_code = two_digit_country_code[c]
-        # graph_data.country_name = i
-        # graph_data.post_count = ref[i]
         graph_data = {}
         graph_data["two_digit_country_code"] = two_digit_country_code[c]
         graph_data["country_name"] = i
         graph_data["post_count"] = ref[i]
         res.append(graph_data)
         c+=1
-    #print(res)
-    # for i in res:
-    #     print(dict(i))
     return res
-# async def get_data_with_filters1(q : verbatims_filters):
-#     db = SessionLocal()
-#     data = Verbatims.get_all(db=db)
-#     db.close()
-#     d = {}
-#     q= dict(q)
-#     for i in q:
-#         if q[i] != "string":
-#             d[i] = q[i]
-#     r = []
-#     for i in data:
-#         f = []
-#         t = i.__dict__
-#         for j in d:
-#             if len(d[j])!= len(t[j]):
-#                 t[j] = t[j][1:]
-#             if d[j] == t[j]:
-#                 f.append(True)
-#             else:
-#                 f.append(False)
-#         if False not in f:
-#             r.append(i)

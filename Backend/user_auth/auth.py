@@ -11,10 +11,8 @@ from Config.settings import get_settings
 
 settings = get_settings()
 PRIVATE_KEY = load_private_key()
-# PUBLIC_KEY = PRIVATE_KEY.public_key
-# SECRET_KEY = "0f887850b2898e971380ac9334d00c8b0314e7c19630c54ecc1181c89213a4e1"
 ALGORITHM = "RS256"
-# ACCESS_TOKEN_EXPIRE_TIME = 45
+
 def authenticate(*,user_name: str,password : str,db : Session)->Optional[User_Data]:
     user = db.query(User_Data).filter(User_Data.user_name == user_name).first()
     user = user.__dict__

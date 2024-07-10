@@ -22,21 +22,6 @@ from Database.session import get_db
 
 router = APIRouter()
 
-# @router.get("/live_verbatims_list/")
-# async def get_live_verbatims_list(db: Session = Depends(get_db)):
-#     try:
-#         return await get_data(db = db)
-#     except Exception as e:
-#         return str(e)
-
-# @router.post("/verbatim_list/")
-# async def get_data_with_filters(q : verbatims_filters = None):
-#     try:
-#         return await get_data_with_filters1(q=q)
-#     except Exception as e:
-#         return str(e)
-
-
 # Define a function to get both verbatims and graph data
 async def get_live_data(db: Session):#get the dependency function
     try:

@@ -1,6 +1,4 @@
 import jwt
-# import jwt.exceptions
-# from jwt.exceptions import InvalidTokenError
 from fastapi import FastAPI, Depends, HTTPException,status
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -8,23 +6,18 @@ from Models.users_data_model import Token_Data
 from Database.session import SessionLocal
 from Models.users_data_model import Token_Data,Roles
 from sqlalchemy.orm import Session
-# from user_auth.auth import ACCESS_TOKEN_EXPIRE_TIME,ALGORITHM,SECRET_KEY
 from Config.settings import get_settings
 from User_auth.public_and_private_key_services import load_public_key
 from Models.role_based_access import Role,Action
 
 settings = get_settings()
 
-# SECRET_KEY = "0f887850b2898e971380ac9334d00c8b0314e7c19630c54ecc1181c89213a4e1"
 ALGORITHM = "RS256"
 PUBLIC_KEY = load_public_key()
-# ACCESS_TOKEN_EXPIRE_TIME = 45
 
 def decodeJWT(jwtoken: str):
     try:
-        # Decode and verify the token
         payload = jwt.decode(jwtoken,PUBLIC_KEY , ALGORITHM)
-        # print(payload)
         return payload
     except Exception as e:
         return None
@@ -37,17 +30,11 @@ class JWTBearer(HTTPBearer):
 
     async def __call__(self, request: Request):
         credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
-        # print(request.method.lower())
-        # print(request.body.__dict__)
-        print(self.action)
         if credentials:
             if not credentials.scheme == "Bearer":
                 raise HTTPException(status_code=403, detail="Invalid authentication scheme.")
             if not await self.verify_jwt(credentials.credentials):
                 raise HTTPException(status_code=403, detail="Invalid token or expired token.")
-            # if not await self.has_access(request=request,jwtoken=credentials.credentials):
-            #     raise HTTPException(status_code=405, detail="No Access to do this operation")
-            # print(self.action)
             if not await self.check_permissions(action = self.action,jwttoken=credentials.credentials):
                 raise HTTPException(status_code=405, detail="No Access to do this operation")
             return credentials.credentials
@@ -59,7 +46,6 @@ class JWTBearer(HTTPBearer):
         db = SessionLocal()
         get_token_data = db.query(Token_Data).filter_by(access_token=jwtoken).first()
         db.close()
-        # print(get_token_data.__dict__)
         if get_token_data and get_token_data.status == False:
             return None
         try:
@@ -69,22 +55,6 @@ class JWTBearer(HTTPBearer):
         if payload:
             isTokenValid = True
         return isTokenValid
-    # async def has_access(self,request : Request,jwtoken : str):
-    #     method = request.method.lower()
-    #     data = decodeJWT(jwtoken=jwtoken)
-    #     print(data)
-    #     db = SessionLocal()
-    #     role_data = db.query(Roles).filter_by(role=data['role']).first()
-    #     print(role_data.__dict__)
-    #     db.close()
-    #     # print(role_data.__dict__)
-    #     role_data = role_data.__dict__
-    #     # print(role_data[method]==True)
-    #     hasAccess = False
-    #     if role_data[method] == True:
-    #         hasAccess = True
-    #     print(hasAccess)
-    #     return hasAccess
     async def check_permissions(self,action: str,jwttoken : str):
         db = SessionLocal()
         # print(action)

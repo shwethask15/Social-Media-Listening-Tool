@@ -19,7 +19,6 @@ router = APIRouter()
 
 def get_user(username : str,db : Session):
     data = Users.get_all(db=db)
-    # print(data)
     for i in data:
         temp = i.__dict__
         if username == temp["user_name"]:
@@ -39,7 +38,6 @@ async def signup(user : User_data_create,db : Session = Depends(get_db)):
 @router.post("/login/")
 async def login(data : Login_data,db : Session = Depends(get_db)):
     user = authenticate(user_name=data.user_name,password=data.password,db=db)
-    # print(user)
     if not user:
         raise HTTPException(
             status_code= status.HTTP_401_UNAUTHORIZED,

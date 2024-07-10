@@ -7,7 +7,6 @@ async def get_trend_analysis1(type : str,db : Session):
         temp = {"april":[],"may":[],"june":[]}
         for i in data:
             temp1 = i.__dict__
-            # print(temp["april"])
             if temp1["date"][4] == "4":
                 temp["april"].append(i)
             elif temp1["date"][4] == "5":
@@ -20,7 +19,6 @@ async def get_trend_analysis1(type : str,db : Session):
         temp = {"april":[],"may":[],"june":[]}
         for i in data:
             temp1 = i.__dict__
-            # print(temp["april"])
             if temp1["date"][4] == "4":
                 temp["april"].append(i)
             elif temp1["date"][4] == "5":
@@ -33,21 +31,18 @@ async def get_trend_analysis1(type : str,db : Session):
         temp = {"april":[],"may":[],"june":[]}
         for i in data:
             temp1 = i.__dict__
-            # print(temp["april"])
             if temp1["date"][4] == "4":
                 temp["april"].append(i)
             elif temp1["date"][4] == "5":
                 temp["may"].append(i)
             elif temp1["date"][4] == "6":
                 temp["june"].append(i)
-        # print(temp["april"][0].__dict__)
         return temp
     elif type == "sentiment_count":
         data = sentiment_count.get_all(db=db)
         temp = {"april":[],"may":[],"june":[]}
         for i in data:
             temp1 = i.__dict__
-            # print(temp["april"])
             if temp1["date"][4] == "4":
                 temp["april"].append(i)
             elif temp1["date"][4] == "5":

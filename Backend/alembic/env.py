@@ -2,7 +2,7 @@ from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-from database.base import Base
+from Database.base import Base
 from alembic import context
 
 # this is the Alembic Config object, which provides
@@ -15,7 +15,7 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # add your model's MetaData object here
-config.set_main_option('sqlalchemy.url', 'postgresql://db_user:p%%40ssw0rd@codx-minerva.postgres.database.azure.com/dap_session')
+config.set_main_option('sqlalchemy.url', 'sqlite:///C:/Users/VenkateshAdinani/OneDrive - TheMathCompany Private Limited/Desktop/Social-Media-Listening-Tool/capstone_db.db')
 # for 'autogenerate' support
 # from myapp import mymodel
 target_metadata = Base.metadata

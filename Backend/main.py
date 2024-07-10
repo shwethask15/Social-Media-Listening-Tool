@@ -17,8 +17,6 @@ from Database.session import engine,SessionLocal
 from datetime import datetime
 app = FastAPI()
 
-# init_db_with_data()
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],  # Adjust this list as necessary
@@ -116,6 +114,7 @@ async def send_realtime_updates() -> None:
                     .limit(current_total_rows_live_verbatims - last_total_rows_live_verbatims)
                     .all()
                 )
+                
 
                 # Serialize new entries to send as notifications
                 recent_updates = [entry.serialize() for entry in new_entries]
@@ -136,11 +135,10 @@ async def send_realtime_updates() -> None:
                     .limit(current_total_rows_verbatims_list - last_total_rows_verbatims_list)
                     .all()
                 )
-                # datetime_str = new_entries2[0].date
-                # datetime_obj = datetime.strptime(datetime_str, "%Y-%m-%d %H:%M:%S.%f")
-                # iso_format = datetime_obj.isoformat()
-                # new_entries2[0].date = iso_format
-                # print(type(new_entries2[0].date),type(iso_format),iso_format)
+                for update in new_entries2:
+                    msg = update.snippet
+                    update.snippet = "The verbatim with message "+msg+" was updated"
+                
                 
 
                 # Serialize new entries to send as notifications

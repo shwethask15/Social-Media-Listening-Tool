@@ -1,4 +1,4 @@
-from pydantic import BaseModel # type: ignore
+from pydantic import BaseModel
 from typing import List,Optional
 
 class Verbatims_List_create(BaseModel):
@@ -31,20 +31,16 @@ class Verbatims_List_create(BaseModel):
 
 class verbatims_filters(BaseModel):
     brand : Optional[List] | None = None
-    # datasource : List | None = None
     country : Optional[List] | None = None
-    # theme : List | None =None
     source : Optional[List] | None = None
     sentiment : Optional[List] | None = None
     virality : Optional[List] | None = None
     severity : Optional[List] | None = None
     profanity : Optional[List] | None = None
-    # relevancy_filter : bool | None = None
 class verbatims_list_update(BaseModel):
     virality : str | None = None
     sentiment : str | None = None
     severity : str | None = None
-    # theme : str | None = None
 
 class verbatims_snapshot_filter(BaseModel):
     pass
