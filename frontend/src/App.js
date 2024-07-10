@@ -25,7 +25,7 @@ function App() {
             <>
               <Route path="/" element={<Navigate to="/analytics" />} />
               <Route path="/analytics/*" element={<Analytics />} />
-              <Route path="/page2/*" element={<Verbatims />} />
+              <Route path="/verbatims/*" element={<Verbatims />} />
               <Route path="*" element={<Navigate to="/analytics" />} />
             </>
           )}

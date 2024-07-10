@@ -31,7 +31,7 @@ function Navbar() {
             </div>
             <ul className="navbar-menu">
                 <li><NavLink to="/analytics" className="nav-link">ANALYTICS</NavLink></li>
-                <li><NavLink to="/page2" className="nav-link">VERBATIMS</NavLink></li>
+                <li><NavLink to="/verbatims" className="nav-link">VERBATIMS</NavLink></li>
             </ul>
             <div className="navbar-icons">
  
