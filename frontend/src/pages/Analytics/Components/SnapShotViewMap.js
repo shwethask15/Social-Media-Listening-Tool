@@ -14,7 +14,7 @@ const Legend = ({ legendData }) => (
   <div className="legend-container">
     {legendData.map((item, index) => (
       <div key={index} className="legend-item">
-        <div className="legend-color-box" style={{ backgroundColor: item.fill,marginRight:'5px' }}></div>
+        <div className="legend-color-box" style={{ backgroundColor: item.fill, marginRight: '5px' }}></div>
         <span>{item.name}</span>
       </div>
     ))}
@@ -65,19 +65,19 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     setCountryData(processedCountryData);
 
     let processedLegendData;
-    if (selectedOption === 'Sentiment') {
+    if (selectedOption !== 'Sentiment') {
       processedLegendData = [
-        { name: 'Positive', fill: am4core.color('#84A59D') }, // Greenish
-        { name: 'Negative', fill: am4core.color('#A44A3F') }, // Reddish
-        { name: 'Neutral', fill: am4core.color('#FF9F1C') },  // Yellowish
-        { name: 'No Activity', fill: am4core.color('#c0c0c0') } // Greyish
-      ];
+        { name: 'High', fill: am4core.color('#6A0572') },     // Dark Purple
+        { name: 'Medium', fill: am4core.color('#B56576') },   // Medium Pink
+        { name: 'Low', fill: am4core.color('#D4A5A5') },      // Light Pink
+        { name: 'No Activity', fill: am4core.color('#C9ADA7') } // Greyish
+      ]
     } else {
       processedLegendData = [
-        { name: 'High', fill: am4core.color('#004d00') },
-        { name: 'Medium', fill: am4core.color('#1a8c1a') },
-        { name: 'Low', fill: am4core.color('#66ff66') },
-        { name: 'No Activity', fill: am4core.color('#c0c0c0') }
+        { name: 'Negative', fill: am4core.color('#6A0572') },     // Dark Purple
+        { name: 'Neutral', fill: am4core.color('#B56576') },   // Medium Pink
+        { name: 'Positive', fill: am4core.color('#D4A5A5') },      // Light Pink
+        { name: 'No Activity', fill: am4core.color('#C9ADA7') }
       ];
     }
     setLegendData(processedLegendData);
@@ -101,17 +101,17 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
 
   const getFillColor = (counts) => {
     if (selectedOption === 'Sentiment') {
-      if (counts.Positive > 0) return am4core.color('#2E7D32'); // Dark Green
-      if (counts.Negative > 0) return am4core.color('#C62828'); // Dark Red
-      if (counts.Neutral > 0) return am4core.color('#F9A825');  // Dark Yellow
+      if (counts.Positive > 0) return am4core.color('#6A0572'); // Dark Green
+      if (counts.Negative > 0) return am4core.color('#B56576'); // Dark Red
+      if (counts.Neutral > 0) return am4core.color('#D4A5A5');  // Dark Yellow
     } else {
-      if (counts.High > 0) return am4core.color('#004d00');
-      if (counts.Medium > 0) return am4core.color('#1a8c1a');
-      if (counts.Low > 0) return am4core.color('#66ff66');
+      if (counts.High > 0) return am4core.color('#6A0572');     // Dark Purple
+      if (counts.Medium > 0) return am4core.color('#B56576');   // Medium Pink
+      if (counts.Low > 0) return am4core.color('#D4A5A5');       // Dark Pink
     }
     return am4core.color('#c0c0c0'); // Greyish for No Activity
   };
-  
+
 
   const getTooltipText = () => {
     switch (selectedOption) {

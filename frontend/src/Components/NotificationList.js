@@ -5,7 +5,6 @@ import { FaCalendarAlt, FaExternalLinkAlt } from 'react-icons/fa';
 import './Navbar.css';
 
 const NotificationList = () => {
-  const [notifications, setNotifications] = useState([]);
   const [newNotifications, setNewNotifications] = useState([]);
   const [displayedNotifications, setDisplayedNotifications] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -34,10 +33,6 @@ const NotificationList = () => {
 
   const handleAlertClick = () => {
     setDisplayedNotifications(newNotifications);
-    setNotifications((prevNotifications) => [
-      ...newNotifications,
-      ...prevNotifications,
-    ]);
     setNewNotifications([]); // Clear new notifications count after viewing
     setShowModal(true); // Open modal dialog on notification click
   };
