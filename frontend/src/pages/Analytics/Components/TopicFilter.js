@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ChartComponent from './TopicFilterChart';
 import '../style/TopicFilter.css';
+import '../style/TrendAnalysis.css'
 import WordCloud from './WordCloud';
 
 const TopicFilter = () => {
