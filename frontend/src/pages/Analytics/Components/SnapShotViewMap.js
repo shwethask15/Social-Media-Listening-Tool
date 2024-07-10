@@ -4,8 +4,7 @@ import * as am4maps from '@amcharts/amcharts4/maps';
 import am4geodata_worldLow from '@amcharts/amcharts4-geodata/worldLow';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import '../style/Analytics.css';
-
-const LoadingIndicator = () => <div>Loading...</div>;
+import Loader from './Loader'
 
 const MapContainer = () => (
   <div id="chartdiv" className='ssvMap'></div>
@@ -68,10 +67,10 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     let processedLegendData;
     if (selectedOption === 'Sentiment') {
       processedLegendData = [
-        { name: 'Positive', fill: am4core.color('#004d00') },
-        { name: 'Negative', fill: am4core.color('#8B0000') },
-        { name: 'Neutral', fill: am4core.color('#FFD700') },
-        { name: 'No Activity', fill: am4core.color('#c0c0c0') }
+        { name: 'Positive', fill: am4core.color('#84A59D') }, // Greenish
+        { name: 'Negative', fill: am4core.color('#A44A3F') }, // Reddish
+        { name: 'Neutral', fill: am4core.color('#FF9F1C') },  // Yellowish
+        { name: 'No Activity', fill: am4core.color('#c0c0c0') } // Greyish
       ];
     } else {
       processedLegendData = [
@@ -102,16 +101,17 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
 
   const getFillColor = (counts) => {
     if (selectedOption === 'Sentiment') {
-      if (counts.Positive > 0) return am4core.color('#004d00');
-      if (counts.Negative > 0) return am4core.color('#8B0000');
-      if (counts.Neutral > 0) return am4core.color('#FFD700');
+      if (counts.Positive > 0) return am4core.color('#2E7D32'); // Dark Green
+      if (counts.Negative > 0) return am4core.color('#C62828'); // Dark Red
+      if (counts.Neutral > 0) return am4core.color('#F9A825');  // Dark Yellow
     } else {
       if (counts.High > 0) return am4core.color('#004d00');
       if (counts.Medium > 0) return am4core.color('#1a8c1a');
       if (counts.Low > 0) return am4core.color('#66ff66');
     }
-    return am4core.color('#c0c0c0');
+    return am4core.color('#c0c0c0'); // Greyish for No Activity
   };
+  
 
   const getTooltipText = () => {
     switch (selectedOption) {
@@ -153,7 +153,7 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
     chart.zoomControl = new am4maps.ZoomControl();
 
     let homeButton = new am4core.Button();
-    homeButton.events.on('hit', function() {
+    homeButton.events.on('hit', function () {
       chart.goHome();
     });
 
@@ -176,9 +176,10 @@ const SnapshotViewMap = ({ data, selectedOption, loading }) => {
   return (
     <div className='SnapShotViewMap'>
       {loading || isProcessing ? (
-        <LoadingIndicator />
+        <Loader />
       ) : (
         <>
+          <h2>{selectedOption}</h2>
           <MapContainer />
           <Legend legendData={legendData} />
         </>

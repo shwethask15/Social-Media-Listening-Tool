@@ -3,6 +3,7 @@ import * as am5 from "@amcharts/amcharts5/index";
 import * as am5hierarchy from "@amcharts/amcharts5/hierarchy";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
 import '../style/TopicFilter.css'
+import '../style/TrendAnalysis.css'
  
 const ChartComponent = () => {
   useEffect(() => {

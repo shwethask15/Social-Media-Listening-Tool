@@ -11,39 +11,34 @@ const LineCharts = ({ data }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
-    let chart = create(chartRef.current, am4charts.XYChart);
+    const chart = create(chartRef.current, am4charts.XYChart);
     chart.data = data;
 
-    let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    const dateAxis = chart.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.grid.template.location = 0;
     dateAxis.dateFormats.setKey("day", "MMM dd yyyy");
     dateAxis.periodChangeDateFormats.setKey("day", "MMM dd yyyy");
 
-    let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.minGridDistance = 50;
 
     const createSeries = (field, name, color) => {
-      let series = chart.series.push(new am4charts.LineSeries());
+      const series = chart.series.push(new am4charts.LineSeries());
       series.dataFields.valueY = field;
       series.dataFields.dateX = "date";
       series.name = name;
       series.strokeWidth = 2;
       series.stroke = am4core.color(color);
-      let bullet = series.bullets.push(new am4charts.CircleBullet());
+      const bullet = series.bullets.push(new am4charts.CircleBullet());
       bullet.circle.fill = am4core.color(color);
     };
 
-    if (data.length > 0 && data[0].hasOwnProperty("count")) {
-      createSeries("count", "Count", "#6683b7");
-    } else if (data.length > 0 && data[0].hasOwnProperty("low")) {
-      createSeries("low", "Low", "#EDD8F5");
-      createSeries("medium", "Medium", "#B2A6D9");
-      createSeries("high", "High", "#5E548E");
-      createSeries("no_threat", "No Threat", "#708B82");
-    } else if (data.length > 0 && data[0].hasOwnProperty("neutral")) {
-      createSeries("neutral", "Neutral", "#F2D0A9");
-      createSeries("positive", "Positive", "#A6C9C2");
-      createSeries("negative", "Negative", "#E0A4AF");
+    if (data.length > 0) {
+      const keys = Object.keys(data[0]);
+      const colors = ["#FF9F1C", "#D4A5A5", "#B56576", "#6A0572", "#84A59D", "#C9ADA7", "#6B4226", "#A44A3F"];
+      keys.forEach((key, index) => {
+        if (key !== "date") createSeries(key, key.charAt(0).toUpperCase() + key.slice(1), colors[index % colors.length]);
+      });
     }
 
     chart.legend = new am4charts.Legend();
@@ -51,9 +46,7 @@ const LineCharts = ({ data }) => {
     chart.cursor.xAxis = dateAxis;
     chart.exporting.menu = new am4core.ExportMenu();
 
-    return () => {
-      chart.dispose();
-    };
+    return () => chart.dispose();
   }, [data]);
 
   return <div id="line-chart-container" ref={chartRef} style={{ width: "100%", height: "370px" }}></div>;

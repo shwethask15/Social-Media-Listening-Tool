@@ -1,25 +1,17 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useLayoutEffect,useEffect } from 'react';
 import * as am5 from "@amcharts/amcharts5";
 import * as am5map from "@amcharts/amcharts5/map";
 import am5geodata_worldLow from "@amcharts/amcharts5-geodata/worldLow";
 import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchLiveVerbatimsData } from '../redux/slice/slice';
+import { useSelector } from 'react-redux';
 import '../style/Analytics.css'; 
 
-function LiveMapChart({ setLoading }) {
-  const dispatch = useDispatch();
+function LiveMapChart() {
   const mapData = useSelector((state) => state.analytics.liveVerbatimsData.graph);
-  useEffect(() => {
-    dispatch(fetchLiveVerbatimsData());
-    console.log('Fetching live verbatims data');
-  }, [dispatch]);
 
   useLayoutEffect(() => {
     console.log('mapData:', mapData);
     if (!mapData || mapData.length === 0) return; // Check if mapData is undefined or empty
-
-    setLoading(true);
 
     let root = am5.Root.new("chartdiv");
     root.setThemes([am5themes_Animated.new(root)]);
@@ -35,7 +27,6 @@ function LiveMapChart({ setLoading }) {
         strokeWidth: 2, // Increase the stroke width (adjust as needed)
       })
     );
-    
 
     let bubbleSeries = chart.series.push(
       am5map.MapPointSeries.new(root, {
@@ -56,7 +47,7 @@ function LiveMapChart({ setLoading }) {
           fillOpacity: 1,
           fill: am5.color(0x000000),
           cursorOverStyle: "pointer",
-          tooltipText: `{id}: [bold]{value}[/]`
+          tooltipText: `{id}: [bold]{name}[/]`
         }, circleTemplate)
       );
 
@@ -138,16 +129,13 @@ function LiveMapChart({ setLoading }) {
       chart.goHome();
     });
 
-    setLoading(false);
-
     return () => {
       root.dispose();
     };
-  }, [mapData, setLoading]);
-
+  }, [mapData]);
 
   return (
-    <div id="chartdiv" className='MapChart '></div>
+    <div id="chartdiv" className='MapChart'></div>
   );
 }
 

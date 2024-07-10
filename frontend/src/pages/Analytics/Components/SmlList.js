@@ -1,30 +1,12 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchLiveVerbatimsData } from '../redux/slice/slice';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import SmlShow from './SmlShow';
 import Loader from './Loader';
 import '../style/Analytics.css';
 
 const SmlList = () => {
-  const dispatch = useDispatch();
   const liveVerbatims = useSelector((state) => state.analytics.liveVerbatimsData.Live_Verbatims_List);
-  const loading = useSelector((state) => state.analytics.loading);
-  const error = useSelector((state) => state.analytics.error);
-
-  useEffect(() => {
-    dispatch(fetchLiveVerbatimsData());
-  }, [dispatch]);
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    // Convert the error object to a string
-    const errorMessage = typeof error === 'object' ? JSON.stringify(error) : error;
-    return <div>Error: {errorMessage}</div>;
-  }
-
+  
   if (!liveVerbatims || liveVerbatims.length === 0) {
     return <div>No data available</div>;
   }
