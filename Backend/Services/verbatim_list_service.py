@@ -30,7 +30,7 @@ async def get_data_with_filters1(q : verbatims_filters,db : Session):
                 #print([ord[i] for i in q[i]])
                 # print(d[i])
 
-    print(d)
+    # print(d)
     r = []
     for i in data:
         r.append(i.__dict__)
@@ -55,7 +55,7 @@ async def get_data_with_filters1(q : verbatims_filters,db : Session):
                     if k["mention_id"] == temp["mention_id"]:
                         r.remove(k)
                         break
-    print(r)
+    # print(r)
     data = []
     for i in r:
         data.append(Verbatims_List_create(**i))

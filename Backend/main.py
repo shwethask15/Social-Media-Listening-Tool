@@ -98,7 +98,6 @@ async def send_realtime_updates() -> None:
             last_total_rows_verbatims_list = json.load(f)
     else:
         last_total_rows_verbatims_list = 0 
-
     while True:
         try:
             db = SessionLocal()
@@ -142,10 +141,11 @@ async def send_realtime_updates() -> None:
                 # iso_format = datetime_obj.isoformat()
                 # new_entries2[0].date = iso_format
                 # print(type(new_entries2[0].date),type(iso_format),iso_format)
+                
 
                 # Serialize new entries to send as notifications
                 recent_updates2 = [entry.serialize() for entry in new_entries2]
-
+                print(new_entries2[0].updated_at)
                 # Send notifications to SSE clients
                 for client_id, notifications_queue in missed_notifications.items():
                     for update in recent_updates2:

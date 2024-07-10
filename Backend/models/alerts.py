@@ -7,7 +7,7 @@ class verbatims_list_audit(Base):
     mention_id = Column(String,primary_key=True,index=True)
     datasource = Column(String,nullable=False)
     language = Column(String, nullable=True)
-    date = Column(String,nullable=False)
+    updated_at = Column(String,nullable=False)
     translated_snippet = Column(String,nullable=False)
     snippet = Column(String,nullable=False)
     country = Column(String, nullable=True)
@@ -36,7 +36,7 @@ class verbatims_list_audit(Base):
             'mention_id': self.mention_id,
             'datasource': self.datasource,
             'language': self.language,
-            'date': self.date,
+            'updated_at': self.updated_at,
             'translated_snippet': self.translated_snippet,
             'snippet': self.snippet,
             'country': self.country,
