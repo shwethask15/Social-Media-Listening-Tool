@@ -1,6 +1,6 @@
 from sqlalchemy import Column,Integer,String,Boolean
 
-from database.base import Base
+from Database.base import Base
 
 class Verbatim_Count(Base):
     date = Column(String,primary_key=True)

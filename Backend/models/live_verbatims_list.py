@@ -1,6 +1,6 @@
 from sqlalchemy import Column,Integer,String,Float,Boolean # type: ignore
 
-from database.base import Base
+from Database.base import Base
 
 
 class Live_Verbatims_List(Base):

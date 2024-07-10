@@ -2,7 +2,7 @@ from typing import Any,Dict,Generic,List,Optional,Type,TypeVar
 from fastapi.encoders import jsonable_encoder # type: ignore
 from pydantic import BaseModel # type: ignore
 from sqlalchemy.orm import Session # type: ignore
-from database.base import Base
+from Database.base import Base
 
 ModelType = TypeVar("ModelType",bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType",bound=BaseModel)

@@ -1,5 +1,5 @@
 from sqlalchemy import Column,Integer,String,Boolean, TIMESTAMP, func
-from database.base import Base
+from Database.base import Base
 
 class verbatims_list_audit(Base):
     __tablename__="verbatims_list_audit"
@@ -7,7 +7,7 @@ class verbatims_list_audit(Base):
     mention_id = Column(String,primary_key=True,index=True)
     datasource = Column(String,nullable=False)
     language = Column(String, nullable=True)
-    updated_at = Column(String,nullable=False)
+    date = Column(String,nullable=False)
     translated_snippet = Column(String,nullable=False)
     snippet = Column(String,nullable=False)
     country = Column(String, nullable=True)
@@ -27,7 +27,7 @@ class verbatims_list_audit(Base):
     severity_altered = Column(Boolean,nullable=False)
     sentiment_altered = Column(Boolean,nullable=False)
     count = Column(Integer,nullable=False)
-    modified_at=Column(TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp())
+    updated_at=Column(TIMESTAMP, server_default=func.now(), onupdate=func.current_timestamp())
     
 
     def serialize(self):
@@ -36,7 +36,7 @@ class verbatims_list_audit(Base):
             'mention_id': self.mention_id,
             'datasource': self.datasource,
             'language': self.language,
-            'updated_at': self.updated_at,
+            'date': self.date,
             'translated_snippet': self.translated_snippet,
             'snippet': self.snippet,
             'country': self.country,
@@ -56,5 +56,5 @@ class verbatims_list_audit(Base):
             'severity_altered': self.severity_altered,
             'sentiment_altered': self.sentiment_altered,
             'count': self.count,
-            'modified_at': self.modified_at.isoformat()  # Example serialization of timestamp
+            'updated_at': self.updated_at.isoformat()  # Example serialization of timestamp
         }

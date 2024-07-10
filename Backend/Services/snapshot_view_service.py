@@ -1,12 +1,12 @@
 from collections import defaultdict
-from crud.crud_snapshot_view import all_views
-from crud import base
+from Crud.crud_snapshot_view import all_views
+from Crud import base
 import logging
 from typing import List,Dict
 from sqlalchemy.orm import Session # type: ignore
-from models.verbatims_list import Verbatims_List as VerbatimModel
-from schemas.verbatims_list_schema import Verbatims_List_create
-from schemas.snapshot_view_schema import AggregatedResponse,SentimentCounts,Counts,CountryData,FilteredResponse,CountryAggregatedData
+from Models.verbatims_list import Verbatims_List as VerbatimModel
+from Schemas.verbatims_list_schema import Verbatims_List_create
+from Schemas.snapshot_view_schema import AggregatedResponse,SentimentCounts,Counts,CountryData,FilteredResponse,CountryAggregatedData
 
 class VerbatimService:
     def __init__(self, db: Session):

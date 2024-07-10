@@ -1,17 +1,17 @@
-from models.users_data_model import User_Data,Token_Data
+from Models.users_data_model import User_Data,Token_Data
 from fastapi import APIRouter,Depends,HTTPException,status
-from user_auth.security import get_password_hash
-from schemas.user_data_schema import User_data_create,Token_Create,Login_data,Get_user_data
-from crud.crud_users_data import Users
-from database.session import get_db,engine
+from User_auth.security import get_password_hash
+from Schemas.user_data_schema import User_data_create,Token_Create,Login_data,Get_user_data
+from Crud.crud_users_data import Users
+from Database.session import get_db,engine
 import jwt
 from sqlalchemy.orm import Session
 # from jwt.exceptions import InvalidTokenError
-from user_auth.auth_bearer import JWTBearer
-from user_auth.auth import create_token,authenticate
+from User_auth.auth_bearer import JWTBearer
+from User_auth.auth import create_token,authenticate
 from datetime import datetime
-from config.settings import get_settings
-from user_auth.public_and_private_key_services import load_public_key
+from Config.settings import get_settings
+from User_auth.public_and_private_key_services import load_public_key
 
 settings = get_settings()
 PUBLIC_KEY = load_public_key()

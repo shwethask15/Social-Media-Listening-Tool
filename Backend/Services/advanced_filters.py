@@ -1,7 +1,7 @@
-from crud.crud_verbatims_list import Verbatims
-from database.session import SessionLocal
+from Crud.crud_verbatims_list import Verbatims
+from Database.session import SessionLocal
 from sqlalchemy.orm import Session
-from models.verbatims_list import Verbatims_List
+from Models.verbatims_list import Verbatims_List
 
 db= SessionLocal()
 data = db.query(Verbatims_List).all()

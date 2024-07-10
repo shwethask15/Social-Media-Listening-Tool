@@ -1,11 +1,11 @@
-from crud.crud_verbatims_list import Verbatims
-from models import verbatims_list
+from Crud.crud_verbatims_list import Verbatims
+from Models import verbatims_list
 from http.client import HTTPException
-from schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update,Verbatims_List_create
-from database.session import SessionLocal,engine
+from Schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update,Verbatims_List_create
+from Database.session import SessionLocal,engine
 from sqlalchemy.orm import Session
-from database.session import SessionLocal
-from models.verbatims_list import Verbatims_List
+from Database.session import SessionLocal
+from Models.verbatims_list import Verbatims_List
 
 
 async def get_data1(db : Session):

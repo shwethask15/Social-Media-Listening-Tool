@@ -1,6 +1,6 @@
-from crud.base import CRUDBase
-from models.trend_analysis import Virality_Count,Sentiment_Count,Verbatim_Count,Severity_Count
-from schemas.trend_analysis_schema import Virality_Count_Create,Verbatim_Count_Create,Sentiment_Count_Create,Severity_Count_Create
+from Crud.base import CRUDBase
+from Models.trend_analysis import Virality_Count,Sentiment_Count,Verbatim_Count,Severity_Count
+from Schemas.trend_analysis_schema import Virality_Count_Create,Verbatim_Count_Create,Sentiment_Count_Create,Severity_Count_Create
 
 class CRUDVirality_Count(CRUDBase[Virality_Count,Virality_Count_Create]):
     ...

@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Query # type: ignore
 from sqlalchemy.orm import Session # type: ignore
 from typing import Optional,Union
-from database.session import get_db
-from database.session import engine
-from schemas.snapshot_view_schema import AggregatedResponse, FilteredResponse
+from Database.session import get_db
+from Database.session import engine
+from Schemas.snapshot_view_schema import AggregatedResponse, FilteredResponse
 from Services.snapshot_view_service import  VerbatimService
 from sqlalchemy import Column, Integer, String, create_engine, text # type: ignore
 import re
@@ -11,7 +11,7 @@ from collections import Counter
 from fastapi.responses import JSONResponse # type: ignore
 import nltk
 from nltk.corpus import stopwords
-from user_auth.auth_bearer import JWTBearer
+from User_auth.auth_bearer import JWTBearer
 
 
 

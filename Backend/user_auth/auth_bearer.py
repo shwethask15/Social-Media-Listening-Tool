@@ -4,14 +4,14 @@ import jwt
 from fastapi import FastAPI, Depends, HTTPException,status
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from models.users_data_model import Token_Data
-from database.session import SessionLocal
-from models.users_data_model import Token_Data,Roles
+from Models.users_data_model import Token_Data
+from Database.session import SessionLocal
+from Models.users_data_model import Token_Data,Roles
 from sqlalchemy.orm import Session
 # from user_auth.auth import ACCESS_TOKEN_EXPIRE_TIME,ALGORITHM,SECRET_KEY
-from config.settings import get_settings
-from user_auth.public_and_private_key_services import load_public_key
-from models.role_based_access import Role,Action
+from Config.settings import get_settings
+from User_auth.public_and_private_key_services import load_public_key
+from Models.role_based_access import Role,Action
 
 settings = get_settings()
 

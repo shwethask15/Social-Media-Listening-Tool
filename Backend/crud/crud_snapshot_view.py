@@ -15,7 +15,7 @@
 # sentiment_views = CRUDSentiment_views(Snapshot_View)
 
 from sqlalchemy.orm import Session
-from models.verbatims_list import Verbatims_List  # Assuming you have a model named VerbatimsList
+from Models.verbatims_list import Verbatims_List  # Assuming you have a model named VerbatimsList
 
 class CRUDSnapshotView:
     def get_all(self, db: Session):

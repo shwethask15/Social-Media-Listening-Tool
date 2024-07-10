@@ -1,10 +1,10 @@
 from fastapi import APIRouter,Depends # type: ignore
 from Services.verbatim_list_service import get_data1,get_data_with_filters1,get_data_by_mention_id1,advanced_filters_query
-from schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update,Verbatims_List_create
+from Schemas.verbatims_list_schema import verbatims_filters,verbatims_list_update,Verbatims_List_create
 from typing import Dict,List
-from database.session import get_db
+from Database.session import get_db
 from sqlalchemy.orm import Session # type: ignore
-from user_auth.auth_bearer import JWTBearer
+from User_auth.auth_bearer import JWTBearer
 from datetime import datetime
 from Services.websocket_service import manager
 import asyncio

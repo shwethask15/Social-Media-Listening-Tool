@@ -1,7 +1,7 @@
 from sqlalchemy import Column,Integer,String,Boolean
 from typing import Optional # type: ignore
 from pydantic import BaseModel
-from database.base import Base
+from Database.base import Base
 
 class Snapshot_View(BaseModel):
     country: Optional[str]

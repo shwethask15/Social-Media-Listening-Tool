@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session # type: ignore
-from crud import crud_verbatims_list,crud_live_verbatims_list
-from models import verbatims_list,live_verbatims_list,trend_analysis
-from schemas import verbatims_list_schema,live_verbatims_list_schema
-from database.session import SessionLocal,engine
-from database import base
+from Crud import crud_verbatims_list,crud_live_verbatims_list
+from Models import verbatims_list,live_verbatims_list,trend_analysis
+from Schemas import verbatims_list_schema,live_verbatims_list_schema
+from Database.session import SessionLocal,engine
+from Database import base
 import json
-from models import users_data_model
-from user_auth.security import get_password_hash
+from Models import users_data_model
+from User_auth.security import get_password_hash
 # verbatims_list.Base.metadata.create_all(bind=engine)
 # live_verbatims_list.Base.metadata.create_all(bind=engine)
 # alerts.Base.metadata.create_all(bind=engine)

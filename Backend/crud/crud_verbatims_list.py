@@ -1,6 +1,6 @@
-from crud.base import CRUDBase
-from models.verbatims_list import Verbatims_List
-from schemas.verbatims_list_schema import Verbatims_List_create
+from Crud.base import CRUDBase
+from Models.verbatims_list import Verbatims_List
+from Schemas.verbatims_list_schema import Verbatims_List_create
 from sqlalchemy.orm import Session
 
 class CRUDVerbatims_list(CRUDBase[Verbatims_List,Verbatims_List_create]):

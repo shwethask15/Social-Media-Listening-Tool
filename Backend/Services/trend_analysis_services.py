@@ -1,4 +1,4 @@
-from crud.crud_trend_analysis import verbatim_count,virality_count,sentiment_count,severity_count
+from Crud.crud_trend_analysis import verbatim_count,virality_count,sentiment_count,severity_count
 from sqlalchemy.orm import Session
 
 async def get_trend_analysis1(type : str,db : Session):

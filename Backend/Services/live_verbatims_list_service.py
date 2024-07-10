@@ -1,9 +1,9 @@
-from crud.crud_live_verbatims_list import Live_Verbatims
-from models import live_verbatims_list
+from Crud.crud_live_verbatims_list import Live_Verbatims
+from Models import live_verbatims_list
 from http.client import HTTPException
-from schemas.verbatims_list_schema import verbatims_filters
-from schemas.live_verbatims_list_schema import GraphItem,Live_Verbatims_List_Create
-from database.session import SessionLocal,engine
+from Schemas.verbatims_list_schema import verbatims_filters
+from Schemas.live_verbatims_list_schema import GraphItem,Live_Verbatims_List_Create
+from Database.session import SessionLocal,engine
 from sqlalchemy.sql import select
 from sqlalchemy.orm import Session
 import asyncio

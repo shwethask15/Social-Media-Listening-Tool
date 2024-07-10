@@ -1,6 +1,6 @@
 from sqlalchemy import Column,Integer,String,Boolean # type: ignore
 
-from database.base import Base
+from Database.base import Base
 
 class Verbatims_List(Base):
     mention_id = Column(String,primary_key=True,index=True)

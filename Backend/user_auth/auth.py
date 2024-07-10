@@ -1,13 +1,13 @@
 from typing import Optional,MutableMapping,List,Union
 from datetime import datetime,timedelta
 
-from user_auth.auth_bearer import JWTBearer
+from User_auth.auth_bearer import JWTBearer
 from sqlalchemy.orm.session import Session
 import jwt
-from user_auth.public_and_private_key_services import load_private_key
-from models.users_data_model import User_Data
-from user_auth.security import verify_password
-from config.settings import get_settings
+from User_auth.public_and_private_key_services import load_private_key
+from Models.users_data_model import User_Data
+from User_auth.security import verify_password
+from Config.settings import get_settings
 
 settings = get_settings()
 PRIVATE_KEY = load_private_key()

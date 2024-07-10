@@ -1,6 +1,6 @@
-from crud.base import CRUDBase
-from models.users_data_model import User_Data
-from schemas.user_data_schema import User_data_create
+from Crud.base import CRUDBase
+from Models.users_data_model import User_Data
+from Schemas.user_data_schema import User_data_create
 from sqlalchemy.orm import Session
 
 class CRUDUsers(CRUDBase[User_Data,User_data_create]):

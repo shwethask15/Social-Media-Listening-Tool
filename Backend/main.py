@@ -4,16 +4,16 @@ from Routes.live_verbatims_list_routes import router as live_verbatims_list_rout
 from fastapi.middleware.cors import CORSMiddleware
 from Routes.snapshot_view_routes import router as snapshot_router
 import asyncio
-from database.session import SessionLocal, get_db
-from models.live_verbatims_list import Live_Verbatims_List
-from models.alerts import verbatims_list_audit
+from Database.session import SessionLocal, get_db
+from Models.live_verbatims_list import Live_Verbatims_List
+from Models.alerts import verbatims_list_audit
 from sqlalchemy import func
 from fastapi.responses import StreamingResponse
 import os
 from Services.database_table_service import init_db_with_data
 from Routes.user_auth_routes import router as user_auth_router
 from Routes.trend_analysis_routes import router as trend_analysis_router
-from database.session import engine,SessionLocal
+from Database.session import engine,SessionLocal
 from datetime import datetime
 app = FastAPI()
 

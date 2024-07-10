@@ -1,6 +1,6 @@
 from fastapi import Depends
-from database.session import SessionLocal,engine
-from models.role_based_access import Role,Action,Base
+from Database.session import SessionLocal,engine
+from Models.role_based_access import Role,Action,Base
 from sqlalchemy.orm import Session
 
 def init_db_with_data():
