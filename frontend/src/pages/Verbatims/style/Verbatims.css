@@ -1,5 +1,6 @@
 :root {
   --purple: #dab9dc;
+  --purple-text: #220047;
   --purple-bg: #dbd6e1;
   --peach-bg: #fcf3f3;
   --gray: #ededec;
@@ -75,6 +76,7 @@
 
 .verbatims-count {
   font-weight: bold;
+  color: var(--purple-text);
 }
 
 .verbatims-info {

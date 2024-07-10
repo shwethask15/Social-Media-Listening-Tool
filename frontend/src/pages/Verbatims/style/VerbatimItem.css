@@ -76,8 +76,8 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #007bff;
-  color: #007bff;
+  border: 1px solid #220047;
+  color: #220047;
   border-radius: 20px;
   padding: 5px 10px;
   font-size: 14px;
@@ -98,7 +98,7 @@ html, body {
 
 .edit-icon {
   background: none;
-  color: #007bff;
+  color: #220047;
   border: none;
   cursor: pointer;
   margin-left: 8px;
