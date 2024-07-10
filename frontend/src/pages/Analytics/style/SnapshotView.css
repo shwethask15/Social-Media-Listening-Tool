@@ -12,14 +12,14 @@
 .SnapShotViewMap h4{
   margin: 5px;
   padding: 0;
-  border-bottom: #000000;
   width: fit-content; 
+  color:#220047 ;
    display: flex;
   justify-content: center;
 }
 .SnapShotViewMap {
   padding: 10px;
-  border: 1px solid #000000;
+  border: 1px solid #bf99bd;
   border-radius: 8px;
   width: 150vh;
   margin: 0 50px;
