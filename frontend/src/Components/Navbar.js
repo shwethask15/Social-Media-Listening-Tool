@@ -36,7 +36,7 @@ function Navbar() {
             <div className="navbar-icons">
  
                 <NotificationList />
-                <button onClick={handleLogout} ><i className="fa fa-sign-out"></i></button>
+                <button onClick={handleLogout} className='logout-button'><i className="fa fa-sign-out"></i></button>
             </div>
         </div>
     );

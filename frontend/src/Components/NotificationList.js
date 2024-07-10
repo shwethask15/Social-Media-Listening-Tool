@@ -65,7 +65,7 @@ const NotificationList = () => {
                   <FaCalendarAlt style={{ marginRight: '5px' }} />
                   <p>{new Date(notification.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</p>
                 </div>
-                <IconButton href={notification.url} target="_blank" rel="noopener noreferrer">
+                <IconButton href={notification.originalURL} target="_blank" rel="noopener noreferrer">
                   <FaExternalLinkAlt className="notification-link" />
                 </IconButton>
               </div>

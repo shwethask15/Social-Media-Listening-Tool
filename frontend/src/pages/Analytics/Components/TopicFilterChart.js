@@ -51,18 +51,7 @@ const ChartComponent = () => {
         { name: "Puppo", value: 1 },
         { name: "Nutro", value: 1 },
         { name: "Dreamies", value: 1 },
-        { name: "Whiskas", value: 1, children: [
-            { name: "Health/...", value: 1 },
-            { name: "Value/Price", value: 1 },
-            { name: "Advertis...", value: 1 },
-            { name: "P&P-Pac...", value: 1 },
-            { name: "Refusal", value: 1 },
-            { name: "Illness/...", value: 1 },
-            { name: "Sponsors...", value: 1 },
-            { name: "Availability", value: 1 },
-            { name: "PA-Variet...", value: 1 }
-          ]
-        },
+        { name: "Whiskas", value: 1},
         { name: "Greenies", value: 1 },
         { name: "Advance", value: 1 },
         { name: "James ...", value: 1 },
