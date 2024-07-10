@@ -79,6 +79,12 @@
   background: none;
   color: var(--white);
 }
+
+.logout-button {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+}
  
 .icon-button .MuiBadge-root {
   color: var(--icon-color); /* Change the color of the bell icon */
